@@ -1,0 +1,21 @@
+{
+  "name": "chboard",
+  "version": "0.0.1",
+  "description": "Customizable engine for chess and checkers games",
+  "main": "main.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "Customizable engine for chess and checkers games"
+  },
+  "keywords": [
+    "chess",
+    "checkers",
+    "board",
+    "game"
+  ],
+  "author": "Kirill Warp",
+  "license": "MIT"
+}
