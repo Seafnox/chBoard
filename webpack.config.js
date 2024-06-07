@@ -38,7 +38,7 @@ const config = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      title: 'Miniverse',
+      title: 'Ch.Board Games',
       template: './src/index.html',
     }),
     new CopyWebpackPlugin({
@@ -64,19 +64,11 @@ const config = {
         use: [stylesHandler, 'css-loader', 'postcss-loader'],
       },
       {
-        test: /\.(glsl|vs|fs)$/,
-        loader: 'ts-shader-loader',
-      },
-      {
         test: /\.(png|jpeg|jpg|svg)$/,
         loader: 'file-loader',
       },
       {
         test: /\.(ogg|mp3)$/,
-        loader: 'file-loader',
-      },
-      {
-        test: /\.(mesh|obj|glb|gltf|fbx)$/,
         loader: 'file-loader',
       },
       {
