@@ -72,7 +72,7 @@ const config = {
         loader: 'file-loader',
       },
       {
-        test: /\.(eot|svg|ttf|woff|woff2|png|jpg|gif)$/i,
+        test: /\.(eot|svg|ttf|woff|woff2|png|jpg|gif|fnt|ltr)$/i,
         type: 'asset',
       },
 
