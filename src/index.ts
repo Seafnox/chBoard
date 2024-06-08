@@ -5,7 +5,6 @@ import { TitleStage } from "./gui/stages/TitleStage";
 import { PlayStage } from "./gui/stages/PlayStage";
 import { Player } from "./gui/renderables/Player";
 import { DataManifest } from "./DataManifest";
-// import width = ParticleEmitterSettings.width;
 
 device.onReady(() => {
 
@@ -30,7 +29,7 @@ device.onReady(() => {
   }
 
   // set and load all resources.
-  loader.preload(DataManifest, function() {
+  loader.preload(DataManifest, () => {
     // set the user defined game stages
     state.set(state.MENU, new TitleStage());
     state.set(state.PLAY, new PlayStage());

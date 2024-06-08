@@ -10,7 +10,7 @@ export class Game<TCellType, TUnitType> {
     public readonly width: number,
     public readonly height: number,
     public readonly initialConfig: BoardConfig<TCellType, TUnitType>,
-    private rules: Rule<TCellType, TUnitType>[],
+    private rules: Rule<TCellType, TUnitType, InteractiveEntity<TCellType, TUnitType>>[],
   ) {
     this.board = new Board(width, height, initialConfig);
 
