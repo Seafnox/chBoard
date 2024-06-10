@@ -5,10 +5,10 @@ import { Unit } from './Unit';
 
 export class Board<TCellType, TUnitType, TOwner> extends InteractiveEntity<TCellType, TUnitType, TOwner> {
   public readonly cells: Cell<TCellType, TUnitType, TOwner>[];
-  private readonly cellMap: Record<string, Cell<TCellType, TUnitType, TOwner>>;
+  private readonly cellMap: Record<string, Cell<TCellType, TUnitType, TOwner> | undefined>;
 
   public readonly units: Unit<TCellType, TUnitType, TOwner>[];
-  private readonly unitMap: Record<string, Unit<TCellType, TUnitType, TOwner>>;
+  private readonly unitMap: Record<string, Unit<TCellType, TUnitType, TOwner> | undefined>;
 
   constructor(
     public readonly width: number,
@@ -38,13 +38,13 @@ export class Board<TCellType, TUnitType, TOwner> extends InteractiveEntity<TCell
       if (!cell) {
         throw new Error(`initialConfig incorrect. Could not find cell at [${x},${y}] for unit ${location}`);
       }
-      const unit = new Unit<TCellType, TUnitType, TOwner>(x, y, type, owner);
+      const unit = new Unit<TCellType, TUnitType, TOwner>(cell, type, owner);
       this.units.push(unit);
       this.unitMap[location] = unit;
     });
   }
 
-  public getCell(x: number, y: number): Cell<TCellType, TUnitType, TOwner> {
+  public getCell(x: number, y: number): Cell<TCellType, TUnitType, TOwner> | undefined {
     return this.cellMap[`${x},${y}`];
   }
 }

@@ -4,8 +4,8 @@ import { CheckersRuCellType } from '../CheckersRuCellType';
 import { CheckersRuUnit, CheckersRuInteractiveEntity, CheckersRuBoard, CheckersRuAvailableAction } from '../CheckersRuTypings';
 import { CheckersRuUnitOwner } from '../CheckersRuUnitOwner';
 import { CheckersRuUnitType } from '../CheckersRuUnitType';
-import { SimpleMoveLeft } from './SimpleMoveLeft';
-import { SimpleMoveRight } from './SimpleMoveRight';
+import { SimpleMoveLeft } from '../actions/SimpleMoveLeft';
+import { SimpleMoveRight } from '../actions/SimpleMoveRight';
 
 
 

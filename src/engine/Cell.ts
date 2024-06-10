@@ -12,6 +12,14 @@ export class Cell<TCellType, TUnitType, TOwner> extends InteractiveEntity<TCellT
     super();
   }
 
+  public get location(): string {
+    return `${this.x},${this.y}`;
+  }
+
+  public get position(): [number, number] {
+    return [this.x, this.y];
+  }
+
   public get unit(): Unit<TCellType, TUnitType, TOwner> | undefined {
     return this._unit;
   }
