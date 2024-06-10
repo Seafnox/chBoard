@@ -1,5 +1,6 @@
-import { BoardConfig } from '../engine/BoardConfig';
+import { BoardConfig, UnitConfig } from '../engine/BoardConfig';
 import { CheckersRuCellType } from './CheckersRuCellType';
+import { CheckersRuUnitOwner } from './CheckersRuUnitOwner';
 import { CheckersRuUnitType } from './CheckersRuUnitType';
 
 const cellMap: Record<string, CheckersRuCellType> = {};
@@ -10,15 +11,21 @@ for(let i = 0; i < 8; i++) {
   }
 }
 
-const unitMap: Record<string, CheckersRuUnitType> = {}
+const unitMap: Record<string, UnitConfig<CheckersRuUnitType, CheckersRuUnitOwner>> = {}
 
 // FIXME wrong unit generation
 for(let i = 0; i < 8; i++) {
-  unitMap[`${i},0`] = CheckersRuUnitType.Checker;
-  unitMap[`${i},7`] = CheckersRuUnitType.Checker;
+  unitMap[`${i},0`] = {
+    type: CheckersRuUnitType.Checker,
+    owner: CheckersRuUnitOwner.White,
+  };
+  unitMap[`${i},7`] = {
+    type: CheckersRuUnitType.Checker,
+    owner: CheckersRuUnitOwner.Black,
+  };
 }
 
-export const checkersRuConfig: BoardConfig<CheckersRuCellType, CheckersRuUnitType> = {
+export const checkersRuConfig: BoardConfig<CheckersRuCellType, CheckersRuUnitType, CheckersRuUnitOwner> = {
   cellMap,
   unitMap,
 }

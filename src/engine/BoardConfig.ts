@@ -1,4 +1,9 @@
-export interface BoardConfig<TCellType, TUnitType> {
+export interface UnitConfig<TUnitType, TOwner> {
+  type: TUnitType,
+  owner: TOwner,
+}
+
+export interface BoardConfig<TCellType, TUnitType, TOwner> {
   cellMap: Record<string, TCellType>,
-  unitMap: Record<string, TUnitType>,
+  unitMap: Record<string, UnitConfig<TUnitType, TOwner>>,
 }

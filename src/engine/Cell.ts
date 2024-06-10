@@ -1,8 +1,8 @@
 import { InteractiveEntity } from './InteractiveEntity';
 import { Unit } from './Unit';
 
-export class Cell<TCellType, TUnitType> extends InteractiveEntity<TCellType, TUnitType> {
-  private _unit?: Unit<TCellType, TUnitType>;
+export class Cell<TCellType, TUnitType, TOwner> extends InteractiveEntity<TCellType, TUnitType, TOwner> {
+  private _unit?: Unit<TCellType, TUnitType, TOwner>;
 
   constructor(
     public readonly x: number,
@@ -12,11 +12,11 @@ export class Cell<TCellType, TUnitType> extends InteractiveEntity<TCellType, TUn
     super();
   }
 
-  public get unit(): Unit<TCellType, TUnitType> | undefined {
+  public get unit(): Unit<TCellType, TUnitType, TOwner> | undefined {
     return this._unit;
   }
 
-  public setUnit(unit?: Unit<TCellType, TUnitType>): void {
+  public setUnit(unit?: Unit<TCellType, TUnitType, TOwner>): void {
     this._unit = unit;
   }
 }
