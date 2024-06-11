@@ -34,6 +34,7 @@
     "copy-webpack-plugin": "~11.0.0",
     "css-loader": "~6.8.1",
     "eslint": "~8.53.0",
+    "file-loader": "~6.2.0",
     "html-webpack-plugin": "~5.5.3",
     "mini-css-extract-plugin": "~2.7.6",
     "postcss-loader": "~7.3.3",
@@ -48,8 +49,7 @@
     "typescript": "~5.1.6"
   },
   "dependencies": {
-    "@melonjs/debug-plugin": "~14.8.3",
-    "melonjs": "~17.3.0",
+    "excalibur": "~0.29.3",
     "normalize.css": "~8.0.1"
   }
 }

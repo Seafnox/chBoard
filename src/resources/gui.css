@@ -1,0 +1,61 @@
+.menu button {
+  all: unset;
+  cursor: pointer;
+  font-family: 'Roboto', serif;
+  background-color: gray;
+  border-radius: 3px;
+  box-shadow: 0 4px black;
+}
+.menu button:focus-visible,.menu button:hover {
+  outline: white solid 1px;
+  /* box-shadow: 0 4px black; */
+}
+
+.menu button:active {
+  transform: translate(0, 4px);
+  box-shadow: 0 0 black;
+}
+
+
+#game {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.excalibur-scale {
+  transform-origin: 0 0;
+  transform: scale(var(--pixel-conversion), var(--pixel-conversion));
+}
+
+.menu {
+  position: absolute;
+  /* position menu on click */
+  left: var(--pointer-x);
+  top: var(--pointer-y);
+
+  font-family: 'silkscreen';
+
+  display: flex;
+  flex-direction: column;
+  padding: 5px;
+  width: 100px;
+  color: white;
+  background-color: #00000077;
+  border-radius: 5px;
+  /* top: calc(10px * var(--pixel-conversion));
+  left: calc(10px * var(--pixel-conversion)); */
+}
+
+.menu button {
+  margin-bottom: 10px;
+}
+
+.hide {
+  display: none;
+}
+
+.show {
+  display: block;
+}

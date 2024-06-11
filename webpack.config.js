@@ -68,6 +68,10 @@ const config = {
         loader: 'file-loader',
       },
       {
+        test: /\.(ttf)$/,
+        loader: 'file-loader',
+      },
+      {
         test: /\.(ogg|mp3)$/,
         loader: 'file-loader',
       },
