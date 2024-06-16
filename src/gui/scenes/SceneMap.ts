@@ -1,5 +1,6 @@
 import { SceneWithOptions, FadeInOut, Color } from 'excalibur';
 import { NotImplementedScene } from './NotImplemented';
+import { WelcomeScene } from './WelcomeScene';
 
 export enum SceneName {
   WelcomeScene = 'WelcomeScene',
@@ -17,7 +18,7 @@ export const defaultSceneTransition = {
 
 export const sceneMap: Record<SceneName, SceneWithOptions> = {
   [SceneName.WelcomeScene]: {
-    scene: NotImplementedScene,
+    scene: WelcomeScene,
     transitions: defaultSceneTransition,
   },
   [SceneName.PlayScene]: {

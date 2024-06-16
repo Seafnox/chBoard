@@ -16,3 +16,14 @@ export const PixelFont30px = (options?: FontOptions) => PixelFontResource.toFont
     ...options?.shadow,
   }
 })
+
+export const PixelFont60px = (options?: FontOptions) => PixelFontResource.toFont({
+  size: 60,
+  unit: FontUnit.Px,
+  ...options,
+  shadow: {
+    blur: 4,
+    offset: vec(4, 4),
+    ...options?.shadow,
+  }
+})
