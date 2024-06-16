@@ -13,8 +13,8 @@ import { calculateExPixelConversion } from './gui/СalculatePixelConversion';
 
 const engine = new GameEngine({
   canvasElementId: 'scene',
-  width: 800,
-  height: 600,
+  width: 1600,
+  height: 900,
   pixelArt: true,
   displayMode: DisplayMode.FitScreen
 });
