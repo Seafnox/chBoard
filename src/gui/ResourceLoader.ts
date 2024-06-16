@@ -1,11 +1,11 @@
 import { Loader } from "excalibur";
-import { PixelFont } from './PrepareFonts';
+import { PixelFontResource } from './PrepareFonts';
 import { UnitSprite } from './PrepareSprites';
 
 
 export const ResourceLoader = new Loader();
 
 // FONTS
-ResourceLoader.addResource(PixelFont);
+ResourceLoader.addResource(PixelFontResource);
 // SPRITES
 ResourceLoader.addResource(UnitSprite);
