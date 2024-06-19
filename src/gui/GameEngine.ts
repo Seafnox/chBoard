@@ -2,7 +2,7 @@ import { Engine, EventEmitter, PointerEvent, Vector } from 'excalibur';
 import { GameProperty } from './GameProperty';
 
 export enum GameEvent {
-  ButtonClicked = 'buttonclicked',
+  MenuButtonClicked = 'buttonclicked',
   PointerDown = 'pointerdown',
   AddUnit = 'addunit',
   RemoveUnit = 'removeunit',

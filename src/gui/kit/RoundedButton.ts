@@ -1,11 +1,12 @@
-import { ScreenElement, GraphicsGroup, Vector, Color, Rectangle, Text, vec, Circle } from 'excalibur';
+import { ScreenElement, GraphicsGroup, Vector, Color, Rectangle, Text, vec, Circle, BaseAlign } from 'excalibur';
 import { GameEvent } from '../GameEngine';
 import { PixelFont60px } from '../PrepareFonts';
 
 export interface RoundedButtonConfig {
   width: number;
   height: number;
-  radius: number; // TODO implement
+  radius: number;
+  borderSize?: number; // TODO implement. refactor radius
   pos: Vector;
   label: string;
   labelColor: Color;
@@ -23,9 +24,9 @@ interface RoundedButtonStateConfig {
   border?: Color;
   width: number;
   height: number;
-  radius: number; // TODO implement
+  radius: number;
+  borderSize: number; // TODO implement. refactor radius
   label: Text;
-  labelOffset: Vector;
 }
 
 export enum ButtonState {
@@ -48,10 +49,11 @@ export class RoundedButton extends ScreenElement {
 
     this.label = new Text({
       text: config.label,
-      width: config.width - config.radius,
-      height: config.height - config.radius,
       color: config.labelColor,
-      font: PixelFont60px({shadow: {color: config.labelShadowColor}}),
+      font: PixelFont60px({
+        baseAlign: BaseAlign.Middle,
+        shadow: {color: config.labelShadowColor}
+      }),
     });
 
     this.graphics.add(ButtonState.Idle, this.getStateGroup({
@@ -60,8 +62,8 @@ export class RoundedButton extends ScreenElement {
       width: config.width,
       height: config.height,
       radius: config.radius,
+      borderSize: config.borderSize || 0,
       label: this.label,
-      labelOffset: vec(0, 0),
     }));
     this.graphics.add(ButtonState.Hover, this.getStateGroup({
       background: config.hoverBackground || config.idleBackground,
@@ -69,8 +71,8 @@ export class RoundedButton extends ScreenElement {
       width: config.width,
       height: config.height,
       radius: config.radius,
+      borderSize: config.borderSize || 0,
       label: this.label,
-      labelOffset: vec(0, 0),
     }));
     this.graphics.add(ButtonState.Pressed, this.getStateGroup({
       background: config.pressedBackground || config.hoverBackground || config.idleBackground,
@@ -78,8 +80,8 @@ export class RoundedButton extends ScreenElement {
       width: config.width,
       height: config.height,
       radius: config.radius,
+      borderSize: config.borderSize || 0,
       label: this.label,
-      labelOffset: vec(0, 0),
     }));
   }
 
@@ -87,7 +89,7 @@ export class RoundedButton extends ScreenElement {
     this.graphics.use(ButtonState.Idle);
     this.on('pointerup', () => {
       this.graphics.use(ButtonState.Hover);
-      this.events.emit(GameEvent.ButtonClicked, {
+      this.events.emit(GameEvent.MenuButtonClicked, {
         buttonName: this.config.label,
       });
     })
@@ -159,7 +161,7 @@ export class RoundedButton extends ScreenElement {
         },
         {
           graphic: this.label,
-          offset: config.labelOffset.add(vec(config.radius, config.radius)),
+          offset: vec(config.width / 2, config.height / 2),
         }
       ]
     });
