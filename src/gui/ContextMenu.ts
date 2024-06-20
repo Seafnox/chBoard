@@ -9,7 +9,7 @@ export class ContextMenuController {
   ) {
     this.view = new ContextMenuView(this.engine.canvas.parentElement as HTMLElement, this);
     this.engine.gameEvents.on(GameEvent.PointerDown, event => {
-      if (event.button !== PointerButton.Left) {
+      if (event.button !== PointerButton.Right) {
         return;
       }
 
