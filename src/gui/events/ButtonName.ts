@@ -8,4 +8,5 @@ export const enum ButtonName {
   Play = 'PLAY',
   Settings = 'SETTINGS',
   Help = 'HELP',
+  Back = 'BACK',
 }

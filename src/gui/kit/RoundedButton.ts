@@ -2,6 +2,7 @@ import { ScreenElement, GraphicsGroup, Vector, Color, Rectangle, Text, vec, Circ
 import { ButtonName } from '../events/ButtonName';
 import { GameEvent } from '../GameEngine';
 import { PixelFont60px } from '../PrepareFonts';
+import { ButtonState } from './ButtonState';
 
 export interface RoundedButtonConfig {
   width: number;
@@ -28,12 +29,6 @@ interface RoundedButtonStateConfig {
   radius: number;
   borderSize: number; // TODO implement. refactor radius
   label: Text;
-}
-
-export enum ButtonState {
-  Idle = 'idle',
-  Hover = 'hover',
-  Pressed = 'pressed',
 }
 
 export class RoundedButton extends ScreenElement {
