@@ -1,4 +1,5 @@
 import { ScreenElement, GraphicsGroup, Vector, Color, Rectangle, Text, vec, Circle, BaseAlign } from 'excalibur';
+import { ButtonName } from '../events/ButtonName';
 import { GameEvent } from '../GameEngine';
 import { PixelFont60px } from '../PrepareFonts';
 
@@ -8,7 +9,7 @@ export interface RoundedButtonConfig {
   radius: number;
   borderSize?: number; // TODO implement. refactor radius
   pos: Vector;
-  label: string;
+  label: ButtonName;
   labelColor: Color;
   labelShadowColor?: Color;
   idleBackground: Color;

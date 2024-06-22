@@ -1,18 +1,20 @@
-import { Scene, Engine, Label, vec, Color, Actor } from 'excalibur';
+import { Scene, Label, vec, Color, Actor } from 'excalibur';
+import { ButtonName } from '../events/ButtonName';
+import { GameEvent, GameEngine } from '../GameEngine';
 import { KitColor } from '../kit/KitColor';
 import { RoundedButton } from '../kit/RoundedButton';
 import { PixelFont60px } from '../PrepareFonts';
 
 export class WelcomeScene extends Scene {
 
-  onInitialize(engine: Engine) {
+  onInitialize(engine: GameEngine) {
     engine.add(this.createHeader(engine));
-    engine.add(this.createButton(engine, 200, 'PLAY'));
-    engine.add(this.createButton(engine, 350, 'SETTINGS'));
-    engine.add(this.createButton(engine, 500, 'QUIT'));
+    engine.add(this.createButton(engine, 200, ButtonName.Play));
+    engine.add(this.createButton(engine, 350, ButtonName.Settings));
+    engine.add(this.createButton(engine, 500, ButtonName.Help));
   }
 
-  createHeader(engine: Engine): Actor {
+  createHeader(engine: GameEngine): Actor {
     return new Label({
       text: 'CHECKERS',
       pos: vec(engine.screen.center.x, 50),
@@ -21,7 +23,7 @@ export class WelcomeScene extends Scene {
     });
   }
 
-  private createButton(engine: Engine, offsetY: number, label: string): Actor {
+  private createButton(engine: GameEngine, offsetY: number, label: ButtonName): Actor {
     const button = new RoundedButton({
       width: 400,
       height: 100,
@@ -37,6 +39,10 @@ export class WelcomeScene extends Scene {
       pressedBackground: KitColor.Pink,
       pressedBorder: KitColor.Black,
     });
+
+    button.events.on(GameEvent.MenuButtonClicked, event =>
+      engine.gameEvents.emit(GameEvent.MenuButtonClicked, event)
+    );
 
     return button;
   }

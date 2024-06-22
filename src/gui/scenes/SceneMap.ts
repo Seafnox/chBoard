@@ -7,6 +7,9 @@ export enum SceneName {
   PlayScene = 'PlayScene',
   GameOverScene = 'GameOverScene',
   RatingScene = 'RatingScene',
+  SettingsScene = 'SettingsScene',
+  HelpScene = 'HelpScene',
+  NoopScene = 'NoopScene',
 }
 
 export const defaultScene = SceneName.WelcomeScene;
@@ -30,6 +33,18 @@ export const sceneMap: Record<SceneName, SceneWithOptions> = {
     transitions: defaultSceneTransition,
   },
   [SceneName.RatingScene]: {
+    scene: NotImplementedScene,
+    transitions: defaultSceneTransition,
+  },
+  [SceneName.SettingsScene]: {
+    scene: NotImplementedScene,
+    transitions: defaultSceneTransition,
+  },
+  [SceneName.HelpScene]: {
+    scene: NotImplementedScene,
+    transitions: defaultSceneTransition,
+  },
+  [SceneName.NoopScene]: {
     scene: NotImplementedScene,
     transitions: defaultSceneTransition,
   },

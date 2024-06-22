@@ -7,6 +7,7 @@ import { GameEngine, GameEvent } from './gui/GameEngine';
 import { GameProperty } from './gui/GameProperty';
 import { ResourceLoader } from './gui/ResourceLoader';
 import { ContextMenuController } from "./gui/ContextMenu";
+import { SceneController } from './gui/SceneController';
 import { sceneMap, defaultScene } from './gui/scenes/SceneMap';
 import { UnitController } from './gui/UnitController';
 import { calculateExPixelConversion } from './gui/СalculatePixelConversion';
@@ -25,7 +26,8 @@ Object.entries(sceneMap).forEach(([sceneName, configuration ]) => {
 
 engine.screen.events.on('resize', () => calculateExPixelConversion(engine.screen));
 
-engine.start(ResourceLoader)
+engine.start();
+engine.load(ResourceLoader)
   .then(() => engine.goToScene(defaultScene))
   .then(() => {
     calculateExPixelConversion(engine.screen);
@@ -39,6 +41,7 @@ engine.start(ResourceLoader)
       engine.gameEvents.emit(GameEvent.PointerDown, event);
     });
 
+    new SceneController(engine);
     new ContextMenuController(engine);
     new UnitController(engine);
   })
