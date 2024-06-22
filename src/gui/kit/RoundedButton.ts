@@ -37,6 +37,7 @@ export enum ButtonState {
 
 export class RoundedButton extends ScreenElement {
   private label: Text;
+  private isPointerDownHere = false;
 
   constructor(
     private config: RoundedButtonConfig,
@@ -88,18 +89,25 @@ export class RoundedButton extends ScreenElement {
   onInitialize() {
     this.graphics.use(ButtonState.Idle);
     this.on('pointerup', () => {
+      if (!this.isPointerDownHere) {
+        return;
+      }
+      this.isPointerDownHere = false;
       this.graphics.use(ButtonState.Hover);
       this.events.emit(GameEvent.MenuButtonClicked, {
         buttonName: this.config.label,
       });
     })
     this.on('pointerdown', () => {
+      this.isPointerDownHere = true;
       this.graphics.use(ButtonState.Pressed);
     })
     this.on('pointerenter', () => {
+      this.isPointerDownHere = false;
       this.graphics.use(ButtonState.Hover);
     })
     this.on('pointerleave', () => {
+      this.isPointerDownHere = false;
       this.graphics.use(ButtonState.Idle);
     })
   }
