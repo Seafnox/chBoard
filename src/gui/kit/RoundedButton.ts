@@ -39,6 +39,7 @@ export class RoundedButton extends ScreenElement {
     private config: RoundedButtonConfig,
   ) {
     super({
+      name: config.label,
       pos: vec(config.pos.x - config.width / 2, config.pos.y - config.height / 2),
       width: config.width,
       height: config.height,

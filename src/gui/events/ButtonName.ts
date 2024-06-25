@@ -6,6 +6,7 @@ export const enum ButtonName {
   QuitGame = 'QUIT GAME',
   LoadGame = 'LOAD GAME',
   Play = 'PLAY',
+  CheckersRu = 'RUSSIAN CHECKERS',
   Settings = 'SETTINGS',
   Help = 'HELP',
   Back = 'BACK',

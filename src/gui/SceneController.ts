@@ -4,7 +4,7 @@ import { SceneName } from './scenes/SceneMap';
 
 export class SceneController {
   private sceneMap: Partial<Record<ButtonName, SceneName>> = {
-    [ButtonName.Play]: SceneName.PlayScene,
+    [ButtonName.CheckersRu]: SceneName.RussianCheckersScene,
     [ButtonName.Settings]: SceneName.SettingsScene,
     [ButtonName.Help]: SceneName.HelpScene,
     [ButtonName.QuitGame]: SceneName.WelcomeScene,

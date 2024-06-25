@@ -26,6 +26,7 @@ export class BackButton extends ScreenElement {
 
   constructor(config: BackButtonConfig) {
     super({
+      name: ButtonName.Back,
       pos: vec(50, 50),
       width,
       height,

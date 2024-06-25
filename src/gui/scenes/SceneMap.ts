@@ -4,7 +4,7 @@ import { WelcomeScene } from './WelcomeScene';
 
 export enum SceneName {
   WelcomeScene = 'WelcomeScene',
-  PlayScene = 'PlayScene',
+  RussianCheckersScene = 'RussianCheckersScene',
   GameOverScene = 'GameOverScene',
   RatingScene = 'RatingScene',
   SettingsScene = 'SettingsScene',
@@ -24,7 +24,7 @@ export const sceneMap: Record<SceneName, SceneWithOptions> = {
     scene: WelcomeScene,
     transitions: defaultSceneTransition,
   },
-  [SceneName.PlayScene]: {
+  [SceneName.RussianCheckersScene]: {
     scene: NotImplementedScene,
     transitions: defaultSceneTransition,
   },
