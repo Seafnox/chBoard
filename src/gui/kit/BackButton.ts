@@ -1,4 +1,4 @@
-import { ScreenElement, vec, Text, BaseAlign, Vector, Color, GraphicsGroup, Rectangle } from 'excalibur';
+import { ScreenElement, vec, Text, BaseAlign, Vector, Color, GraphicsGroup, Circle, Line } from 'excalibur';
 import { ButtonName } from '../events/ButtonName';
 import { GameEvent } from '../GameEngine';
 import { PixelFont30px } from '../PrepareFonts';
@@ -18,6 +18,7 @@ interface BackButtonStateConfig {
 const width = 150;
 const height = 50;
 const borderSize = 5;
+const lineWidth = 5;
 
 export class BackButton extends ScreenElement {
   private label: Text;
@@ -96,20 +97,45 @@ export class BackButton extends ScreenElement {
     return new GraphicsGroup({
       members: [
         {
-          graphic: new Rectangle({
-            width: height,
-            height,
+          graphic: new Circle({
+            radius: height/2,
             color: config.border,
           }),
           offset: vec(0, 0),
         },
         {
-          graphic: new Rectangle({
-            width: height - borderSize * 2,
-            height: height - borderSize * 2,
+          graphic: new Circle({
+            radius: (height - borderSize * 2)/2,
             color: config.background,
           }),
           offset: vec(borderSize, borderSize),
+        },
+        {
+          graphic: new Line({
+            start: vec(0, 0),
+            end: vec(height/2, 0),
+            thickness: lineWidth,
+            color: config.border,
+          }),
+          offset: vec(borderSize/2 + height/4, height/2 + lineWidth/2),
+        },
+        {
+          graphic: new Line({
+            start: vec(0, -lineWidth/4 - 1),
+            end: vec(height/4, height/4),
+            thickness: lineWidth,
+            color: config.border,
+          }),
+          offset: vec(borderSize/2 + height/4, height/2 + lineWidth/2),
+        },
+        {
+          graphic: new Line({
+            start: vec(0, lineWidth/4 + 1),
+            end: vec(height/4, -height/4),
+            thickness: lineWidth,
+            color: config.border,
+          }),
+          offset: vec(borderSize/2 + height/4, height/2 + lineWidth/2),
         },
         {
           graphic: this.label,
