@@ -17,12 +17,11 @@ const engine = new GameEngine({
   width: 1600,
   height: 900,
   pixelArt: true,
-  displayMode: DisplayMode.FitScreen
+  displayMode: DisplayMode.FitScreen,
+  suppressConsoleBootMessage: true,
+  suppressPlayButton: true,
+  scenes: sceneMap,
 });
-
-Object.entries(sceneMap).forEach(([sceneName, configuration ]) => {
-  engine.addScene(sceneName, configuration);
-})
 
 engine.screen.events.on('resize', () => calculateExPixelConversion(engine.screen));
 
