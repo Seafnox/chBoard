@@ -1,6 +1,7 @@
 import { Scene, Vector, Actor, vec, Color } from 'excalibur';
 import { IdleUnitAnimation } from '../PrepareSprites';
 
+// TODO Remove useless action
 export class AddUnit {
   public static execute(
     scene: Scene,

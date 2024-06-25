@@ -5,7 +5,9 @@ import { GameProperty } from './GameProperty';
 export enum GameEvent {
   MenuButtonClicked = 'buttonclicked',
   PointerDown = 'pointerdown',
+  // TODO Remove useless action
   AddUnit = 'addunit',
+  // TODO Remove useless action
   RemoveUnit = 'removeunit',
 }
 

@@ -2,6 +2,7 @@ import { vec, PointerButton } from 'excalibur';
 import { GameEngine, GameEvent } from './GameEngine';
 import { GameProperty } from './GameProperty';
 
+// TODO Remove this
 export class ContextMenuController {
   view: ContextMenuView;
   constructor(

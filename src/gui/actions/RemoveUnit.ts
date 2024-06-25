@@ -1,5 +1,6 @@
 import { Scene, Vector } from 'excalibur';
 
+// TODO Remove useless action
 export class RemoveUnit {
   public static execute(
     scene: Scene,
