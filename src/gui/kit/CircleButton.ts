@@ -1,51 +1,47 @@
-import { ScreenElement, GraphicsGroup, Vector, Color, Rectangle, vec, Circle, GraphicsGrouping } from 'excalibur';
+import { ScreenElement, Vector, Color, vec, GraphicsGroup, Circle, GraphicsGrouping } from 'excalibur';
+import { ButtonName } from '../events/ButtonName';
 import { GameEvent } from '../GameEngine';
 import { ButtonState } from './ButtonState';
 
-export interface RoundedButtonConfig {
-  buttonName: string;
-  width: number;
-  height: number;
+export interface CircleButtonConfig {
+  buttonName: ButtonName;
   radius: number;
   pos: Vector;
   subNodes: GraphicsGrouping[];
-  idleBackground: Color;
-  hoverBackground?: Color;
-  pressedBackground?: Color;
-  borderSize?: number; // TODO implement. refactor radius
+  borderSize?: number;
   idleBorder?: Color;
   hoverBorder?: Color;
   pressedBorder?: Color;
+  idleBackground?: Color;
+  hoverBackground?: Color;
+  pressedBackground?: Color;
 }
 
-interface RoundedButtonStateConfig {
-  background: Color;
-  border?: Color;
-  width: number;
-  height: number;
+export interface CircleButtonStateConfig {
   radius: number;
-  borderSize: number; // TODO implement. refactor radius
   subNodes: GraphicsGrouping[];
+  background?: Color;
+  borderSize: number;
+  border?: Color;
+  textOffset?: number;
 }
 
-export class RoundedButton extends ScreenElement {
+export class CircleButton extends ScreenElement {
   private isPointerDownHere = false;
 
   constructor(
-    private config: RoundedButtonConfig,
+    private config: CircleButtonConfig,
   ) {
     super({
       name: config.buttonName,
-      pos: vec(config.pos.x - config.width / 2, config.pos.y - config.height / 2),
-      width: config.width,
-      height: config.height,
+      pos: vec(config.pos.x - config.radius / 2, config.pos.y - config.radius / 2),
+      width: config.radius,
+      height: config.radius,
     });
 
     this.graphics.add(ButtonState.Idle, this.getStateGroup({
       background: config.idleBackground,
       border: config.idleBorder,
-      width: config.width,
-      height: config.height,
       radius: config.radius,
       borderSize: config.borderSize || 0,
       subNodes: config.subNodes,
@@ -53,8 +49,6 @@ export class RoundedButton extends ScreenElement {
     this.graphics.add(ButtonState.Hover, this.getStateGroup({
       background: config.hoverBackground || config.idleBackground,
       border: config.hoverBorder || config.idleBorder,
-      width: config.width,
-      height: config.height,
       radius: config.radius,
       borderSize: config.borderSize || 0,
       subNodes: config.subNodes,
@@ -62,8 +56,6 @@ export class RoundedButton extends ScreenElement {
     this.graphics.add(ButtonState.Pressed, this.getStateGroup({
       background: config.pressedBackground || config.hoverBackground || config.idleBackground,
       border: config.pressedBorder || config.hoverBorder || config.idleBorder,
-      width: config.width,
-      height: config.height,
       radius: config.radius,
       borderSize: config.borderSize || 0,
       subNodes: config.subNodes,
@@ -96,60 +88,22 @@ export class RoundedButton extends ScreenElement {
     })
   }
 
-  private getStateGroup(config: RoundedButtonStateConfig): GraphicsGroup {
+  private getStateGroup(config: CircleButtonStateConfig): GraphicsGroup {
     const group = new GraphicsGroup({
       members: [
         {
-          graphic: new Rectangle({
-            width: config.width,
-            height: config.height - config.radius * 2,
-            color: config.border || config.background,
-          }),
-          offset: vec(0, config.radius),
-        },
-        {
-          graphic: new Rectangle({
-            width: config.width - config.radius * 2,
-            height: config.height,
-            color: config.border || config.background,
-          }),
-          offset: vec(config.radius, 0),
-        },
-        {
           graphic: new Circle({
             radius: config.radius,
             color: config.border || config.background,
           }),
-          offset: vec(-1, -1),
+          offset: vec(0, config.radius/2),
         },
         {
           graphic: new Circle({
-            radius: config.radius,
-            color: config.border || config.background,
-          }),
-          offset: vec(config.width - config.radius * 2 - 2, -1),
-        },
-        {
-          graphic: new Circle({
-            radius: config.radius,
-            color: config.border || config.background,
-          }),
-          offset: vec(-1, config.height - config.radius * 2 - 2),
-        },
-        {
-          graphic: new Circle({
-            radius: config.radius,
-            color: config.border || config.background,
-          }),
-          offset: vec(config.width - config.radius * 2 - 2, config.height - config.radius * 2 - 2),
-        },
-        {
-          graphic: new Rectangle({
-            width: config.width - config.radius * 2,
-            height: config.height - config.radius * 2,
+            radius: config.radius - config.borderSize * 2,
             color: config.background,
           }),
-          offset: vec(config.radius, config.radius),
+          offset: vec(0, config.radius/2 + config.borderSize),
         },
         ...config.subNodes,
       ]

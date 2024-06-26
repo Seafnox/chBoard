@@ -16,7 +16,7 @@ export class ModalWindow extends ScreenElement {
   private contentBorder: Rectangle;
   private contentWrapperBackground: Color = Color.fromHex('f0f0f0');
   private contentWrapper: Rectangle;
-  private actors: Actor[] = [];
+  private subNodes: Actor[] = [];
 
   constructor(
     private engine: GameEngine,
@@ -53,13 +53,13 @@ export class ModalWindow extends ScreenElement {
   }
 
   onInitialize() {
-    this.actors.forEach(actor => {
+    this.subNodes.forEach(actor => {
       this.engine.add(actor);
     });
   }
 
   onPreKill() {
-    this.actors.forEach(actor => {
+    this.subNodes.forEach(actor => {
       this.engine.remove(actor);
     });
 
@@ -71,7 +71,7 @@ export class ModalWindow extends ScreenElement {
       this.engine.screen.drawWidth/2 + offset.x,
       (this.engine.screen.drawHeight - this.config.height) / 2 + this.contentBorderSize + offset.y
     );
-    this.actors.push(entity);
+    this.subNodes.push(entity);
 
     return this;
   }

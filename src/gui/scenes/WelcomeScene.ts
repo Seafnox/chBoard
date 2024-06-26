@@ -4,6 +4,7 @@ import { GameEvent, GameEngine } from '../GameEngine';
 import { KitColor } from '../kit/KitColor';
 import { ModalWindow } from '../kit/ModalWindow';
 import { RoundedButton } from '../kit/RoundedButton';
+import { ButtonLabel } from '../kit/ButtonLabel';
 import { PixelFont60px } from '../PrepareFonts';
 
 export class WelcomeScene extends Scene {
@@ -70,14 +71,19 @@ export class WelcomeScene extends Scene {
   }
 
   private createButton(offsetY: number, label: ButtonName): Actor {
+    const width = 400;
+    const height = 100;
+
     return new RoundedButton({
-      width: 400,
-      height: 100,
+      buttonName: label,
+      width,
+      height,
       radius: 10,
       pos: vec(this.gameEngine.screen.center.x, offsetY),
-      label,
-      labelColor: KitColor.Black,
-      labelShadowColor: KitColor.White,
+      subNodes: [{
+        graphic: new ButtonLabel({ label }),
+        offset: vec(width/2, height/2),
+      }],
       idleBackground: KitColor.Cyan,
       idleBorder: KitColor.Black,
       hoverBackground: KitColor.Blue,
