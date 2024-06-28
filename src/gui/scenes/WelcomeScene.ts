@@ -8,6 +8,7 @@ import { ButtonLabel } from '../kit/ButtonLabel';
 import { PixelFont60px } from '../PrepareFonts';
 
 export class WelcomeScene extends Scene {
+  private isModalWindowOpen = false;
 
   get gameEngine(): GameEngine {
     return this.engine as GameEngine;
@@ -33,9 +34,11 @@ export class WelcomeScene extends Scene {
   private createActionButton(offsetY: number, label: ButtonName): Actor {
     const button = this.createButton(offsetY, label);
 
-    button.events.on(GameEvent.MenuButtonClicked, event =>
-      this.gameEngine.gameEvents.emit(GameEvent.MenuButtonClicked, event)
-    );
+    button.events.on(GameEvent.MenuButtonClicked, event => {
+      if (!this.isModalWindowOpen) {
+        this.gameEngine.gameEvents.emit(GameEvent.MenuButtonClicked, event);
+      }
+    });
 
     return button;
   }
@@ -53,6 +56,12 @@ export class WelcomeScene extends Scene {
       sysName: ButtonName.SelectGame,
       width: 800,
       height: 600,
+      onOpen: () => {
+        this.isModalWindowOpen = true;
+      },
+      onClose: () => {
+        this.isModalWindowOpen = false;
+      },
     });
 
     const button = this.createButton(0, ButtonName.CheckersRu);
