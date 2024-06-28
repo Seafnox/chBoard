@@ -1,9 +1,10 @@
 import { ScreenElement, GraphicsGroup, Vector, Color, Rectangle, vec, Circle, GraphicsGrouping } from 'excalibur';
-import { GameEvent } from '../GameEngine';
+import { SystemActionEvent } from '../events/SystemActionEvent';
+import { SystemName } from '../events/SystemName';
 import { ButtonState } from './ButtonState';
 
 export interface RoundedButtonConfig {
-  systemName: string;
+  systemName: SystemName;
   width: number;
   height: number;
   radius: number;
@@ -16,6 +17,7 @@ export interface RoundedButtonConfig {
   idleBorder?: Color;
   hoverBorder?: Color;
   pressedBorder?: Color;
+  onClick?: (event: SystemActionEvent) => void;
 }
 
 interface RoundedButtonStateConfig {
@@ -78,8 +80,7 @@ export class RoundedButton extends ScreenElement {
       }
       this.isPointerDownHere = false;
       this.graphics.use(ButtonState.Hover);
-      // TODO refactor to callback function
-      this.events.emit(GameEvent.MenuButtonClicked, {
+      this.config.onClick && this.config.onClick({
         systemName: this.config.systemName,
       });
     })

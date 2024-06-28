@@ -1,5 +1,5 @@
 import { SystemName } from './SystemName';
 
-export interface MenuButtonClickedEvent {
+export interface SystemActionEvent {
   systemName: SystemName;
 }

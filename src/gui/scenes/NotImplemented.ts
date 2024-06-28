@@ -22,12 +22,10 @@ export class NotImplementedScene extends Scene {
     const backButton = new BackButton({
       pos: engine.screen.center.add(vec(0, 100)),
       labelColor: Color.White,
-      labelShadowColor: Color.Black
+      labelShadowColor: Color.Black,
+      onClick: event => engine.gameEvents.emit(GameEvent.SystemAction, event),
     });
 
-    backButton.events.on(GameEvent.MenuButtonClicked, event => {
-      engine.gameEvents.emit(GameEvent.MenuButtonClicked, event);
-    })
     this.add(backButton);
   }
 }

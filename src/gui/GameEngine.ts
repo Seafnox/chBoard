@@ -1,9 +1,9 @@
 import { Engine, EventEmitter, PointerEvent, Vector } from 'excalibur';
-import { MenuButtonClickedEvent } from './events/MenuButtonClickedEvent';
+import { SystemActionEvent } from './events/SystemActionEvent';
 import { GameProperty } from './GameProperty';
 
 export enum GameEvent {
-  MenuButtonClicked = 'buttonclicked',
+  SystemAction = 'systemaction',
   PointerDown = 'pointerdown',
   // TODO Remove useless action
   AddUnit = 'addunit',
@@ -15,7 +15,7 @@ export interface GameEventMap {
   [GameEvent.PointerDown]: PointerEvent,
   [GameEvent.AddUnit]: Vector,
   [GameEvent.RemoveUnit]: Vector,
-  [GameEvent.MenuButtonClicked]: MenuButtonClickedEvent,
+  [GameEvent.SystemAction]: SystemActionEvent,
 }
 
 export class GameEngine extends Engine {

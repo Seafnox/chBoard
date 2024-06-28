@@ -1,6 +1,6 @@
 import { ScreenElement, vec, Text, BaseAlign, Vector, Color, GraphicsGroup, Circle, Line } from 'excalibur';
+import { SystemActionEvent } from '../events/SystemActionEvent';
 import { SystemName } from '../events/SystemName';
-import { GameEvent } from '../GameEngine';
 import { PixelFont30px } from '../PrepareFonts';
 import { ButtonState } from './ButtonState';
 
@@ -8,6 +8,7 @@ export interface BackButtonConfig {
   pos?: Vector;
   labelColor: Color;
   labelShadowColor?: Color;
+  onClick?: (event: SystemActionEvent) => void;
 }
 
 interface BackButtonStateConfig {
@@ -19,21 +20,24 @@ const width = 150;
 const height = 50;
 const borderSize = 5;
 const lineWidth = 5;
+const systemName = SystemName.Back;
 
 export class BackButton extends ScreenElement {
   private label: Text;
   private isPointerDownHere = false;
 
-  constructor(config: BackButtonConfig) {
+  constructor(
+    private config: BackButtonConfig
+  ) {
     super({
-      name: SystemName.Back,
+      name: systemName,
       pos: vec(50, 50),
       width,
       height,
     });
 
     this.label = new Text({
-      text: SystemName.Back,
+      text: systemName,
       color: config.labelColor,
       font: PixelFont30px({
         baseAlign: BaseAlign.Middle,
@@ -54,10 +58,7 @@ export class BackButton extends ScreenElement {
       }
       this.isPointerDownHere = false;
       this.graphics.use(ButtonState.Hover);
-      // TODO refactor to callback function
-      this.events.emit(GameEvent.MenuButtonClicked, {
-        systemName: SystemName.Back,
-      });
+      this.config.onClick && this.config.onClick({ systemName });
     })
     this.on('pointerdown', () => {
       this.isPointerDownHere = true;

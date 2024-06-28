@@ -1,6 +1,6 @@
 import { ScreenElement, Vector, Color, vec, GraphicsGroup, Circle, GraphicsGrouping } from 'excalibur';
+import { SystemActionEvent } from '../events/SystemActionEvent';
 import { SystemName } from '../events/SystemName';
-import { GameEvent } from '../GameEngine';
 import { ButtonState } from './ButtonState';
 
 export interface CircleButtonConfig {
@@ -15,6 +15,7 @@ export interface CircleButtonConfig {
   idleBackground?: Color;
   hoverBackground?: Color;
   pressedBackground?: Color;
+  onClick?: (event: SystemActionEvent) => void;
 }
 
 export interface CircleButtonStateConfig {
@@ -70,8 +71,7 @@ export class CircleButton extends ScreenElement {
       }
       this.isPointerDownHere = false;
       this.graphics.use(ButtonState.Hover);
-      // TODO refactor to callback function
-      this.events.emit(GameEvent.MenuButtonClicked, {
+      this.config.onClick && this.config.onClick({
         systemName: this.config.systemName,
       });
     })
