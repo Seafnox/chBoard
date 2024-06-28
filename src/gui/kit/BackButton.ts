@@ -1,5 +1,5 @@
 import { ScreenElement, vec, Text, BaseAlign, Vector, Color, GraphicsGroup, Circle, Line } from 'excalibur';
-import { ButtonName } from '../events/ButtonName';
+import { SystemName } from '../events/SystemName';
 import { GameEvent } from '../GameEngine';
 import { PixelFont30px } from '../PrepareFonts';
 import { ButtonState } from './ButtonState';
@@ -26,14 +26,14 @@ export class BackButton extends ScreenElement {
 
   constructor(config: BackButtonConfig) {
     super({
-      name: ButtonName.Back,
+      name: SystemName.Back,
       pos: vec(50, 50),
       width,
       height,
     });
 
     this.label = new Text({
-      text: ButtonName.Back,
+      text: SystemName.Back,
       color: config.labelColor,
       font: PixelFont30px({
         baseAlign: BaseAlign.Middle,
@@ -54,8 +54,9 @@ export class BackButton extends ScreenElement {
       }
       this.isPointerDownHere = false;
       this.graphics.use(ButtonState.Hover);
+      // TODO refactor to callback function
       this.events.emit(GameEvent.MenuButtonClicked, {
-        buttonName: ButtonName.Back,
+        systemName: SystemName.Back,
       });
     })
     this.on('pointerdown', () => {

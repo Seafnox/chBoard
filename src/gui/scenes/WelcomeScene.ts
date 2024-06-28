@@ -1,5 +1,5 @@
 import { Scene, Label, vec, Color, Actor } from 'excalibur';
-import { ButtonName } from '../events/ButtonName';
+import { SystemName } from '../events/SystemName';
 import { GameEvent, GameEngine } from '../GameEngine';
 import { KitColor } from '../kit/KitColor';
 import { ModalWindow } from '../kit/ModalWindow';
@@ -17,9 +17,9 @@ export class WelcomeScene extends Scene {
   onInitialize(engine: GameEngine) {
     this.engine = engine;
     this.gameEngine.add(this.createHeader());
-    this.gameEngine.add(this.createGameSelectionButton(200, ButtonName.Play));
-    this.gameEngine.add(this.createActionButton(350, ButtonName.Settings));
-    this.gameEngine.add(this.createActionButton(500, ButtonName.Help));
+    this.gameEngine.add(this.createGameSelectionButton(200, SystemName.Play));
+    this.gameEngine.add(this.createActionButton(350, SystemName.Settings));
+    this.gameEngine.add(this.createActionButton(500, SystemName.Help));
   }
 
   createHeader(): Actor {
@@ -31,7 +31,7 @@ export class WelcomeScene extends Scene {
     });
   }
 
-  private createActionButton(offsetY: number, label: ButtonName): Actor {
+  private createActionButton(offsetY: number, label: SystemName): Actor {
     const button = this.createButton(offsetY, label);
 
     button.events.on(GameEvent.MenuButtonClicked, event => {
@@ -43,7 +43,7 @@ export class WelcomeScene extends Scene {
     return button;
   }
 
-  private createGameSelectionButton(offsetY: number, label: ButtonName): Actor {
+  private createGameSelectionButton(offsetY: number, label: SystemName): Actor {
     const button = this.createButton(offsetY, label);
 
     button.events.on(GameEvent.MenuButtonClicked, () => this.showGameSelectionMenu());
@@ -53,7 +53,7 @@ export class WelcomeScene extends Scene {
 
   private showGameSelectionMenu() {
     const modal = new ModalWindow(this.gameEngine, {
-      sysName: ButtonName.SelectGame,
+      systemName: SystemName.SelectGame,
       width: 800,
       height: 600,
       onOpen: () => {
@@ -64,7 +64,7 @@ export class WelcomeScene extends Scene {
       },
     });
 
-    const button = this.createButton(0, ButtonName.CheckersRu);
+    const button = this.createButton(0, SystemName.CheckersRu);
 
     button.events.on(GameEvent.MenuButtonClicked, event => {
       this.gameEngine.gameEvents.emit(GameEvent.MenuButtonClicked, event);
@@ -75,25 +75,25 @@ export class WelcomeScene extends Scene {
     modal.addEntity(this.createModalHeader());
     // TODO fix positions
     modal.addEntity(button, vec(0, 150));
-    // modal.addEntity(this.createActionButton(450, ButtonName.CheckersRu));
+    // modal.addEntity(this.createActionButton(450, SystemName.CheckersRu));
 
     modal.open();
   }
 
   createModalHeader(): Actor {
     return new Label({
-      text: ButtonName.SelectGame,
+      text: SystemName.SelectGame,
       color: Color.White,
       font: PixelFont60px({shadow: {color: Color.Black}}),
     });
   }
 
-  private createButton(offsetY: number, label: ButtonName): Actor {
+  private createButton(offsetY: number, label: SystemName): Actor {
     const width = 400;
     const height = 100;
 
     return new RoundedButton({
-      buttonName: label,
+      systemName: label,
       width,
       height,
       radius: 10,

@@ -3,7 +3,7 @@ import { GameEvent } from '../GameEngine';
 import { ButtonState } from './ButtonState';
 
 export interface RoundedButtonConfig {
-  buttonName: string;
+  systemName: string;
   width: number;
   height: number;
   radius: number;
@@ -35,7 +35,7 @@ export class RoundedButton extends ScreenElement {
     private config: RoundedButtonConfig,
   ) {
     super({
-      name: config.buttonName,
+      name: config.systemName,
       pos: vec(config.pos.x - config.width / 2, config.pos.y - config.height / 2),
       width: config.width,
       height: config.height,
@@ -78,8 +78,9 @@ export class RoundedButton extends ScreenElement {
       }
       this.isPointerDownHere = false;
       this.graphics.use(ButtonState.Hover);
+      // TODO refactor to callback function
       this.events.emit(GameEvent.MenuButtonClicked, {
-        buttonName: this.config.buttonName,
+        systemName: this.config.systemName,
       });
     })
     this.on('pointerdown', () => {

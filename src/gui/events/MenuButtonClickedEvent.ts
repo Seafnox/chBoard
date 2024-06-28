@@ -1,5 +1,5 @@
-import { ButtonName } from './ButtonName';
+import { SystemName } from './SystemName';
 
 export interface MenuButtonClickedEvent {
-  buttonName: ButtonName;
+  systemName: SystemName;
 }

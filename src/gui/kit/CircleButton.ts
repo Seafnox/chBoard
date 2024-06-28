@@ -1,10 +1,10 @@
 import { ScreenElement, Vector, Color, vec, GraphicsGroup, Circle, GraphicsGrouping } from 'excalibur';
-import { ButtonName } from '../events/ButtonName';
+import { SystemName } from '../events/SystemName';
 import { GameEvent } from '../GameEngine';
 import { ButtonState } from './ButtonState';
 
 export interface CircleButtonConfig {
-  buttonName: ButtonName;
+  systemName: SystemName;
   radius: number;
   pos: Vector;
   subNodes: GraphicsGrouping[];
@@ -33,7 +33,7 @@ export class CircleButton extends ScreenElement {
     private config: CircleButtonConfig,
   ) {
     super({
-      name: config.buttonName,
+      name: config.systemName,
       pos: vec(config.pos.x - config.radius / 2, config.pos.y - config.radius / 2),
       width: config.radius,
       height: config.radius,
@@ -70,8 +70,9 @@ export class CircleButton extends ScreenElement {
       }
       this.isPointerDownHere = false;
       this.graphics.use(ButtonState.Hover);
+      // TODO refactor to callback function
       this.events.emit(GameEvent.MenuButtonClicked, {
-        buttonName: this.config.buttonName,
+        systemName: this.config.systemName,
       });
     })
     this.on('pointerdown', () => {

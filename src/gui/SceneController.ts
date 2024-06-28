@@ -1,27 +1,27 @@
-import { ButtonName } from './events/ButtonName';
+import { SystemName } from './events/SystemName';
 import { GameEngine, GameEvent } from './GameEngine';
 import { SceneName } from './scenes/SceneMap';
 
 export class SceneController {
-  private sceneMap: Partial<Record<ButtonName, SceneName>> = {
-    [ButtonName.CheckersRu]: SceneName.RussianCheckersScene,
-    [ButtonName.Settings]: SceneName.SettingsScene,
-    [ButtonName.Help]: SceneName.HelpScene,
-    [ButtonName.QuitGame]: SceneName.WelcomeScene,
-    [ButtonName.NewGame]: SceneName.WelcomeScene,
+  private sceneMap: Partial<Record<SystemName, SceneName>> = {
+    [SystemName.CheckersRu]: SceneName.RussianCheckersScene,
+    [SystemName.Settings]: SceneName.SettingsScene,
+    [SystemName.Help]: SceneName.HelpScene,
+    [SystemName.QuitGame]: SceneName.WelcomeScene,
+    [SystemName.NewGame]: SceneName.WelcomeScene,
   }
 
   constructor(
     private engine: GameEngine,
   ) {
     this.engine.gameEvents.on(GameEvent.MenuButtonClicked, event => {
-      console.log(this.constructor.name, event.buttonName);
-      if (event.buttonName === ButtonName.Back) {
+      console.log(this.constructor.name, event.systemName);
+      if (event.systemName === SystemName.Back) {
         this.runBackScenario();
         return;
       }
 
-      const sceneName = this.sceneMap[event.buttonName];
+      const sceneName = this.sceneMap[event.systemName];
       if (sceneName && sceneName !== this.currentSceneName) {
         this.engine.goToScene(sceneName);
       } else {

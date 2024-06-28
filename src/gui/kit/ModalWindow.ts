@@ -1,9 +1,9 @@
 import { ScreenElement, vec, Color, Rectangle, Actor, GraphicsGroup, Vector, BoundingBox } from 'excalibur';
-import { ButtonName } from '../events/ButtonName';
+import { SystemName } from '../events/SystemName';
 import { GameEngine } from '../GameEngine';
 
 export interface ModalWindowConfig {
-  sysName: ButtonName;
+  systemName: SystemName;
   width: number;
   height: number;
   onClose?: () => void;
@@ -28,7 +28,7 @@ export class ModalWindow extends ScreenElement {
     private config: ModalWindowConfig,
   ) {
     super({
-      name: `Modal_${config.sysName}`,
+      name: `Modal_${config.systemName}`,
       width: engine.screen.drawWidth,
       height: engine.screen.drawHeight,
       pos: vec(0, 0),

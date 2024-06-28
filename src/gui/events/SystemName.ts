@@ -1,4 +1,4 @@
-export const enum ButtonName {
+export const enum SystemName {
   Restart = 'RESTART',
   Save = 'SAVE',
   Load = 'LOAD',
