@@ -1,10 +1,13 @@
-import { ScreenElement, vec, Color, Rectangle, Actor, GraphicsGroup, Vector } from 'excalibur';
+import { ScreenElement, vec, Color, Rectangle, Actor, GraphicsGroup, Vector, BoundingBox } from 'excalibur';
+import { ButtonName } from '../events/ButtonName';
 import { GameEngine } from '../GameEngine';
 
 export interface ModalWindowConfig {
+  sysName: ButtonName;
   width: number;
   height: number;
   onClose?: () => void;
+  onOpen?: () => void;
 }
 
 export class ModalWindow extends ScreenElement {
@@ -18,12 +21,14 @@ export class ModalWindow extends ScreenElement {
   private contentWrapper: Rectangle;
   private subNodes: Actor[] = [];
 
+  private isPointerDownHere = false;
+
   constructor(
     private engine: GameEngine,
     private config: ModalWindowConfig,
   ) {
     super({
-      name: 'ModalWindow',
+      name: `Modal_${config.sysName}`,
       width: engine.screen.drawWidth,
       height: engine.screen.drawHeight,
       pos: vec(0, 0),
@@ -56,13 +61,39 @@ export class ModalWindow extends ScreenElement {
     this.subNodes.forEach(actor => {
       this.engine.add(actor);
     });
+
+    const modalBoundingVectors = this.contentBorder.localBounds.getPoints().map(point => point.add(this.getContentBorderOffset()));
+    const modalBounding = BoundingBox.fromPoints(modalBoundingVectors);
+
+    this.on('pointerup', event => {
+      if (!this.isPointerDownHere) {
+        return;
+      }
+      this.isPointerDownHere = false;
+
+      if (!modalBounding.contains(event.worldPos)) {
+        this.close();
+      }
+    });
+
+    this.on('pointerdown', () => {
+      this.isPointerDownHere = true;
+    })
   }
 
   onPreKill() {
     this.subNodes.forEach(actor => {
       this.engine.remove(actor);
     });
+  }
 
+  open() {
+    this.engine.add(this);
+    this.config.onOpen && this.config.onOpen();
+  }
+
+  close() {
+    this.kill();
     this.config.onClose && this.config.onClose();
   }
 
@@ -76,6 +107,13 @@ export class ModalWindow extends ScreenElement {
     return this;
   }
 
+  private getContentBorderOffset(): Vector {
+    return vec(
+      (this.engine.screen.drawWidth - this.config.width) / 2,
+      (this.engine.screen.drawHeight - this.config.height) / 2
+    );
+  }
+
   private generateWindow(): GraphicsGroup {
     return new GraphicsGroup({
       members: [
@@ -85,17 +123,11 @@ export class ModalWindow extends ScreenElement {
         },
         {
           graphic: this.contentBorder,
-          offset: vec(
-            (this.engine.screen.drawWidth - this.config.width) / 2,
-            (this.engine.screen.drawHeight - this.config.height) / 2
-          ),
+          offset: this.getContentBorderOffset(),
         },
         {
           graphic: this.contentWrapper,
-          offset: vec(
-            (this.engine.screen.drawWidth - this.config.width) / 2 + this.contentBorderSize,
-            (this.engine.screen.drawHeight - this.config.height) / 2 + this.contentBorderSize
-          ),
+          offset: this.getContentBorderOffset().add(vec(this.contentBorderSize, this.contentBorderSize)),
         },
       ]
     });

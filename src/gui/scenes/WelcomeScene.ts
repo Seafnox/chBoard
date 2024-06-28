@@ -50,21 +50,30 @@ export class WelcomeScene extends Scene {
 
   private showGameSelectionMenu() {
     const modal = new ModalWindow(this.gameEngine, {
+      sysName: ButtonName.SelectGame,
       width: 800,
       height: 600,
     });
 
+    const button = this.createButton(0, ButtonName.CheckersRu);
+
+    button.events.on(GameEvent.MenuButtonClicked, event => {
+      this.gameEngine.gameEvents.emit(GameEvent.MenuButtonClicked, event);
+      modal.close();
+    });
+
+
     modal.addEntity(this.createModalHeader());
     // TODO fix positions
-    // modal.addEntity(this.createActionButton(0, ButtonName.CheckersRu), vec(0, 150));
+    modal.addEntity(button, vec(0, 150));
     // modal.addEntity(this.createActionButton(450, ButtonName.CheckersRu));
 
-    this.engine.add(modal);
+    modal.open();
   }
 
   createModalHeader(): Actor {
     return new Label({
-      text: 'SELECT GAME',
+      text: ButtonName.SelectGame,
       color: Color.White,
       font: PixelFont60px({shadow: {color: Color.Black}}),
     });
