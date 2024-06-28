@@ -1,4 +1,4 @@
-import { Scene, Label, vec, Color, Actor } from 'excalibur';
+import { Scene, Label, vec, Color, Actor, Vector } from 'excalibur';
 import { SystemActionEvent } from '../events/SystemActionEvent';
 import { SystemName } from '../events/SystemName';
 import { GameEvent, GameEngine } from '../GameEngine';
@@ -8,8 +8,17 @@ import { ModalWindow } from '../kit/ModalWindow';
 import { RoundedButton } from '../kit/RoundedButton';
 import { PixelFont60px } from '../PrepareFonts';
 
+interface CommonButtonConfig {
+  systemName: SystemName;
+  width: number;
+  height: number;
+  pos: Vector;
+  onClick?: (event: SystemActionEvent) => void;
+}
+
 export class WelcomeScene extends Scene {
   private isModalWindowOpen = false;
+  private availableCheckers: SystemName[] = [SystemName.CheckersRu];
 
   get gameEngine(): GameEngine {
     return this.engine as GameEngine;
@@ -18,9 +27,9 @@ export class WelcomeScene extends Scene {
   onInitialize(engine: GameEngine) {
     this.engine = engine;
     this.gameEngine.add(this.createHeader());
-    this.gameEngine.add(this.createButton(200, SystemName.Play, this.showGameSelectionMenu.bind(this)));
-    this.gameEngine.add(this.createButton(350, SystemName.Settings, this.emitSystemAction.bind(this)));
-    this.gameEngine.add(this.createButton(500, SystemName.Help, this.emitSystemAction.bind(this)));
+    this.gameEngine.add(this.createMainMenuButton(200, SystemName.Play, this.showGameSelectionMenu.bind(this)));
+    this.gameEngine.add(this.createMainMenuButton(350, SystemName.Settings, this.emitSystemAction.bind(this)));
+    this.gameEngine.add(this.createMainMenuButton(500, SystemName.Help, this.emitSystemAction.bind(this)));
   }
 
   createHeader(): Actor {
@@ -43,9 +52,12 @@ export class WelcomeScene extends Scene {
       return;
     }
 
+    const modalWidth = 800;
+    const borderOffset = 5;
+    const buttonWidth = (modalWidth - 2 * borderOffset);
     const modal = new ModalWindow(this.gameEngine, {
       systemName: SystemName.SelectGame,
-      width: 800,
+      width: modalWidth,
       height: 600,
       onOpen: () => {
         this.isModalWindowOpen = true;
@@ -55,16 +67,17 @@ export class WelcomeScene extends Scene {
       },
     });
 
-    const button = this.createButton(0, SystemName.CheckersRu, event => {
-      this.gameEngine.gameEvents.emit(GameEvent.SystemAction, event);
-      modal.close();
-    });
+    const buttons = this.availableCheckers.map(label => {
+      return this.createSelectionMenuButton(buttonWidth, label, event => {
+        this.gameEngine.gameEvents.emit(GameEvent.SystemAction, event);
+      });
+    })
 
 
     modal.addEntity(this.createModalHeader());
-    // TODO fix positions
-    modal.addEntity(button, vec(0, 150));
-    // modal.addEntity(this.createActionButton(450, SystemName.CheckersRu));
+    buttons.forEach((button, index) => {
+      modal.addEntity(button, vec(-buttonWidth/2, 150 * (index + 1)));
+    })
 
     modal.open();
   }
@@ -77,19 +90,41 @@ export class WelcomeScene extends Scene {
     });
   }
 
-  private createButton(offsetY: number, label: SystemName, onClick: (event: SystemActionEvent) => void): Actor {
+  private createMainMenuButton(offsetY: number, label: SystemName, onClick: (event: SystemActionEvent) => void): Actor {
     const width = 400;
     const height = 100;
 
-    return new RoundedButton({
+    return this.createCommonButton({
       systemName: label,
       width,
       height,
-      radius: height/10,
       pos: vec(this.gameEngine.screen.center.x, offsetY),
+      onClick,
+    });
+  }
+
+  private createSelectionMenuButton(width: number, label: SystemName, onClick: (event: SystemActionEvent) => void): Actor {
+    const height = 100;
+
+    return this.createCommonButton({
+      systemName: label,
+      width,
+      height,
+      pos: vec(this.gameEngine.screen.center.x, 0),
+      onClick,
+    });
+  }
+
+  private createCommonButton(config: CommonButtonConfig): Actor {
+    return new RoundedButton({
+      systemName: config.systemName,
+      width: config.width,
+      height: config.height,
+      radius: config.height/10,
+      pos: config.pos,
       subNodes: [{
-        graphic: new ButtonLabel({ label }),
-        offset: vec(width/2, height/2),
+        graphic: new ButtonLabel({ label: config.systemName }),
+        offset: vec(config.width/2, config.height/2),
       }],
       idleBackground: KitColor.Cyan,
       idleBorder: KitColor.Black,
@@ -97,7 +132,7 @@ export class WelcomeScene extends Scene {
       hoverBorder: KitColor.Black,
       pressedBackground: KitColor.Pink,
       pressedBorder: KitColor.Black,
-      onClick,
+      onClick: config.onClick,
     });
   }
 }
