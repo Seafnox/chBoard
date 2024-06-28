@@ -39,6 +39,10 @@ export class WelcomeScene extends Scene {
   }
 
   private showGameSelectionMenu() {
+    if (this.isModalWindowOpen) {
+      return;
+    }
+
     const modal = new ModalWindow(this.gameEngine, {
       systemName: SystemName.SelectGame,
       width: 800,
@@ -81,7 +85,7 @@ export class WelcomeScene extends Scene {
       systemName: label,
       width,
       height,
-      radius: 10,
+      radius: height/10,
       pos: vec(this.gameEngine.screen.center.x, offsetY),
       subNodes: [{
         graphic: new ButtonLabel({ label }),
