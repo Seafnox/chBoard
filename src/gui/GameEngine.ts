@@ -1,4 +1,5 @@
 import { Engine, EventEmitter, PointerEvent, Vector } from 'excalibur';
+import { GameConfig } from '../engine/GameConfig';
 import { SystemActionEvent } from './events/SystemActionEvent';
 import { GameProperty } from './GameProperty';
 
@@ -19,6 +20,7 @@ export interface GameEventMap {
 }
 
 export class GameEngine extends Engine {
+  public gameConfig?: GameConfig<any, any, any>;
   public readonly gameEvents = new EventEmitter<GameEventMap>();
   public readonly properties = new Map<GameProperty, string>();
 }

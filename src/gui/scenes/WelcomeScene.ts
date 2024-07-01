@@ -1,4 +1,6 @@
 import { Scene, Label, vec, Color, Actor, Vector } from 'excalibur';
+import { checkersRuConfig } from '../../checkersRu/CheckersRuConfig';
+import { GameConfig } from '../../engine/GameConfig';
 import { SystemActionEvent } from '../events/SystemActionEvent';
 import { SystemName } from '../events/SystemName';
 import { GameEvent, GameEngine } from '../GameEngine';
@@ -18,7 +20,9 @@ interface CommonButtonConfig {
 
 export class WelcomeScene extends Scene {
   private isModalWindowOpen = false;
-  private availableCheckers: SystemName[] = [SystemName.CheckersRu];
+  private availableCheckers: Partial<Record<SystemName, GameConfig<any, any, any>>> = {
+    [SystemName.CheckersRu]: checkersRuConfig,
+  };
 
   get gameEngine(): GameEngine {
     return this.engine as GameEngine;
@@ -67,8 +71,9 @@ export class WelcomeScene extends Scene {
       },
     });
 
-    const buttons = this.availableCheckers.map(label => {
-      return this.createSelectionMenuButton(buttonWidth, label, event => {
+    const buttons = Object.entries(this.availableCheckers).map(([label, config]) => {
+      return this.createSelectionMenuButton(buttonWidth, label as SystemName, event => {
+        this.gameEngine.gameConfig = config;
         this.gameEngine.gameEvents.emit(GameEvent.SystemAction, event);
       });
     })
