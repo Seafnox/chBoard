@@ -4,6 +4,8 @@ export interface UnitConfig<TUnitType, TOwner> {
 }
 
 export interface BoardConfig<TCellType, TUnitType, TOwner> {
+  width: number,
+  height: number,
   cellMap: Record<string, TCellType>,
   unitMap: Record<string, UnitConfig<TUnitType, TOwner>>,
 }

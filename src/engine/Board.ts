@@ -11,13 +11,11 @@ export class Board<TCellType, TUnitType, TOwner> extends InteractiveEntity<TCell
   private readonly unitMap: Record<string, Unit<TCellType, TUnitType, TOwner> | undefined>;
 
   constructor(
-    public readonly width: number,
-    public readonly height: number,
     public readonly initialConfig: BoardConfig<TCellType, TUnitType, TOwner>,
   ) {
     super();
 
-    this.cells = Array<Cell<TCellType, TUnitType, TOwner>>(width * height);
+    this.cells = Array<Cell<TCellType, TUnitType, TOwner>>(this.initialConfig.width * this.initialConfig.height);
     this.cellMap = {};
 
     this.units = [];
@@ -27,7 +25,7 @@ export class Board<TCellType, TUnitType, TOwner> extends InteractiveEntity<TCell
       const cellType = initialConfig.cellMap[location];
       const [x, y] = location.split(',').map(Number);
       const cell = new Cell<TCellType, TUnitType, TOwner>(x, y, cellType);
-      this.cells[y * width + x] = cell;
+      this.cells[y * this.initialConfig.width + x] = cell;
       this.cellMap[location] = cell;
     });
 

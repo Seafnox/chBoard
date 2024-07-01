@@ -1,7 +1,9 @@
-import { BoardConfig, UnitConfig } from '../engine/BoardConfig';
+import { UnitConfig } from '../engine/BoardConfig';
+import { GameConfig } from '../engine/GameConfig';
 import { CheckersRuCellType } from './CheckersRuCellType';
 import { CheckersRuUnitOwner } from './CheckersRuUnitOwner';
 import { CheckersRuUnitType } from './CheckersRuUnitType';
+import { MoveForChecker } from './rules/MoveForChecker';
 
 const cellMap: Record<string, CheckersRuCellType> = {};
 
@@ -25,7 +27,12 @@ for(let i = 0; i < 8; i++) {
   };
 }
 
-export const checkersRuConfig: BoardConfig<CheckersRuCellType, CheckersRuUnitType, CheckersRuUnitOwner> = {
+export const checkersRuConfig: GameConfig<CheckersRuCellType, CheckersRuUnitType, CheckersRuUnitOwner> = {
   cellMap,
   unitMap,
+  width: 8,
+  height: 8,
+  rules: [
+    new MoveForChecker(),
+  ],
 }
