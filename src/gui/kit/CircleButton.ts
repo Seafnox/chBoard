@@ -94,17 +94,17 @@ export class CircleButton extends ScreenElement {
       members: [
         {
           graphic: new Circle({
-            radius: config.radius,
+            radius: config.radius - 1,
             color: config.border || config.background,
           }),
-          offset: vec(0, config.radius/2),
+          offset: vec(0, 0),
         },
         {
           graphic: new Circle({
-            radius: config.radius - config.borderSize * 2,
+            radius: config.radius - 1 - config.borderSize,
             color: config.background,
           }),
-          offset: vec(0, config.radius/2 + config.borderSize),
+          offset: vec(config.borderSize, config.borderSize),
         },
         ...config.subNodes,
       ]
