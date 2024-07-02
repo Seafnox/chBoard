@@ -9,6 +9,8 @@ export const enum SystemName {
   SelectGame = 'SELECT GAME',
   CheckersRu = 'RUSSIAN CHECKERS',
   Settings = 'SETTINGS',
+  Settings2 = '⚙️',
   Help = 'HELP',
+  Help2 = '❔',
   Back = 'BACK',
 }
