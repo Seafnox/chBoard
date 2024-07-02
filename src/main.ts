@@ -10,7 +10,7 @@ import { ContextMenuController } from "./gui/ContextMenu";
 import { SceneController } from './gui/SceneController';
 import { sceneMap, defaultScene } from './gui/scenes/SceneMap';
 import { UnitController } from './gui/UnitController';
-import { calculateExPixelConversion } from './gui/СalculatePixelConversion';
+import { calculatePixelConversion } from './gui/СalculatePixelConversion';
 
 const engine = new GameEngine({
   canvasElementId: 'scene',
@@ -23,13 +23,12 @@ const engine = new GameEngine({
   scenes: sceneMap,
 });
 
-engine.screen.events.on('resize', () => calculateExPixelConversion(engine.screen));
+engine.screen.events.on('resize', () => calculatePixelConversion(engine.screen));
 
-engine.start();
-engine.load(ResourceLoader)
+engine.start(ResourceLoader)
   .then(() => engine.goToScene(defaultScene))
   .then(() => {
-    calculateExPixelConversion(engine.screen);
+    calculatePixelConversion(engine.screen);
 
     engine.input.pointers.on('down', event => {
       const currentWorldPos = engine.screen.pageToWorldCoordinates(vec(event.pagePos.x, event.pagePos.y));
