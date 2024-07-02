@@ -5,17 +5,17 @@ import { SystemName } from '../events/SystemName';
 import { GameEngine, GameEvent } from '../GameEngine';
 import { ButtonLabel } from '../kit/ButtonLabel';
 import { CheckersBoard } from '../kit/CheckersBoard';
+import { CircleButton } from '../kit/CircleButton';
 import { KitColor } from '../kit/KitColor';
-import { RoundedButton } from '../kit/RoundedButton';
 import { PixelFont60px } from '../PrepareFonts';
 
-interface CommonButtonConfig {
+interface CircleButtonConfig {
   systemName: SystemName;
-  width: number;
-  height: number;
+  diameter: number;
   pos: Vector;
   onClick?: (event: SystemActionEvent) => void;
 }
+
 export class CheckersScene extends Scene {
   private isModalWindowOpen = false;
 
@@ -34,8 +34,8 @@ export class CheckersScene extends Scene {
     this.gameEngine.add(this.createHeader());
     this.gameEngine.add(this.createBoard(this.gameEngine.gameConfig, vec(this.gameEngine.screen.center.x, 160)));
     //this.gameEngine.add(this.createUnits(this.gameEngine.gameConfig));
-    this.gameEngine.add(this.createMenuButton(350, SystemName.Settings, this.emitSystemAction.bind(this)));
-    this.gameEngine.add(this.createMenuButton(500, SystemName.Help, this.emitSystemAction.bind(this)));
+    this.gameEngine.add(this.createMenuButton(350, SystemName.Settings2, this.emitSystemAction.bind(this)));
+    this.gameEngine.add(this.createMenuButton(500, SystemName.Help2, this.emitSystemAction.bind(this)));
 
   }
 
@@ -59,28 +59,29 @@ export class CheckersScene extends Scene {
   }
 
   private createMenuButton(offsetY: number, label: SystemName, onClick: (event: SystemActionEvent) => void): Actor {
-    const width = 400;
-    const height = 100;
+    const diameter = 100;
 
     return this.createCommonButton({
       systemName: label,
-      width,
-      height,
-      pos: vec(this.gameEngine.screen.drawWidth - width, offsetY),
+      diameter,
+      pos: vec(this.gameEngine.screen.drawWidth - diameter * 1.5, offsetY),
       onClick,
     });
   }
 
-  private createCommonButton(config: CommonButtonConfig): Actor {
-    return new RoundedButton({
+  private createCommonButton(config: CircleButtonConfig): Actor {
+    return new CircleButton({
       systemName: config.systemName,
-      width: config.width,
-      height: config.height,
-      radius: config.height/10,
+      radius: config.diameter / 2,
+      borderSize: config.diameter / 20,
       pos: config.pos,
       subNodes: [{
-        graphic: new ButtonLabel({ label: config.systemName }),
-        offset: vec(config.width/2, config.height/2),
+        graphic: new ButtonLabel({
+          width: config.diameter,
+          height: config.diameter,
+          label: config.systemName,
+        }),
+        offset: vec(config.diameter / 2, config.diameter / 2.5),
       }],
       idleBackground: KitColor.Cyan,
       idleBorder: KitColor.Black,
