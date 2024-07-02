@@ -18,12 +18,12 @@ export class CheckersBoard extends ScreenElement {
 
   constructor(
     public readonly initialConfig: GameConfig<unknown, unknown, unknown>,
-    offset: Vector,
+    public readonly position: Vector,
   ) {
     super({
       width: cellSize * initialConfig.width + borderSize * 2,
       height: cellSize * initialConfig.height + borderSize * 2,
-      offset,
+      offset: position,
     });
 
     this.graphics.add(graphicState, this.getStateGroup(initialConfig));
@@ -34,43 +34,44 @@ export class CheckersBoard extends ScreenElement {
   }
 
   private getStateGroup(initialConfig: GameConfig<unknown, unknown, unknown>) {
+    const offsetX = (2 * borderSize + initialConfig.width * cellSize) / 2;
     return new GraphicsGroup({
       members: [
         {
           graphic: this.getVerticalBorder(initialConfig, true),
-          offset: vec(-this.offset.x / 2, 0),
+          offset: vec(- offsetX, 0),
         },
         {
           graphic: this.getHorizontalBorder(initialConfig, true),
-          offset: vec(-this.offset.x / 2, 0),
+          offset: vec(- offsetX, 0),
         },
         {
           graphic: this.getHorizontalBorder(initialConfig),
-          offset: vec(-this.offset.x / 2, initialConfig.height * cellSize + borderSize),
+          offset: vec(- offsetX, initialConfig.height * cellSize + borderSize),
         },
         {
           graphic: this.getVerticalBorder(initialConfig),
-          offset: vec(initialConfig.width * cellSize + borderSize - this.offset.x / 2, 0),
+          offset: vec(initialConfig.width * cellSize + borderSize - offsetX, 0),
         },
         {
           graphic: this.getVerticalBorderNumbers(initialConfig),
-          offset: vec(borderSize - this.offset.x / 2, 0),
+          offset: vec(borderSize - offsetX, 0),
         },
         {
           graphic: this.getVerticalBorderNumbers(initialConfig),
-          offset: vec(borderSize - this.offset.x / 2, initialConfig.width * cellSize + borderSize),
+          offset: vec(borderSize - offsetX, initialConfig.width * cellSize + borderSize),
         },
         {
           graphic: this.getHorizontalBorderLetters(initialConfig),
-          offset: vec(-this.offset.x / 2, borderSize),
+          offset: vec(- offsetX, borderSize),
         },
         {
           graphic: this.getHorizontalBorderLetters(initialConfig),
-          offset: vec(initialConfig.height * cellSize + borderSize - this.offset.x / 2, borderSize),
+          offset: vec(initialConfig.height * cellSize + borderSize - offsetX, borderSize),
         },
         {
           graphic: this.getCells(initialConfig),
-          offset: vec(borderSize - this.offset.x / 2, borderSize),
+          offset: vec(borderSize - offsetX, borderSize),
         },
       ],
     });
@@ -120,7 +121,7 @@ export class CheckersBoard extends ScreenElement {
           color: darkColor,
           font: borderFont,
         }),
-        offset: vec(index * (cellSize + 1) + borderSize / 2, borderSize / 2),
+        offset: vec(index * cellSize + borderSize, borderSize / 2),
       }))
     });
   }
@@ -170,7 +171,7 @@ export class CheckersBoard extends ScreenElement {
           color: darkColor,
           font: borderFont,
         }),
-        offset: vec(borderSize / 2, index * (cellSize + 1) + borderSize / 2),
+        offset: vec(borderSize / 2, index * cellSize + borderSize),
       })),
     });
   }
