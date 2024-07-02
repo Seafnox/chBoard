@@ -32,7 +32,7 @@ export class CheckersScene extends Scene {
     }
 
     this.gameEngine.add(this.createHeader());
-    this.gameEngine.add(this.createBoard(this.gameEngine.gameConfig));
+    this.gameEngine.add(this.createBoard(this.gameEngine.gameConfig, vec(this.gameEngine.screen.center.x, 160)));
     //this.gameEngine.add(this.createUnits(this.gameEngine.gameConfig));
     this.gameEngine.add(this.createMenuButton(350, SystemName.Settings, this.emitSystemAction.bind(this)));
     this.gameEngine.add(this.createMenuButton(500, SystemName.Help, this.emitSystemAction.bind(this)));
@@ -48,8 +48,8 @@ export class CheckersScene extends Scene {
     });
   }
 
-  createBoard(config: GameConfig<any, any, any>): Actor {
-    return new CheckersBoard(config);
+  createBoard(config: GameConfig<unknown, unknown, unknown>, offset: Vector): Actor {
+    return new CheckersBoard(config, offset);
   }
 
   private emitSystemAction(event: SystemActionEvent) {
@@ -66,7 +66,7 @@ export class CheckersScene extends Scene {
       systemName: label,
       width,
       height,
-      pos: vec(this.gameEngine.screen.center.x, offsetY),
+      pos: vec(this.gameEngine.screen.drawWidth - width, offsetY),
       onClick,
     });
   }
