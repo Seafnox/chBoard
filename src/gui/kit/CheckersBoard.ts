@@ -3,8 +3,8 @@ import { GraphicsGrouping } from 'excalibur/build/dist/Graphics/GraphicsGroup';
 import { GameConfig } from '../../engine/GameConfig';
 import { PixelFont30px } from '../PrepareFonts';
 
-const cellSize = 60;
-const borderSize = 50;
+const cellSize = 80;
+const borderSize = 40;
 const borderBorderCoef = 0.1;
 const graphicState = 'root';
 const lightColor = Color.fromHex('DBC1A2');
