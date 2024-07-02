@@ -17,16 +17,15 @@ export class SceneController {
     this.engine.gameEvents.on(GameEvent.SystemAction, event => {
       console.log(this.constructor.name, event.systemName);
       if (event.systemName === SystemName.Back) {
-        this.runBackScenario();
-        return;
+        return this.runBackScenario();
       }
 
       const sceneName = this.sceneMap[event.systemName];
       if (sceneName && sceneName !== this.currentSceneName) {
-        this.engine.goToScene(sceneName);
+        return this.engine.goToScene(sceneName);
       } else {
         console.log(this.constructor.name, 'runNoopScenario');
-        this.engine.goToScene(SceneName.NoopScene);
+        return this.engine.goToScene(SceneName.NoopScene);
       }
     });
   }
@@ -39,10 +38,9 @@ export class SceneController {
     console.log(this.constructor.name, 'runBackScenario');
 
     if (this.currentSceneName !== SceneName.WelcomeScene) {
-      this.engine.goToScene(SceneName.WelcomeScene);
-      return;
+      return this.engine.goToScene(SceneName.WelcomeScene);
     }
 
-    this.engine.goToScene(SceneName.NoopScene);
+    return this.engine.goToScene(SceneName.NoopScene);
   }
 }
