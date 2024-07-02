@@ -20,7 +20,8 @@ interface CommonButtonConfig {
 
 export class WelcomeScene extends Scene {
   private isModalWindowOpen = false;
-  private availableCheckers: Partial<Record<SystemName, GameConfig<any, any, any>>> = {
+  private preparedActors: Actor[] = [];
+  private availableCheckers: Partial<Record<SystemName, GameConfig<unknown, unknown, unknown>>> = {
     [SystemName.CheckersRu]: checkersRuConfig,
   };
 
@@ -28,12 +29,23 @@ export class WelcomeScene extends Scene {
     return this.engine as GameEngine;
   }
 
-  onInitialize(engine: GameEngine) {
-    this.engine = engine;
-    this.gameEngine.add(this.createHeader());
-    this.gameEngine.add(this.createMainMenuButton(200, SystemName.Play, this.showGameSelectionMenu.bind(this)));
-    this.gameEngine.add(this.createMainMenuButton(350, SystemName.Settings, this.emitSystemAction.bind(this)));
-    this.gameEngine.add(this.createMainMenuButton(500, SystemName.Help, this.emitSystemAction.bind(this)));
+  onInitialize() {
+    this.preparedActors.push(this.createHeader());
+    this.preparedActors.push(this.createMainMenuButton(200, SystemName.Play, this.showGameSelectionMenu.bind(this)));
+    this.preparedActors.push(this.createMainMenuButton(350, SystemName.Settings, this.emitSystemAction.bind(this)));
+    this.preparedActors.push(this.createMainMenuButton(500, SystemName.Help, this.emitSystemAction.bind(this)));
+  }
+
+  onActivate() {
+    this.preparedActors.forEach((actor) => {
+      this.add(actor);
+    })
+  }
+
+  onDeactivate() {
+    this.preparedActors.forEach((actor) => {
+      this.remove(actor);
+    })
   }
 
   createHeader(): Actor {
