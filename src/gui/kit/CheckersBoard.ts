@@ -9,6 +9,10 @@ const borderBorderCoef = 0.1;
 const graphicState = 'root';
 const lightColor = Color.fromHex('DBC1A2');
 const darkColor = Color.fromHex('4F3B2C');
+const borderFont = PixelFont30px({
+  textAlign: TextAlign.Center,
+  baseAlign: BaseAlign.Middle,
+});
 
 export class CheckersBoard extends ScreenElement {
 
@@ -33,11 +37,11 @@ export class CheckersBoard extends ScreenElement {
     return new GraphicsGroup({
       members: [
         {
-          graphic: this.getHorizontalBorder(initialConfig, true),
+          graphic: this.getVerticalBorder(initialConfig, true),
           offset: vec(-this.offset.x / 2, 0),
         },
         {
-          graphic: this.getVerticalBorder(initialConfig, true),
+          graphic: this.getHorizontalBorder(initialConfig, true),
           offset: vec(-this.offset.x / 2, 0),
         },
         {
@@ -49,8 +53,24 @@ export class CheckersBoard extends ScreenElement {
           offset: vec(initialConfig.width * cellSize + borderSize - this.offset.x / 2, 0),
         },
         {
+          graphic: this.getVerticalBorderNumbers(initialConfig),
+          offset: vec(borderSize - this.offset.x / 2, 0),
+        },
+        {
+          graphic: this.getVerticalBorderNumbers(initialConfig),
+          offset: vec(borderSize - this.offset.x / 2, initialConfig.width * cellSize + borderSize),
+        },
+        {
+          graphic: this.getHorizontalBorderLetters(initialConfig),
+          offset: vec(-this.offset.x / 2, borderSize),
+        },
+        {
+          graphic: this.getHorizontalBorderLetters(initialConfig),
+          offset: vec(initialConfig.height * cellSize + borderSize - this.offset.x / 2, borderSize),
+        },
+        {
           graphic: this.getCells(initialConfig),
-          offset: vec(borderSize - this.offset.x / 2, borderSize * 100),
+          offset: vec(borderSize - this.offset.x / 2, borderSize),
         },
       ],
     });
@@ -86,10 +106,6 @@ export class CheckersBoard extends ScreenElement {
           }),
           offset: vec(isLeftBorder ? borderSize * (1 - borderBorderCoef) : 0, borderSize * (1 - borderBorderCoef)),
         },
-        {
-          graphic: this.getVerticalBorderNumbers(initialConfig),
-          offset: vec(borderSize, 0),
-        },
       ],
     });
   }
@@ -102,13 +118,10 @@ export class CheckersBoard extends ScreenElement {
           height: borderSize,
           text: String(index + 1),
           color: darkColor,
-          font: PixelFont30px({
-            textAlign: TextAlign.Center,
-            baseAlign: BaseAlign.Middle,
-          }),
+          font: borderFont,
         }),
-        offset: vec(index * cellSize + borderSize / 2, borderSize / 2),
-      })),
+        offset: vec(index * (cellSize + 1) + borderSize / 2, borderSize / 2),
+      }))
     });
   }
 
@@ -142,10 +155,6 @@ export class CheckersBoard extends ScreenElement {
           }),
           offset: vec(borderSize * (1 - borderBorderCoef), isTopBorder ? borderSize * (1 - borderBorderCoef) : 0),
         },
-        {
-          graphic: this.getHorizontalBorderLetters(initialConfig),
-          offset: vec(-borderSize/2, borderSize),
-        },
       ],
     });
   }
@@ -153,29 +162,16 @@ export class CheckersBoard extends ScreenElement {
   private getHorizontalBorderLetters(initialConfig: GameConfig<unknown, unknown, unknown>): GraphicsGroup {
     const firstCharIndex = 'A'.charCodeAt(0);
     return new GraphicsGroup({
-      members: [
-        ...Array(initialConfig.width).fill(0).map<GraphicsGrouping>((_, index) => ({
-          graphic: new Rectangle({
-            width: borderSize / 2,
-            height: borderSize / 2,
-            color: Color.Cyan,
-          }),
-          offset: vec(borderSize / 4, index * cellSize + borderSize / 4),
-        })),
-        ...Array(initialConfig.height).fill(0).map<GraphicsGrouping>((_, index) => ({
-          graphic: new Text({
-            width: borderSize,
-            height: borderSize,
-            text: String.fromCharCode(firstCharIndex + index),
-            color: darkColor,
-            font: PixelFont30px({
-              textAlign: TextAlign.Center,
-              baseAlign: BaseAlign.Middle,
-            }),
-          }),
-          offset: vec(borderSize / 2, index * cellSize + borderSize / 2),
-        })),
-      ],
+      members: Array(initialConfig.height).fill(0).map<GraphicsGrouping>((_, index) => ({
+        graphic: new Text({
+          width: borderSize,
+          height: borderSize,
+          text: String.fromCharCode(firstCharIndex + index),
+          color: darkColor,
+          font: borderFont,
+        }),
+        offset: vec(borderSize / 2, index * (cellSize + 1) + borderSize / 2),
+      })),
     });
   }
 
