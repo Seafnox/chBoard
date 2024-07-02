@@ -32,7 +32,7 @@ export class CheckersScene extends Scene {
     }
 
     this.gameEngine.add(this.createHeader());
-    this.gameEngine.add(this.createBoard(this.gameEngine.gameConfig, vec(this.gameEngine.screen.center.x, 160)));
+    this.gameEngine.add(this.createBoard(this.gameEngine.gameConfig, vec(this.gameEngine.screen.center.x, 120)));
     //this.gameEngine.add(this.createUnits(this.gameEngine.gameConfig));
     this.gameEngine.add(this.createMenuButton(350, SystemName.Settings2, this.emitSystemAction.bind(this)));
     this.gameEngine.add(this.createMenuButton(500, SystemName.Help2, this.emitSystemAction.bind(this)));
