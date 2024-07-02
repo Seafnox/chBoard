@@ -24,6 +24,7 @@ export class ModalWindow extends ScreenElement {
   private isPointerDownHere = false;
 
   constructor(
+    // TODO refactor to use Scene for adding and position calculation
     private engine: GameEngine,
     private config: ModalWindowConfig,
   ) {
