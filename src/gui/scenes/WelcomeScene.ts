@@ -39,13 +39,13 @@ export class WelcomeScene extends Scene {
   onActivate() {
     this.preparedActors.forEach((actor) => {
       this.add(actor);
-    })
+    });
   }
 
   onDeactivate() {
     this.preparedActors.forEach((actor) => {
       this.remove(actor);
-    })
+    });
   }
 
   createHeader(): Actor {
@@ -88,13 +88,12 @@ export class WelcomeScene extends Scene {
         this.gameEngine.gameConfig = config;
         this.gameEngine.gameEvents.emit(GameEvent.SystemAction, event);
       });
-    })
-
+    });
 
     modal.addEntity(this.createModalHeader());
     buttons.forEach((button, index) => {
-      modal.addEntity(button, vec(-buttonWidth/2, 150 * (index + 1)));
-    })
+      modal.addEntity(button, vec(-buttonWidth / 2, 150 * (index + 1)));
+    });
 
     modal.open();
   }
@@ -137,11 +136,15 @@ export class WelcomeScene extends Scene {
       systemName: config.systemName,
       width: config.width,
       height: config.height,
-      radius: config.height/10,
+      radius: config.height / 10,
       pos: config.pos,
       subNodes: [{
-        graphic: new ButtonLabel({ label: config.systemName }),
-        offset: vec(config.width/2, config.height/2),
+        graphic: new ButtonLabel({
+          width: config.width,
+          height: config.height,
+          label: config.systemName,
+        }),
+        offset: vec(config.width / 2, config.height / 2),
       }],
       idleBackground: KitColor.Cyan,
       idleBorder: KitColor.Black,
