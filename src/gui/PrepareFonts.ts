@@ -9,22 +9,26 @@ export const PixelFont30px = (options?: FontOptions & GraphicOptions & RasterOpt
   size: 30,
   unit: FontUnit.Px,
   textAlign: TextAlign.Center,
-  ...options,
-  shadow: {
-    blur: 2,
-    offset: vec(2, 2),
-    ...options?.shadow,
-  }
-})
+  ...(options || {}),
+  ...(!options?.shadow ? {} : {
+    shadow: {
+      blur: 2,
+      offset: vec(2, 2),
+      ...(options?.shadow || {}),
+    },
+  }),
+});
 
 export const PixelFont60px = (options?: FontOptions & GraphicOptions & RasterOptions) => PixelFontResource.toFont({
   size: 60,
   unit: FontUnit.Px,
   textAlign: TextAlign.Center,
   ...options,
-  shadow: {
-    blur: 4,
-    offset: vec(4, 4),
-    ...options?.shadow,
-  }
-})
+  ...(!options?.shadow ? {} : {
+    shadow: {
+      blur: 4,
+      offset: vec(4, 4),
+      ...options?.shadow,
+    },
+  }),
+});
