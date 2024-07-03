@@ -1,10 +1,15 @@
 import { Scene, Actor, Label, vec, Color, Vector } from 'excalibur';
+import { CheckersCellType } from '../../engineCheckers/simple/commons/CheckersCellType';
+import { CheckersUnitOwner } from '../../engineCheckers/simple/commons/CheckersUnitOwner';
+import { CheckersUnitType } from '../../engineCheckers/simple/commons/CheckersUnitType';
+import { Game } from '../../engine/Game';
 import { GameConfig } from '../../engine/GameConfig';
 import { SystemActionEvent } from '../events/SystemActionEvent';
 import { SystemName } from '../events/SystemName';
 import { GameEngine, GameEvent } from '../GameEngine';
 import { ButtonLabel } from '../kit/ButtonLabel';
 import { CheckersBoard } from '../kit/CheckersBoard';
+import { CheckersUnit } from '../kit/CheckersUnit';
 import { CircleButton } from '../kit/CircleButton';
 import { KitColor } from '../kit/KitColor';
 import { PixelFont60px } from '../PrepareFonts';
@@ -16,26 +21,36 @@ interface CircleButtonConfig {
   onClick?: (event: SystemActionEvent) => void;
 }
 
-export class CheckersScene extends Scene {
+export class SimpleCheckersScene extends Scene {
   private isModalWindowOpen = false;
+  private game?: Game<CheckersCellType, CheckersUnitType, CheckersUnitOwner>;
+  private boardView?: CheckersBoard;
+  private unitViews: CheckersUnit[] = [];
 
   get gameEngine(): GameEngine {
     return this.engine as GameEngine;
   }
 
-  onInitialize(engine: GameEngine) {
-    this.engine = engine;
-
+  onInitialize() {
     if (!this.gameEngine.gameConfig) {
       alert(`GameConfig is not set. Please set it in.`);
       return;
     }
 
-    this.gameEngine.add(this.createHeader());
-    this.gameEngine.add(this.createBoard(this.gameEngine.gameConfig, vec(this.gameEngine.screen.center.x, 120)));
-    //this.gameEngine.add(this.createUnits(this.gameEngine.gameConfig));
-    this.gameEngine.add(this.createMenuButton(350, SystemName.Settings2, this.emitSystemAction.bind(this)));
-    this.gameEngine.add(this.createMenuButton(500, SystemName.Help2, this.emitSystemAction.bind(this)));
+    this.game = new Game(this.gameEngine.gameConfig);
+    this.boardView = this.createBoard(this.gameEngine.gameConfig, vec(this.gameEngine.screen.center.x, 120));
+    this.unitViews = this.createUnits(
+      this.game,
+      this.boardView,
+      this.boardView.offset.add(vec(- this.gameEngine.gameConfig.width / 2 * this.boardView.cellSize, this.boardView.borderSize)),
+    );
+
+    this.add(this.createHeader());
+    this.add(this.createMenuButton(350, SystemName.Settings2, this.emitSystemAction.bind(this)));
+    this.add(this.createMenuButton(500, SystemName.Help2, this.emitSystemAction.bind(this)));
+
+    this.add(this.boardView);
+    this.unitViews.forEach(unitView => this.add(unitView));
 
   }
 
@@ -48,7 +63,7 @@ export class CheckersScene extends Scene {
     });
   }
 
-  createBoard(config: GameConfig<unknown, unknown, unknown>, offset: Vector): Actor {
+  createBoard(config: GameConfig<unknown, unknown, unknown>, offset: Vector): CheckersBoard {
     return new CheckersBoard(config, offset);
   }
 
@@ -93,4 +108,16 @@ export class CheckersScene extends Scene {
     });
   }
 
+  private createUnits(game: Game<unknown, unknown, unknown>, boardView: CheckersBoard, offset: Vector): CheckersUnit[] {
+    return game.board.units
+      .map(unit => new CheckersUnit({
+        cellSize: boardView.cellSize,
+        position: unit.position,
+        isActive: unit.actions.length !== 0,
+        offset: offset.add(vec( unit.position[0] * boardView.cellSize, unit.position[1] * boardView.cellSize)),
+        unitColor: unit.owner === CheckersUnitOwner.White ? [Color.White, Color.LightGray] : [Color.Black, Color.DarkGray],
+        hoverColor: Color.Gray,
+        onClick: this.emitSystemAction.bind(this),
+      }));
+  }
 }
