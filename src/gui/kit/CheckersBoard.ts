@@ -3,6 +3,7 @@ import { GraphicsGrouping } from 'excalibur/build/dist/Graphics/GraphicsGroup';
 import { GameConfig } from '../../engine/GameConfig';
 import { PixelFont30px } from '../PrepareFonts';
 
+// TODO Refactor: move constant to specific exportable module
 const cellSize = 80;
 const borderSize = 40;
 const borderBorderCoef = 0.1;
@@ -31,6 +32,14 @@ export class CheckersBoard extends ScreenElement {
 
   onInitialize() {
     this.graphics.use(graphicState);
+  }
+
+  get cellSize(): number {
+    return cellSize;
+  }
+
+  get borderSize(): number {
+    return borderSize;
   }
 
   private getStateGroup(initialConfig: GameConfig<unknown, unknown, unknown>) {
