@@ -2,7 +2,7 @@ import { ScreenElement, vec, Text, BaseAlign, Vector, Color, GraphicsGroup, Circ
 import { SystemActionEvent } from '../events/SystemActionEvent';
 import { SystemName } from '../events/SystemName';
 import { PixelFont30px } from '../PrepareFonts';
-import { ButtonState } from './ButtonState';
+import { InteractiveState } from './InteractiveState';
 
 export interface BackButtonConfig {
   pos?: Vector;
@@ -45,32 +45,32 @@ export class BackButton extends ScreenElement {
       }),
     });
 
-    this.graphics.add(ButtonState.Idle, this.getIdleState());
-    this.graphics.add(ButtonState.Hover, this.getHoverState());
-    this.graphics.add(ButtonState.Pressed, this.getPressedState());
+    this.graphics.add(InteractiveState.Idle, this.getIdleState());
+    this.graphics.add(InteractiveState.Hover, this.getHoverState());
+    this.graphics.add(InteractiveState.Pressed, this.getPressedState());
   }
 
   onInitialize() {
-    this.graphics.use(ButtonState.Idle);
+    this.graphics.use(InteractiveState.Idle);
     this.on('pointerup', () => {
       if (!this.isPointerDownHere) {
         return;
       }
       this.isPointerDownHere = false;
-      this.graphics.use(ButtonState.Hover);
+      this.graphics.use(InteractiveState.Hover);
       this.config.onClick && this.config.onClick({ systemName });
     })
     this.on('pointerdown', () => {
       this.isPointerDownHere = true;
-      this.graphics.use(ButtonState.Pressed);
+      this.graphics.use(InteractiveState.Pressed);
     })
     this.on('pointerenter', () => {
       this.isPointerDownHere = false;
-      this.graphics.use(ButtonState.Hover);
+      this.graphics.use(InteractiveState.Hover);
     })
     this.on('pointerleave', () => {
       this.isPointerDownHere = false;
-      this.graphics.use(ButtonState.Idle);
+      this.graphics.use(InteractiveState.Idle);
     })
   }
 

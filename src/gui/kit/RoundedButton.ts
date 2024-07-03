@@ -1,7 +1,7 @@
 import { ScreenElement, GraphicsGroup, Vector, Color, Rectangle, vec, Circle, GraphicsGrouping } from 'excalibur';
 import { SystemActionEvent } from '../events/SystemActionEvent';
 import { SystemName } from '../events/SystemName';
-import { ButtonState } from './ButtonState';
+import { InteractiveState } from './InteractiveState';
 
 export interface RoundedButtonConfig {
   systemName: SystemName;
@@ -43,7 +43,7 @@ export class RoundedButton extends ScreenElement {
       height: config.height,
     });
 
-    this.graphics.add(ButtonState.Idle, this.getStateGroup({
+    this.graphics.add(InteractiveState.Idle, this.getStateGroup({
       background: config.idleBackground,
       border: config.idleBorder,
       width: config.width,
@@ -52,7 +52,7 @@ export class RoundedButton extends ScreenElement {
       borderSize: config.borderSize || 0,
       subNodes: config.subNodes,
     }));
-    this.graphics.add(ButtonState.Hover, this.getStateGroup({
+    this.graphics.add(InteractiveState.Hover, this.getStateGroup({
       background: config.hoverBackground || config.idleBackground,
       border: config.hoverBorder || config.idleBorder,
       width: config.width,
@@ -61,7 +61,7 @@ export class RoundedButton extends ScreenElement {
       borderSize: config.borderSize || 0,
       subNodes: config.subNodes,
     }));
-    this.graphics.add(ButtonState.Pressed, this.getStateGroup({
+    this.graphics.add(InteractiveState.Pressed, this.getStateGroup({
       background: config.pressedBackground || config.hoverBackground || config.idleBackground,
       border: config.pressedBorder || config.hoverBorder || config.idleBorder,
       width: config.width,
@@ -73,28 +73,28 @@ export class RoundedButton extends ScreenElement {
   }
 
   onInitialize() {
-    this.graphics.use(ButtonState.Idle);
+    this.graphics.use(InteractiveState.Idle);
     this.on('pointerup', () => {
       if (!this.isPointerDownHere) {
         return;
       }
       this.isPointerDownHere = false;
-      this.graphics.use(ButtonState.Hover);
+      this.graphics.use(InteractiveState.Hover);
       this.config.onClick && this.config.onClick({
         systemName: this.config.systemName,
       });
     })
     this.on('pointerdown', () => {
       this.isPointerDownHere = true;
-      this.graphics.use(ButtonState.Pressed);
+      this.graphics.use(InteractiveState.Pressed);
     })
     this.on('pointerenter', () => {
       this.isPointerDownHere = false;
-      this.graphics.use(ButtonState.Hover);
+      this.graphics.use(InteractiveState.Hover);
     })
     this.on('pointerleave', () => {
       this.isPointerDownHere = false;
-      this.graphics.use(ButtonState.Idle);
+      this.graphics.use(InteractiveState.Idle);
     })
   }
 
