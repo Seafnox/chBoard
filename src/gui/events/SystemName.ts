@@ -13,4 +13,5 @@ export const enum SystemName {
   Help = 'HELP',
   Help2 = '❔',
   Back = 'BACK',
+  Unit = 'UNIT',
 }

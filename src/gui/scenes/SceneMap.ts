@@ -1,11 +1,11 @@
 import { SceneWithOptions, FadeInOut, Color } from 'excalibur';
-import { CheckersScene } from './CheckersScene';
+import { SimpleCheckersScene } from './SimpleCheckersScene';
 import { NotImplementedScene } from './NotImplemented';
 import { WelcomeScene } from './WelcomeScene';
 
 export enum SceneName {
   WelcomeScene = 'WelcomeScene',
-  RussianCheckersScene = 'RussianCheckersScene',
+  SimpleCheckersScene = 'SimpleCheckersScene',
   GameOverScene = 'GameOverScene',
   RatingScene = 'RatingScene',
   SettingsScene = 'SettingsScene',
@@ -25,8 +25,8 @@ export const sceneMap: Record<SceneName, SceneWithOptions> = {
     scene: WelcomeScene,
     transitions: defaultSceneTransition,
   },
-  [SceneName.RussianCheckersScene]: {
-    scene: CheckersScene,
+  [SceneName.SimpleCheckersScene]: {
+    scene: SimpleCheckersScene,
     transitions: defaultSceneTransition,
   },
   [SceneName.GameOverScene]: {

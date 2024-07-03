@@ -1,5 +1,5 @@
 import { Scene, Label, vec, Color, Actor, Vector } from 'excalibur';
-import { checkersRuConfig } from '../../checkersRu/CheckersRuConfig';
+import { checkersRuConfig } from '../../engineCheckers/simple/ru/CheckersRuConfig';
 import { GameConfig } from '../../engine/GameConfig';
 import { SystemActionEvent } from '../events/SystemActionEvent';
 import { SystemName } from '../events/SystemName';
