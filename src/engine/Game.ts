@@ -3,7 +3,7 @@ import { GameConfig } from './GameConfig';
 import { InteractiveEntity } from './InteractiveEntity';
 
 export class Game<TCellType, TUnitType, TOwner> {
-  private board: Board<TCellType, TUnitType, TOwner>;
+  public readonly board: Board<TCellType, TUnitType, TOwner>;
 
   constructor(
     public readonly initialConfig: GameConfig<TCellType, TUnitType, TOwner>,

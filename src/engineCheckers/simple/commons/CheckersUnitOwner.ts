@@ -1,4 +1,4 @@
-export enum CheckersRuUnitOwner {
+export enum CheckersUnitOwner {
   White = 'white',
   Black = 'black',
 }

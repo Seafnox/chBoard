@@ -3,6 +3,7 @@ import { InteractiveEntity } from './InteractiveEntity';
 
 export class Unit<TCellType, TUnitType, TOwner> extends InteractiveEntity<TCellType, TUnitType, TOwner> {
   private _prevCell?: Cell<TCellType, TUnitType, TOwner>;
+
   constructor(
     private _cell: Cell<TCellType, TUnitType, TOwner>,
     private _type: TUnitType,

@@ -1,17 +1,17 @@
-import { Rule } from '../../engine/Rule';
-import { Unit } from '../../engine/Unit';
-import { CheckersRuCellType } from '../CheckersRuCellType';
+import { Rule } from '../../../../engine/Rule';
+import { Unit } from '../../../../engine/Unit';
+import { CheckersCellType } from '../../commons/CheckersCellType';
 import { CheckersRuUnit, CheckersRuInteractiveEntity, CheckersRuBoard, CheckersRuAvailableAction } from '../CheckersRuTypings';
-import { CheckersRuUnitOwner } from '../CheckersRuUnitOwner';
-import { CheckersRuUnitType } from '../CheckersRuUnitType';
+import { CheckersUnitOwner } from '../../commons/CheckersUnitOwner';
+import { CheckersUnitType } from '../../commons/CheckersUnitType';
 import { SimpleMoveLeft } from '../actions/SimpleMoveLeft';
 import { SimpleMoveRight } from '../actions/SimpleMoveRight';
 
 
 
-export class MoveForChecker extends Rule<CheckersRuCellType, CheckersRuUnitType, CheckersRuUnitOwner, CheckersRuUnit> {
+export class MoveForChecker extends Rule<CheckersCellType, CheckersUnitType, CheckersUnitOwner, CheckersRuUnit> {
   isSuitable(entity: CheckersRuInteractiveEntity): entity is CheckersRuUnit {
-    return entity instanceof Unit && entity.type === CheckersRuUnitType.Checker;
+    return entity instanceof Unit && entity.type === CheckersUnitType.Checker;
   }
 
   getAction(
