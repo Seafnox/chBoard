@@ -13,7 +13,7 @@ export interface CheckersUnitConfig {
   hoverColor: Color;
   activeColor?: Color;
   pressedColor?: Color;
-  onClick?: (event: SystemActionEvent) => void;
+  onClick?: (event: SystemActionEvent<CheckersUnit>) => void;
 }
 
 interface CheckersUnitStateConfig {
@@ -42,8 +42,8 @@ export class CheckersUnit extends ScreenElement {
         .add(vec(-2, -2)),
     });
 
-    this.setSelected(!!config.isSelected);
-    this.setActive(!!config.isActive);
+    this.isSelected = !!config.isSelected;
+    this.isActive = !!config.isActive;
 
     this.graphics.add(InteractiveState.Idle, this.getIdleState(config));
     this.graphics.add(InteractiveState.Hover, this.getHoverState(config));
@@ -54,17 +54,18 @@ export class CheckersUnit extends ScreenElement {
   onInitialize() {
     this.graphics.use(InteractiveState.Idle);
     this.on('pointerup', () => {
+      console.log(this.constructor.name, 'pointerup', this.isPointerDownHere, this.isActive);
       if (!this.isPointerDownHere || !this.isActive) {
         return;
       }
       this.isPointerDownHere = false;
       setTimeout(() => this.graphics.use(InteractiveState.Hover));
 
-      this.config.onClick && this.config.onClick({
-        systemName,
-      });
+      this.config.onClick && this.config.onClick({ systemName, source: this });
     })
     this.on('pointerdown', () => {
+      console.log(this.constructor.name, 'pointerdown');
+
       if (!this.isActive) {
         return;
       }
@@ -72,6 +73,7 @@ export class CheckersUnit extends ScreenElement {
       this.graphics.use(InteractiveState.Pressed);
     })
     this.on('pointerenter', () => {
+      console.log(this.constructor.name, 'pointerenter');
       if (!this.isActive) {
         return;
       }
@@ -79,6 +81,7 @@ export class CheckersUnit extends ScreenElement {
       this.graphics.use(InteractiveState.Hover);
     })
     this.on('pointerleave', () => {
+      console.log(this.constructor.name, 'pointerleave');
       if (!this.isActive) {
         return;
       }

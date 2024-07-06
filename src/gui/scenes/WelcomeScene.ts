@@ -14,7 +14,7 @@ interface CommonButtonConfig {
   width: number;
   height: number;
   pos: Vector;
-  onClick?: (event: SystemActionEvent) => void;
+  onClick?: (event: SystemActionEvent<RoundedButton>) => void;
 }
 
 export class WelcomeScene extends Scene {
@@ -56,7 +56,7 @@ export class WelcomeScene extends Scene {
     });
   }
 
-  private emitSystemAction(event: SystemActionEvent) {
+  private emitSystemAction(event: SystemActionEvent<RoundedButton>) {
     if (!this.isModalWindowOpen) {
       this.gameEngine.gameEvents.emit(GameEvent.SystemAction, event);
     }
@@ -105,7 +105,7 @@ export class WelcomeScene extends Scene {
     });
   }
 
-  private createMainMenuButton(offsetY: number, label: SystemName, onClick: (event: SystemActionEvent) => void): Actor {
+  private createMainMenuButton(offsetY: number, label: SystemName, onClick: (event: SystemActionEvent<RoundedButton>) => void): Actor {
     const width = 400;
     const height = 100;
 
@@ -118,7 +118,7 @@ export class WelcomeScene extends Scene {
     });
   }
 
-  private createSelectionMenuButton(width: number, label: SystemName, onClick: (event: SystemActionEvent) => void): Actor {
+  private createSelectionMenuButton(width: number, label: SystemName, onClick: (event: SystemActionEvent<RoundedButton>) => void): Actor {
     const height = 100;
 
     return this.createCommonButton({

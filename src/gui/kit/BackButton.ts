@@ -8,7 +8,7 @@ export interface BackButtonConfig {
   pos?: Vector;
   labelColor: Color;
   labelShadowColor?: Color;
-  onClick?: (event: SystemActionEvent) => void;
+  onClick?: (event: SystemActionEvent<BackButton>) => void;
 }
 
 interface BackButtonStateConfig {
@@ -58,7 +58,7 @@ export class BackButton extends ScreenElement {
       }
       this.isPointerDownHere = false;
       this.graphics.use(InteractiveState.Hover);
-      this.config.onClick && this.config.onClick({ systemName });
+      this.config.onClick && this.config.onClick({ systemName, source: this });
     })
     this.on('pointerdown', () => {
       this.isPointerDownHere = true;

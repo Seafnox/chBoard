@@ -6,10 +6,8 @@ import { DisplayMode, vec } from 'excalibur';
 import { GameEngine, GameEvent } from './gui/GameEngine';
 import { GameProperty } from './gui/GameProperty';
 import { ResourceLoader } from './gui/ResourceLoader';
-import { ContextMenuController } from "./gui/ContextMenu";
 import { SceneController } from './gui/SceneController';
 import { sceneMap, defaultScene } from './gui/scenes/SceneMap';
-import { UnitController } from './gui/UnitController';
 import { calculatePixelConversion } from './gui/СalculatePixelConversion';
 
 const engine = new GameEngine({
@@ -40,7 +38,5 @@ engine.start(ResourceLoader)
     });
 
     new SceneController(engine);
-    new ContextMenuController(engine);
-    new UnitController(engine);
   })
   .catch(error => alert(`Unknown error: ${error.toString()}`));

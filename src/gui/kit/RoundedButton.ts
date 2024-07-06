@@ -17,7 +17,7 @@ export interface RoundedButtonConfig {
   idleBorder?: Color;
   hoverBorder?: Color;
   pressedBorder?: Color;
-  onClick?: (event: SystemActionEvent) => void;
+  onClick?: (event: SystemActionEvent<RoundedButton>) => void;
 }
 
 interface RoundedButtonStateConfig {
@@ -82,6 +82,7 @@ export class RoundedButton extends ScreenElement {
       this.graphics.use(InteractiveState.Hover);
       this.config.onClick && this.config.onClick({
         systemName: this.config.systemName,
+        source: this,
       });
     })
     this.on('pointerdown', () => {

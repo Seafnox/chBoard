@@ -5,6 +5,7 @@ import { GameProperty } from './GameProperty';
 
 export enum GameEvent {
   SystemAction = 'systemaction',
+  UnitSelected = 'unitselected',
   PointerDown = 'pointerdown',
   // TODO Remove useless action
   AddUnit = 'addunit',
@@ -16,7 +17,7 @@ export interface GameEventMap {
   [GameEvent.PointerDown]: PointerEvent,
   [GameEvent.AddUnit]: Vector,
   [GameEvent.RemoveUnit]: Vector,
-  [GameEvent.SystemAction]: SystemActionEvent,
+  [GameEvent.SystemAction]: SystemActionEvent<any>,
 }
 
 export class GameEngine extends Engine {

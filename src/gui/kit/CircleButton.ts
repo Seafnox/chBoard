@@ -15,7 +15,7 @@ export interface CircleButtonConfig {
   idleBackground?: Color;
   hoverBackground?: Color;
   pressedBackground?: Color;
-  onClick?: (event: SystemActionEvent) => void;
+  onClick?: (event: SystemActionEvent<CircleButton>) => void;
 }
 
 export interface CircleButtonStateConfig {
@@ -73,6 +73,7 @@ export class CircleButton extends ScreenElement {
       this.graphics.use(InteractiveState.Hover);
       this.config.onClick && this.config.onClick({
         systemName: this.config.systemName,
+        source: this,
       });
     })
     this.on('pointerdown', () => {
