@@ -9,6 +9,7 @@ import { SystemName } from '../events/SystemName';
 import { GameEngine, GameEvent } from '../GameEngine';
 import { ButtonLabel } from '../kit/ButtonLabel';
 import { CheckersBoard } from '../kit/CheckersBoard';
+import { borderSize, cellSize } from '../kit/CheckersConstants';
 import { CheckersUnit } from '../kit/CheckersUnit';
 import { CircleButton } from '../kit/CircleButton';
 import { KitColor } from '../kit/KitColor';
@@ -41,8 +42,7 @@ export class SimpleCheckersScene extends Scene {
     this.boardView = this.createBoard(this.gameEngine.gameConfig, vec(this.gameEngine.screen.center.x, 120));
     this.unitViews = this.createUnits(
       this.game,
-      this.boardView,
-      this.boardView.pos.add(vec(- this.gameEngine.gameConfig.width / 2 * this.boardView.cellSize, this.boardView.borderSize)),
+      this.boardView.pos.add(vec(- this.gameEngine.gameConfig.width / 2 * cellSize, borderSize)),
     );
 
     this.add(this.createHeader());
@@ -108,10 +108,10 @@ export class SimpleCheckersScene extends Scene {
     });
   }
 
-  private createUnits(game: Game<unknown, unknown, unknown>, boardView: CheckersBoard, topLeftPosition: Vector): CheckersUnit[] {
+  private createUnits(game: Game<unknown, unknown, unknown>, topLeftPosition: Vector): CheckersUnit[] {
     return game.board.units
       .map(unit => new CheckersUnit({
-        cellSize: boardView.cellSize,
+        cellSize: cellSize,
         cellLocation: unit.position,
         isActive: unit.actions.length !== 0,
         topLeftPosition: topLeftPosition,

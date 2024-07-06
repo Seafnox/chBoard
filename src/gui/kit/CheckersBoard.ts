@@ -1,19 +1,7 @@
-import { ScreenElement, Rectangle, GraphicsGroup, Color, vec, Text, Vector, BaseAlign, TextAlign } from 'excalibur';
+import { ScreenElement, Rectangle, GraphicsGroup, vec, Text, Vector } from 'excalibur';
 import { GraphicsGrouping } from 'excalibur/build/dist/Graphics/GraphicsGroup';
 import { GameConfig } from '../../engine/GameConfig';
-import { PixelFont30px } from '../PrepareFonts';
-
-// TODO Refactor: move constant to specific exportable module
-const cellSize = 80;
-const borderSize = 40;
-const borderBorderCoef = 0.1;
-const graphicState = 'root';
-const lightColor = Color.fromHex('DBC1A2');
-const darkColor = Color.fromHex('4F3B2C');
-const borderFont = PixelFont30px({
-  textAlign: TextAlign.Center,
-  baseAlign: BaseAlign.Middle,
-});
+import { borderFont, darkColor, lightColor, graphicState, borderBorderCoef, borderSize, cellSize } from './CheckersConstants';
 
 export class CheckersBoard extends ScreenElement {
 
@@ -32,14 +20,6 @@ export class CheckersBoard extends ScreenElement {
 
   onInitialize() {
     this.graphics.use(graphicState);
-  }
-
-  get cellSize(): number {
-    return cellSize;
-  }
-
-  get borderSize(): number {
-    return borderSize;
   }
 
   private getStateGroup(initialConfig: GameConfig<unknown, unknown, unknown>) {
