@@ -42,7 +42,7 @@ export class SimpleCheckersScene extends Scene {
     this.unitViews = this.createUnits(
       this.game,
       this.boardView,
-      this.boardView.offset.add(vec(- this.gameEngine.gameConfig.width / 2 * this.boardView.cellSize, this.boardView.borderSize)),
+      this.boardView.pos.add(vec(- this.gameEngine.gameConfig.width / 2 * this.boardView.cellSize, this.boardView.borderSize)),
     );
 
     this.add(this.createHeader());
@@ -108,13 +108,13 @@ export class SimpleCheckersScene extends Scene {
     });
   }
 
-  private createUnits(game: Game<unknown, unknown, unknown>, boardView: CheckersBoard, offset: Vector): CheckersUnit[] {
+  private createUnits(game: Game<unknown, unknown, unknown>, boardView: CheckersBoard, topLeftPosition: Vector): CheckersUnit[] {
     return game.board.units
       .map(unit => new CheckersUnit({
         cellSize: boardView.cellSize,
-        position: unit.position,
+        cellLocation: unit.position,
         isActive: unit.actions.length !== 0,
-        offset: offset.add(vec( unit.position[0] * boardView.cellSize, unit.position[1] * boardView.cellSize)),
+        topLeftPosition: topLeftPosition,
         unitColor: unit.owner === CheckersUnitOwner.White ? [Color.White, Color.LightGray] : [Color.Black, Color.DarkGray],
         hoverColor: Color.Gray,
         onClick: this.emitSystemAction.bind(this),

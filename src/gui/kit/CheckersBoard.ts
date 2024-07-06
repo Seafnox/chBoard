@@ -24,7 +24,7 @@ export class CheckersBoard extends ScreenElement {
     super({
       width: cellSize * initialConfig.width + borderSize * 2,
       height: cellSize * initialConfig.height + borderSize * 2,
-      offset: position,
+      pos: position,
     });
 
     this.graphics.add(graphicState, this.getStateGroup(initialConfig));

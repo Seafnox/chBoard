@@ -63,7 +63,7 @@ export class ModalWindow extends ScreenElement {
       this.engine.add(actor);
     });
 
-    const modalBoundingVectors = this.contentBorder.localBounds.getPoints().map(point => point.add(this.getContentBorderOffset()));
+    const modalBoundingVectors = this.contentBorder.localBounds.getPoints().map(point => point.add(this.getContentBorderPosition()));
     const modalBounding = BoundingBox.fromPoints(modalBoundingVectors);
 
     this.on('pointerup', event => {
@@ -108,7 +108,7 @@ export class ModalWindow extends ScreenElement {
     return this;
   }
 
-  private getContentBorderOffset(): Vector {
+  private getContentBorderPosition(): Vector {
     return vec(
       (this.engine.screen.drawWidth - this.config.width) / 2,
       (this.engine.screen.drawHeight - this.config.height) / 2
@@ -124,11 +124,11 @@ export class ModalWindow extends ScreenElement {
         },
         {
           graphic: this.contentBorder,
-          offset: this.getContentBorderOffset(),
+          offset: this.getContentBorderPosition(),
         },
         {
           graphic: this.contentWrapper,
-          offset: this.getContentBorderOffset().add(vec(this.contentBorderSize, this.contentBorderSize)),
+          offset: this.getContentBorderPosition().add(vec(this.contentBorderSize, this.contentBorderSize)),
         },
       ]
     });

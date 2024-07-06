@@ -5,10 +5,10 @@ import { InteractiveState } from './InteractiveState';
 
 export interface CheckersUnitConfig {
   cellSize: number;
-  position: number[];
+  cellLocation: number[];
   isActive?: boolean;
   isSelected?: boolean;
-  offset: Vector;
+  topLeftPosition: Vector;
   unitColor: [Color, Color];
   hoverColor: Color;
   activeColor?: Color;
@@ -36,8 +36,10 @@ export class CheckersUnit extends ScreenElement {
     private config: CheckersUnitConfig
   ) {
     super({
-      name: `${systemName}-${config.position[0]}-${config.position[1]}`,
-      offset: config.offset,
+      name: `${systemName}-${config.cellLocation[0]}-${config.cellLocation[1]}`,
+      pos: config.topLeftPosition
+        .add(vec( config.cellLocation[0] * config.cellSize, config.cellLocation[1] * config.cellSize))
+        .add(vec(-2, -2)),
     });
 
     this.setSelected(!!config.isSelected);
