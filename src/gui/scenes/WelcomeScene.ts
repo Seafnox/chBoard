@@ -5,7 +5,6 @@ import { SystemActionEvent } from '../events/SystemActionEvent';
 import { SystemName } from '../events/SystemName';
 import { GameEvent, GameEngine } from '../GameEngine';
 import { ButtonLabel } from '../kit/ButtonLabel';
-import { KitColor } from '../kit/KitColor';
 import { ModalWindow } from '../kit/ModalWindow';
 import { RoundedButton } from '../kit/RoundedButton';
 import { PixelFont60px } from '../PrepareFonts';
@@ -146,12 +145,12 @@ export class WelcomeScene extends Scene {
         }),
         offset: vec(config.width / 2, config.height / 2),
       }],
-      idleBackground: KitColor.Cyan,
-      idleBorder: KitColor.Black,
-      hoverBackground: KitColor.Blue,
-      hoverBorder: KitColor.Black,
-      pressedBackground: KitColor.Pink,
-      pressedBorder: KitColor.Black,
+      idleBackground: Color.Cyan,
+      idleBorder: Color.Black,
+      hoverBackground: Color.Blue,
+      hoverBorder: Color.Black,
+      pressedBackground: Color.Magenta,
+      pressedBorder: Color.Black,
       onClick: config.onClick,
     });
   }

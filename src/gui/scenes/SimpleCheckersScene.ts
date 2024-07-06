@@ -12,7 +12,6 @@ import { CheckersBoard } from '../kit/CheckersBoard';
 import { borderSize, cellSize } from '../kit/CheckersConstants';
 import { CheckersUnit } from '../kit/CheckersUnit';
 import { CircleButton } from '../kit/CircleButton';
-import { KitColor } from '../kit/KitColor';
 import { PixelFont60px } from '../PrepareFonts';
 
 interface CircleButtonConfig {
@@ -98,12 +97,12 @@ export class SimpleCheckersScene extends Scene {
         }),
         offset: vec(config.diameter / 2, config.diameter / 2.5),
       }],
-      idleBackground: KitColor.Cyan,
-      idleBorder: KitColor.Black,
-      hoverBackground: KitColor.Blue,
-      hoverBorder: KitColor.Black,
-      pressedBackground: KitColor.Pink,
-      pressedBorder: KitColor.Black,
+      idleBackground: Color.Cyan,
+      idleBorder: Color.Black,
+      hoverBackground: Color.Blue,
+      hoverBorder: Color.Black,
+      pressedBackground: Color.Magenta,
+      pressedBorder: Color.Black,
       onClick: config.onClick,
     });
   }

@@ -1,6 +1,5 @@
 import { Text, BaseAlign, Color } from 'excalibur';
 import { PixelFont60px } from '../PrepareFonts';
-import { KitColor } from './KitColor';
 
 export interface ButtonLabelConfig {
   width: number;
@@ -18,10 +17,10 @@ export class ButtonLabel extends Text {
       width: config.width,
       height: config.height,
       text: config.label,
-      color: config.labelColor || KitColor.Black,
+      color: config.labelColor || Color.Black,
       font: PixelFont60px({
         baseAlign: BaseAlign.Middle,
-        shadow: {color: config.labelShadowColor || KitColor.White},
+        shadow: {color: config.labelShadowColor || Color.White},
       }),
     });
   }
