@@ -1,5 +1,7 @@
 import { Action } from '../../../../engine/Action';
-import { ActionChange } from '../../../../engine/actionChanges/ActionChange';
+import { ActionChangeType } from '../../../../engine/actionChanges/ActionChangeType';
+import { CommonActionChange } from '../../../../engine/actionChanges/CommonActionChange';
+import { Vector2d } from '../../../../engine/Vector2d';
 import { CheckersCellType } from '../../commons/CheckersCellType';
 import { CheckersUnit } from '../CheckersRuTypings';
 import { CheckersUnitOwner } from '../../commons/CheckersUnitOwner';
@@ -15,16 +17,27 @@ export class SimpleMoveLeft extends Action<CheckersCellType, CheckersUnitType, C
     return true;
   }
 
-  get changes(): ActionChange<CheckersUnit>[] {
-    // FIXME add move change
-    return [];
+  get changes(): CommonActionChange<CheckersUnit>[] {
+    const moveDirection = this.entity.owner === CheckersUnitOwner.Black
+      ? Vector2d.Up.add(Vector2d.Left)
+      : Vector2d.Down.add(Vector2d.Left);
+
+    return [
+      {
+        type: ActionChangeType.Move,
+        entity: this.entity,
+        to: this.entity.position.add(moveDirection),
+      }
+    ];
   }
 
+  // FIXME refactor to changes
   public run(): void {
-    const [x, y] = this.entity.position;
-    const nextCell = this.entity.owner === CheckersUnitOwner.Black
-      ? this.board.getCell(x - 1, y - 1)
-      : this.board.getCell(x - 1, y + 1);
+    const moveDirection = this.entity.owner === CheckersUnitOwner.Black
+      ? Vector2d.Up.add(Vector2d.Left)
+      : Vector2d.Down.add(Vector2d.Left);
+    const nextPosition = this.entity.position.add(moveDirection);
+    const nextCell = this.board.getCell(nextPosition);
 
     if (nextCell) {
       this.entity.moveTo(nextCell);
