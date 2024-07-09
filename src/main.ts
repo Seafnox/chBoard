@@ -39,4 +39,4 @@ engine.start(ResourceLoader)
 
     new SceneController(engine);
   })
-  .catch(error => alert(`Unknown error: ${error.toString()}`));
+  .catch(error => alert(`Unknown error: ${(error as Error).toString()}`));

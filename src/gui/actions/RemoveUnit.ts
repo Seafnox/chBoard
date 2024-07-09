@@ -6,7 +6,7 @@ export class RemoveUnit {
     scene: Scene,
     position: Vector,
   ) {
-    for (let actor of scene.actors) {
+    for (const actor of scene.actors) {
       if (actor.graphics.bounds.contains(position)) {
         actor.kill();
       }

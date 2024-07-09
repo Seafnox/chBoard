@@ -14,6 +14,8 @@ export class SceneController {
   constructor(
     private engine: GameEngine,
   ) {
+    // FIXME unhandled Promise exceptions
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
     this.engine.gameEvents.on(GameEvent.SystemAction, event => {
       console.log(this.constructor.name, event.systemName);
       if (event.systemName === SystemName.Back) {
