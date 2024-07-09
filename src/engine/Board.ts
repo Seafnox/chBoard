@@ -52,4 +52,18 @@ export class Board<TCellType, TUnitType, TOwner> extends InteractiveEntity<TCell
   public getCell(vector: Vector2d): Cell<TCellType, TUnitType, TOwner> | undefined {
     return this.getCellXY(vector.x, vector.y);
   }
+
+  public getUnitXY(x: number, y: number): Unit<TCellType, TUnitType, TOwner> | undefined {
+    return this.unitMap[`${x},${y}`];
+  }
+
+  public getUnit(vector: Vector2d): Unit<TCellType, TUnitType, TOwner> | undefined {
+    return this.getUnitXY(vector.x, vector.y);
+  }
+
+  public moveUnit(unit: Unit<TCellType, TUnitType, TOwner>, to: Cell<TCellType, TUnitType, TOwner>): void {
+    unit.setCell(to);
+    this.unitMap[`${unit.position.x},${unit.position.y}`] = undefined;
+    this.unitMap[`${to.position.x},${to.position.y}`] = unit;
+  }
 }

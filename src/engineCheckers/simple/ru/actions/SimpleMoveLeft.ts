@@ -15,8 +15,10 @@ export class SimpleMoveLeft extends Action<CheckersCellType, CheckersUnitType, C
   get isActive(): boolean {
     // FIXME check if unit can move
     const isOwnerTurn = this.entity.owner === this.game.turnManager.activeOwner;
+    const hasNextCell = !!this.game.board.getCell(this.nextPosition);
+    const hasAnyUnit = !!this.game.board.getUnit(this.nextPosition);
 
-    return isOwnerTurn;
+    return isOwnerTurn && hasNextCell && !hasAnyUnit;
   }
 
   get changes(): CommonActionChange<CheckersUnit>[] {
@@ -29,6 +31,10 @@ export class SimpleMoveLeft extends Action<CheckersCellType, CheckersUnitType, C
     ];
   }
 
+  private get nextPosition(): Vector2d {
+    return this.entity.position.add(this.moveDirection);
+  }
+
   private get moveDirection() {
     return this.entity.owner === CheckersUnitOwner.Black
       ? Vector2d.Up.add(Vector2d.Left)
@@ -37,15 +43,15 @@ export class SimpleMoveLeft extends Action<CheckersCellType, CheckersUnitType, C
 
 // FIXME refactor to changes
   public _run(): void {
-    const nextPosition = this.entity.position.add(this.moveDirection);
-    const nextCell = this.game.board.getCell(nextPosition);
+    const nextCell = this.game.board.getCell(this.nextPosition);
 
-    if (nextCell) {
-      this.entity.moveTo(nextCell);
+    if (!nextCell) {
+      throw new Error('No next cell');
     }
 
     // TODO check can switch to king
 
+    this.game.board.moveUnit(this.entity, nextCell);
     this.game.turnManager.nextTurn();
   }
 

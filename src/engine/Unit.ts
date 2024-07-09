@@ -35,7 +35,7 @@ export class Unit<TCellType, TUnitType, TOwner> extends InteractiveEntity<TCellT
     this._type = type;
   }
 
-  public moveTo(cell: Cell<TCellType, TUnitType, TOwner>): void {
+  public setCell(cell: Cell<TCellType, TUnitType, TOwner>): void {
     // TODO Add Pathfinder for smooth and correct animations
     this._prevCell = this._cell;
     this._cell = cell;
