@@ -1,5 +1,6 @@
 import { Cell } from './Cell';
 import { InteractiveEntity } from './InteractiveEntity';
+import { Vector2d } from './Vector2d';
 
 export class Unit<TCellType, TUnitType, TOwner> extends InteractiveEntity<TCellType, TUnitType, TOwner> {
   private _prevCell?: Cell<TCellType, TUnitType, TOwner>;
@@ -16,7 +17,7 @@ export class Unit<TCellType, TUnitType, TOwner> extends InteractiveEntity<TCellT
     return this._cell.location;
   }
 
-  public get position(): [number, number] {
+  public get position(): Vector2d {
     return this._cell.position;
   }
 

@@ -1,4 +1,4 @@
-import { ActionChange } from './actionChanges/ActionChange';
+import { CommonActionChange } from './actionChanges/CommonActionChange';
 import { Board } from './Board';
 
 export abstract class Action<TCellType, TUnitType, TOwner, TInteractiveEntity> {
@@ -10,7 +10,7 @@ export abstract class Action<TCellType, TUnitType, TOwner, TInteractiveEntity> {
   abstract get priority(): number;
   abstract get isActive(): boolean;
 
-  abstract get changes(): ActionChange<TInteractiveEntity>[];
+  abstract get changes(): CommonActionChange<TInteractiveEntity>[];
 
   public abstract run(): void;
 }

@@ -2,6 +2,7 @@ import { BoardConfig } from './BoardConfig';
 import { Cell } from './Cell';
 import { InteractiveEntity } from './InteractiveEntity';
 import { Unit } from './Unit';
+import { Vector2d } from './Vector2d';
 
 export class Board<TCellType, TUnitType, TOwner> extends InteractiveEntity<TCellType, TUnitType, TOwner> {
   public readonly cells: Cell<TCellType, TUnitType, TOwner>[];
@@ -42,7 +43,11 @@ export class Board<TCellType, TUnitType, TOwner> extends InteractiveEntity<TCell
     });
   }
 
-  public getCell(x: number, y: number): Cell<TCellType, TUnitType, TOwner> | undefined {
+  public getCellXY(x: number, y: number): Cell<TCellType, TUnitType, TOwner> | undefined {
     return this.cellMap[`${x},${y}`];
+  }
+
+  public getCell(vector: Vector2d): Cell<TCellType, TUnitType, TOwner> | undefined {
+    return this.getCellXY(vector.x, vector.y);
   }
 }
