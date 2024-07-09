@@ -1,4 +1,4 @@
-import { ScreenElement, Vector, Color, GraphicsGroup, Circle, vec } from 'excalibur';
+import { ScreenElement, Vector, Color, GraphicsGroup, Circle, vec, Rectangle } from 'excalibur';
 import { Vector2d } from '../../engine/Vector2d';
 import { SystemActionEvent } from '../events/SystemActionEvent';
 import { SystemName } from '../events/SystemName';
@@ -144,11 +144,12 @@ export class CheckersUnitElement extends ScreenElement {
     return new GraphicsGroup({
       members: [
         ...(!config.lightingColor ? []: [{
-          graphic: new Circle({
-            radius: config.cellSize / 2,
+          graphic: new Rectangle({
+            width: config.cellSize * sizeCoef,
+            height: config.cellSize * sizeCoef,
             color: config.lightingColor,
           }),
-          offset: vec(0, 0),
+          offset: vec(2 + config.cellSize * (1 - sizeCoef) / 2, 2 + config.cellSize * (1 - sizeCoef) / 2),
         }]),
         {
           graphic: new Circle({

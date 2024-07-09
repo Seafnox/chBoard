@@ -7,7 +7,7 @@ import { CheckersUnit } from '../CheckersRuTypings';
 import { CheckersUnitOwner } from '../../commons/CheckersUnitOwner';
 import { CheckersUnitType } from '../../commons/CheckersUnitType';
 
-export class SimpleMoveLeft extends Action<CheckersCellType, CheckersUnitType, CheckersUnitOwner, CheckersUnit> {
+export class CheckerMoveFrontRight extends Action<CheckersCellType, CheckersUnitType, CheckersUnitOwner, CheckersUnit> {
   get priority(): number {
     return 1;
   }
@@ -37,8 +37,8 @@ export class SimpleMoveLeft extends Action<CheckersCellType, CheckersUnitType, C
 
   private get moveDirection() {
     return this.entity.owner === CheckersUnitOwner.Black
-      ? Vector2d.Up.add(Vector2d.Left)
-      : Vector2d.Down.add(Vector2d.Left);
+      ? Vector2d.Down.add(Vector2d.Right)
+      : Vector2d.Up.add(Vector2d.Right);
   }
 
 // FIXME refactor to changes
