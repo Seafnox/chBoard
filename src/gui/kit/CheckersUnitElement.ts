@@ -13,7 +13,7 @@ export interface CheckersUnitConfig {
   hoverColor: Color;
   activeColor?: Color;
   pressedColor?: Color;
-  onClick?: (event: SystemActionEvent<CheckersUnit>) => void;
+  onClick?: (event: SystemActionEvent<CheckersUnitElement>) => void;
 }
 
 interface CheckersUnitStateConfig {
@@ -27,7 +27,7 @@ const sizeCoef = 0.9;
 const borderCoef = 0.3;
 const systemName = SystemName.Unit;
 
-export class CheckersUnit extends ScreenElement {
+export class CheckersUnitElement extends ScreenElement {
   private isPointerDownHere = false;
   private isActive = false;
   private isSelected = false;

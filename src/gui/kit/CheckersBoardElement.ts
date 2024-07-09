@@ -3,7 +3,7 @@ import { GraphicsGrouping } from 'excalibur/build/dist/Graphics/GraphicsGroup';
 import { GameConfig } from '../../engine/GameConfig';
 import { borderFont, darkColor, lightColor, graphicState, borderBorderCoef, borderSize, cellSize } from './CheckersConstants';
 
-export class CheckersBoard extends ScreenElement {
+export class CheckersBoardElement extends ScreenElement {
 
   constructor(
     public readonly initialConfig: GameConfig<unknown, unknown, unknown>,

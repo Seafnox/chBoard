@@ -1,4 +1,4 @@
-import { AvailableAction } from './AvailableAction';
+import { Action } from './Action';
 import { Board } from './Board';
 import { InteractiveEntity } from './InteractiveEntity';
 
@@ -7,5 +7,5 @@ export abstract class Rule<TCellType, TUnitType, TOwner, TInteractiveEntity exte
   abstract getAction(
     entity: TInteractiveEntity,
     board: Board<TCellType, TUnitType, TOwner>,
-  ): AvailableAction<TCellType, TUnitType, TOwner, TInteractiveEntity>[];
+  ): Action<TCellType, TUnitType, TOwner, TInteractiveEntity>[];
 }

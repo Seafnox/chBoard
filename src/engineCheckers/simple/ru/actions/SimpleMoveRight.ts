@@ -1,10 +1,11 @@
-import { AvailableAction } from '../../../../engine/AvailableAction';
+import { Action } from '../../../../engine/Action';
+import { ActionChange } from '../../../../engine/actionChanges/ActionChange';
 import { CheckersCellType } from '../../commons/CheckersCellType';
-import { CheckersRuUnit } from '../CheckersRuTypings';
+import { CheckersUnit } from '../CheckersRuTypings';
 import { CheckersUnitOwner } from '../../commons/CheckersUnitOwner';
 import { CheckersUnitType } from '../../commons/CheckersUnitType';
 
-export class SimpleMoveRight extends AvailableAction<CheckersCellType, CheckersUnitType, CheckersUnitOwner, CheckersRuUnit> {
+export class SimpleMoveRight extends Action<CheckersCellType, CheckersUnitType, CheckersUnitOwner, CheckersUnit> {
   get priority(): number {
     return 1;
   }
@@ -14,13 +15,18 @@ export class SimpleMoveRight extends AvailableAction<CheckersCellType, CheckersU
     return true;
   }
 
-  public action(): void {
+  get changes(): ActionChange<CheckersUnit>[] {
+    // FIXME add move change
+    return [];
+  }
+
+  public run(): void {
     const [x, y] = this.entity.position;
     const nextCell = this.entity.owner === CheckersUnitOwner.Black
       ? this.board.getCell(x + 1, y - 1)
       : this.board.getCell(x + 1, y + 1);
 
-    if (!!nextCell) {
+    if (nextCell) {
       this.entity.moveTo(nextCell);
     }
 

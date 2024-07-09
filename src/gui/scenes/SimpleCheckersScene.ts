@@ -1,17 +1,17 @@
 import { Scene, Actor, Label, vec, Color, Vector } from 'excalibur';
-import { Unit } from '../../engine/Unit';
-import { CheckersCellType } from '../../engineCheckers/simple/commons/CheckersCellType';
-import { CheckersUnitOwner } from '../../engineCheckers/simple/commons/CheckersUnitOwner';
-import { CheckersUnitType } from '../../engineCheckers/simple/commons/CheckersUnitType';
+import { ActionChange } from '../../engine/actionChanges/ActionChange';
+import { ActionChangeType } from '../../engine/actionChanges/ActionChangeType';
+import { MoveActionChange } from '../../engine/actionChanges/MoveActionChange';
 import { Game } from '../../engine/Game';
-import { GameConfig } from '../../engine/GameConfig';
+import { CheckersUnitOwner } from '../../engineCheckers/simple/commons/CheckersUnitOwner';
+import { CheckersAvailableAction, CheckersGame, CheckersGameConfig, CheckersUnit } from '../../engineCheckers/simple/ru/CheckersRuTypings';
 import { SystemActionEvent } from '../events/SystemActionEvent';
 import { SystemName } from '../events/SystemName';
 import { GameEngine, GameEvent } from '../GameEngine';
 import { ButtonLabel } from '../kit/ButtonLabel';
-import { CheckersBoard } from '../kit/CheckersBoard';
+import { CheckersBoardElement } from '../kit/CheckersBoardElement';
 import { borderSize, cellSize } from '../kit/CheckersConstants';
-import { CheckersUnit } from '../kit/CheckersUnit';
+import { CheckersUnitElement } from '../kit/CheckersUnitElement';
 import { CircleButton } from '../kit/CircleButton';
 import { PixelFont60px } from '../PrepareFonts';
 
@@ -24,14 +24,19 @@ interface CircleButtonConfig {
 
 export class SimpleCheckersScene extends Scene {
   private isModalWindowOpen = false;
-  private game?: Game<CheckersCellType, CheckersUnitType, CheckersUnitOwner>;
-  private boardView?: CheckersBoard;
-  private unitViews: CheckersUnit[] = [];
-  private selectedUnitView?: CheckersUnit;
-  private selectedUnit?: Unit<CheckersCellType, CheckersUnitType, CheckersUnitOwner>;
+  private game?: CheckersGame;
+  private boardView?: CheckersBoardElement;
+  private unitViews: CheckersUnitElement[] = [];
+  private selectedUnitView?: CheckersUnitElement;
+  private selectedUnit?: CheckersUnit;
+  private selectedUnitActionViews: CheckersUnitElement[] = [];
 
   get gameEngine(): GameEngine {
     return this.engine as GameEngine;
+  }
+
+  get topLeftPosition(): Vector {
+    return this.boardView?.pos.add(vec(- (this.gameEngine.gameConfig?.width || 0) / 2 * cellSize, borderSize)) || vec(0,0);
   }
 
   onInitialize() {
@@ -39,13 +44,11 @@ export class SimpleCheckersScene extends Scene {
       alert(`GameConfig is not set. Please set it in.`);
       return;
     }
+    const gameConfig = this.gameEngine.gameConfig as CheckersGameConfig;
 
     this.game = new Game(this.gameEngine.gameConfig);
-    this.boardView = this.createBoard(this.gameEngine.gameConfig, vec(this.gameEngine.screen.center.x, 120));
-    this.unitViews = this.createUnits(
-      this.game,
-      this.boardView.pos.add(vec(- this.gameEngine.gameConfig.width / 2 * cellSize, borderSize)),
-    );
+    this.boardView = this.createBoard(gameConfig, vec(this.gameEngine.screen.center.x, 120));
+    this.unitViews = this.createUnits(this.game);
 
     this.add(this.createHeader());
     this.add(this.createMenuButton(350, SystemName.Settings2, this.emitSystemAction.bind(this)));
@@ -65,8 +68,8 @@ export class SimpleCheckersScene extends Scene {
     });
   }
 
-  createBoard(config: GameConfig<unknown, unknown, unknown>, offset: Vector): CheckersBoard {
-    return new CheckersBoard(config, offset);
+  createBoard(config: CheckersGameConfig, offset: Vector): CheckersBoardElement {
+    return new CheckersBoardElement(config, offset);
   }
 
   private emitSystemAction(event: SystemActionEvent<CircleButton>) {
@@ -110,13 +113,13 @@ export class SimpleCheckersScene extends Scene {
     });
   }
 
-  private createUnits(game: Game<CheckersCellType, CheckersUnitType, CheckersUnitOwner>, topLeftPosition: Vector): CheckersUnit[] {
+  private createUnits(game: CheckersGame): CheckersUnitElement[] {
     return game.board.units
-      .map(unit => new CheckersUnit({
+      .map(unit => new CheckersUnitElement({
         cellSize: cellSize,
         cellLocation: unit.position,
         isActive: unit.actions.length !== 0,
-        topLeftPosition: topLeftPosition,
+        topLeftPosition: this.topLeftPosition,
         unitColor: unit.owner === CheckersUnitOwner.White ? [Color.White, Color.LightGray] : [Color.Black, Color.DarkGray],
         hoverColor: Color.Gray,
         activeColor: Color.Blue,
@@ -127,7 +130,15 @@ export class SimpleCheckersScene extends Scene {
       }));
   }
 
-  private selectUnit(event: SystemActionEvent<CheckersUnit>, unit: Unit<CheckersCellType, CheckersUnitType, CheckersUnitOwner>) {
+  // TODO make more optimized logic with comparion expected and actual game state with local changes
+  private updateUnits() {
+    this.unitViews.forEach(unitView => this.remove(unitView));
+    this.unitViews = this.createUnits(this.game!);
+    this.unitViews.forEach(unitView => this.add(unitView));
+    this.selectUnit(undefined);
+  }
+
+  private selectUnit(event?: SystemActionEvent<CheckersUnitElement>, unit?: CheckersUnit) {
     if (this.selectedUnit === unit) {
       return;
     }
@@ -137,9 +148,46 @@ export class SimpleCheckersScene extends Scene {
     }
 
     this.selectedUnit = unit;
-    this.selectedUnitView = event.source;
+    this.selectedUnitView = event?.source;
     this.gameEngine.gameEvents.emit(GameEvent.UnitSelected, unit);
 
     this.unitViews.forEach(unitView => unitView.setSelected(this.selectedUnitView === unitView));
+    this.updateActions();
+  }
+
+  private updateActions() {
+    this.selectedUnitActionViews.forEach(actionView => this.remove(actionView));
+    this.selectedUnitActionViews = [];
+
+    if (!this.selectedUnit) {
+      return;
+    }
+
+    this.selectedUnitActionViews = this.selectedUnit.actions.map(action => this.createActionView(action, this.selectedUnit!));
+  }
+
+  private createActionView(action: CheckersAvailableAction, unit: CheckersUnit): CheckersUnitElement {
+    const moveChange = action.changes
+      .find((change: ActionChange<CheckersUnit>): change is MoveActionChange<CheckersUnit> => change.type === ActionChangeType.Move);
+
+    if (!moveChange) {
+      throw new Error('No move change');
+    }
+    const movePosition = moveChange.to;
+
+    return new CheckersUnitElement({
+      cellSize: cellSize,
+      cellLocation: movePosition,
+      isActive: true,
+      topLeftPosition: this.topLeftPosition,
+      unitColor: [Color.fromHex('#aaffaa33'), Color.fromHex('#aaffaa33')],
+      hoverColor: Color.fromHex('#aaffaa66'),
+      activeColor: Color.fromHex('#aaffaa99'),
+      onClick: () => {
+        console.log(this.constructor.name, 'onClick', unit.location, movePosition);
+        action.run();
+        this.updateUnits();
+      },
+    });
   }
 }
