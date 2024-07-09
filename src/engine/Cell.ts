@@ -1,3 +1,4 @@
+import { EventEmitter } from './EventEmitter';
 import { InteractiveEntity } from './InteractiveEntity';
 import { Unit } from './Unit';
 import { Vector2d } from './Vector2d';
@@ -9,6 +10,7 @@ export class Cell<TCellType, TUnitType, TOwner> extends InteractiveEntity<TCellT
     public readonly x: number,
     public readonly y: number,
     public readonly type: TCellType,
+    public readonly eventBus: EventEmitter,
   ) {
     super();
   }

@@ -1,7 +1,8 @@
+import { EventEmitter } from '../../../../engine/EventEmitter';
 import { Rule } from '../../../../engine/Rule';
 import { Unit } from '../../../../engine/Unit';
 import { CheckersCellType } from '../../commons/CheckersCellType';
-import { CheckersUnit, CheckersInteractiveEntity, CheckersBoard, CheckersAvailableAction } from '../CheckersRuTypings';
+import { CheckersUnit, CheckersInteractiveEntity, CheckersAvailableAction, CheckersGame } from '../CheckersRuTypings';
 import { CheckersUnitOwner } from '../../commons/CheckersUnitOwner';
 import { CheckersUnitType } from '../../commons/CheckersUnitType';
 import { SimpleMoveLeft } from '../actions/SimpleMoveLeft';
@@ -16,8 +17,9 @@ export class MoveForChecker extends Rule<CheckersCellType, CheckersUnitType, Che
 
   getAction(
     entity: CheckersUnit,
-    board: CheckersBoard,
+    game: CheckersGame,
+    eventBus: EventEmitter,
   ): CheckersAvailableAction[] {
-    return [new SimpleMoveLeft(entity, board), new SimpleMoveRight(entity, board)];
+    return [new SimpleMoveLeft(entity, game, eventBus), new SimpleMoveRight(entity, game, eventBus)];
   }
 }

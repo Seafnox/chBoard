@@ -14,36 +14,37 @@ export class SimpleMoveRight extends Action<CheckersCellType, CheckersUnitType, 
 
   get isActive(): boolean {
     // FIXME check if unit can move
-    return true;
+    return this.entity.owner === this.game.turnManager.activeOwner;
   }
 
   get changes(): CommonActionChange<CheckersUnit>[] {
-    const moveDirection = this.entity.owner === CheckersUnitOwner.Black
-      ? Vector2d.Up.add(Vector2d.Right)
-      : Vector2d.Down.add(Vector2d.Right);
-
     return [
       {
         type: ActionChangeType.Move,
         entity: this.entity,
-        to: this.entity.position.add(moveDirection),
+        to: this.entity.position.add(this.moveDirection),
       }
     ];
   }
 
-  // FIXME refactor to changes
-  public run(): void {
-    const moveDirection = this.entity.owner === CheckersUnitOwner.Black
+  private get moveDirection() {
+    return this.entity.owner === CheckersUnitOwner.Black
       ? Vector2d.Up.add(Vector2d.Right)
       : Vector2d.Down.add(Vector2d.Right);
-    const nextPosition = this.entity.position.add(moveDirection);
-    const nextCell = this.board.getCell(nextPosition);
+  }
+
+// FIXME refactor to changes
+  public _run(): void {
+    const nextPosition = this.entity.position.add(this.moveDirection);
+    const nextCell = this.game.board.getCell(nextPosition);
 
     if (nextCell) {
       this.entity.moveTo(nextCell);
     }
 
     // TODO check can switch to king
+
+    this.game.turnManager.nextTurn();
   }
 
 }

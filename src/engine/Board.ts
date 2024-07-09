@@ -1,5 +1,6 @@
 import { BoardConfig } from './BoardConfig';
 import { Cell } from './Cell';
+import { EventEmitter } from './EventEmitter';
 import { InteractiveEntity } from './InteractiveEntity';
 import { Unit } from './Unit';
 import { Vector2d } from './Vector2d';
@@ -13,6 +14,7 @@ export class Board<TCellType, TUnitType, TOwner> extends InteractiveEntity<TCell
 
   constructor(
     public readonly initialConfig: BoardConfig<TCellType, TUnitType, TOwner>,
+    public readonly eventBus: EventEmitter,
   ) {
     super();
 
@@ -25,7 +27,7 @@ export class Board<TCellType, TUnitType, TOwner> extends InteractiveEntity<TCell
     Object.keys(initialConfig.cellMap).forEach(location => {
       const cellType = initialConfig.cellMap[location];
       const [x, y] = location.split(',').map(Number);
-      const cell = new Cell<TCellType, TUnitType, TOwner>(x, y, cellType);
+      const cell = new Cell<TCellType, TUnitType, TOwner>(x, y, cellType, this.eventBus);
       this.cells[y * this.initialConfig.width + x] = cell;
       this.cellMap[location] = cell;
     });
@@ -37,7 +39,7 @@ export class Board<TCellType, TUnitType, TOwner> extends InteractiveEntity<TCell
       if (!cell) {
         throw new Error(`initialConfig incorrect. Could not find cell at [${x},${y}] for unit ${location}`);
       }
-      const unit = new Unit<TCellType, TUnitType, TOwner>(cell, type, owner);
+      const unit = new Unit<TCellType, TUnitType, TOwner>(cell, type, owner, this.eventBus);
       this.units.push(unit);
       this.unitMap[location] = unit;
     });

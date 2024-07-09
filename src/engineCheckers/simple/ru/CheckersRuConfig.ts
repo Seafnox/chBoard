@@ -1,6 +1,7 @@
 import { UnitConfig } from '../../../engine/BoardConfig';
 import { GameConfig } from '../../../engine/GameConfig';
 import { CheckersCellType } from '../commons/CheckersCellType';
+import { CheckersTurnManager } from '../commons/CheckersTurnManager';
 import { CheckersUnitOwner } from '../commons/CheckersUnitOwner';
 import { CheckersUnitType } from '../commons/CheckersUnitType';
 import { MoveForChecker } from './rules/MoveForChecker';
@@ -35,4 +36,5 @@ export const checkersRuConfig: GameConfig<CheckersCellType, CheckersUnitType, Ch
   rules: [
     new MoveForChecker(),
   ],
+  turnManager: CheckersTurnManager,
 }
