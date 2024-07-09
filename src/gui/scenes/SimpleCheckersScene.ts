@@ -164,6 +164,7 @@ export class SimpleCheckersScene extends Scene {
     }
 
     this.selectedUnitActionViews = this.selectedUnit.actions.map(action => this.createActionView(action, this.selectedUnit!));
+    this.selectedUnitActionViews.forEach(actionView => this.add(actionView));
   }
 
   private createActionView(action: CheckersAvailableAction, unit: CheckersUnit): CheckersUnitElement {
@@ -180,9 +181,9 @@ export class SimpleCheckersScene extends Scene {
       cellLocation: movePosition,
       isActive: true,
       topLeftPosition: this.topLeftPosition,
-      unitColor: [Color.fromHex('#aaffaa33'), Color.fromHex('#aaffaa33')],
-      hoverColor: Color.fromHex('#aaffaa66'),
-      activeColor: Color.fromHex('#aaffaa99'),
+      unitColor: [Color.fromHex('#11aa6633'), Color.fromHex('#aaffaa33')],
+      hoverColor: Color.fromHex('#11aa6666'),
+      activeColor: Color.fromHex('#11aa6699'),
       onClick: () => {
         console.log(this.constructor.name, 'onClick', unit.location, movePosition);
         action.run();

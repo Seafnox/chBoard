@@ -1,11 +1,12 @@
 import { ScreenElement, Vector, Color, GraphicsGroup, Circle, vec } from 'excalibur';
+import { Vector2d } from '../../engine/Vector2d';
 import { SystemActionEvent } from '../events/SystemActionEvent';
 import { SystemName } from '../events/SystemName';
 import { InteractiveState } from './InteractiveState';
 
 export interface CheckersUnitConfig {
   cellSize: number;
-  cellLocation: number[];
+  cellLocation: Vector2d;
   isActive?: boolean;
   isSelected?: boolean;
   topLeftPosition: Vector;
@@ -36,9 +37,9 @@ export class CheckersUnitElement extends ScreenElement {
     private config: CheckersUnitConfig
   ) {
     super({
-      name: `${systemName}-${config.cellLocation[0]}-${config.cellLocation[1]}`,
+      name: `${systemName}-${config.cellLocation.x}-${config.cellLocation.y}`,
       pos: config.topLeftPosition
-        .add(vec( config.cellLocation[0] * config.cellSize, config.cellLocation[1] * config.cellSize))
+        .add(vec( config.cellLocation.x * config.cellSize, config.cellLocation.y * config.cellSize))
         .add(vec(-2, -2)),
     });
 
