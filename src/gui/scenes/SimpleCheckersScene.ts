@@ -118,11 +118,11 @@ export class SimpleCheckersScene extends Scene {
       .map(unit => new CheckersUnitElement({
         cellSize: cellSize,
         cellLocation: unit.position,
-        isActive: unit.actions.length !== 0,
+        isActive: unit.actions.filter(action => action.isActive).length !== 0,
         topLeftPosition: this.topLeftPosition,
         unitColor: unit.owner === CheckersUnitOwner.White ? [Color.White, Color.LightGray] : [Color.Black, Color.DarkGray],
         hoverColor: Color.Gray,
-        activeColor: Color.Blue,
+        activeColor: Color.fromHex("#0080f077"),
         onClick: (event) => {
           console.log(this.constructor.name, 'onClick', unit.location);
           this.selectUnit(event, unit);
@@ -163,7 +163,9 @@ export class SimpleCheckersScene extends Scene {
       return;
     }
 
-    this.selectedUnitActionViews = this.selectedUnit.actions.map(action => this.createActionView(action, this.selectedUnit!));
+    this.selectedUnitActionViews = this.selectedUnit.actions
+      .filter(action => action.isActive)
+      .map(action => this.createActionView(action, this.selectedUnit!));
     this.selectedUnitActionViews.forEach(actionView => this.add(actionView));
   }
 

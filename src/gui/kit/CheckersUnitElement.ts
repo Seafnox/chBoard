@@ -106,6 +106,7 @@ export class CheckersUnitElement extends ScreenElement {
       cellSize: config.cellSize,
       unitOuterColor: config.unitColor[0],
       unitInnerColor: config.unitColor[1],
+      lightingColor: this.isActive ? config.activeColor : undefined,
     });
   }
 
