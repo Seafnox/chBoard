@@ -1,9 +1,13 @@
 import { Scene, Label, vec, Color, Actor, Vector } from 'excalibur';
-import { checkersRuConfig } from '../../engineCheckers/simple/ru/CheckersRuConfig';
 import { GameConfig } from '../../engine/GameConfig';
+import { CheckersUnitOwner } from '../../engineCheckers/simple/commons/CheckersUnitOwner';
+import { checkersRuConfig } from '../../engineCheckers/simple/ru/CheckersRuConfig';
+import { GameEngine } from '../engine/GameEngine';
+import { GameEvent } from '../engine/GameEvent';
+import { PlayerConfig } from '../engine/PlayerConfig';
+import { PlayerType } from '../engine/PlayerType';
 import { SystemActionEvent } from '../events/SystemActionEvent';
 import { SystemName } from '../events/SystemName';
-import { GameEvent, GameEngine } from '../GameEngine';
 import { ButtonLabel } from '../kit/ButtonLabel';
 import { ModalWindow } from '../kit/ModalWindow';
 import { RoundedButton } from '../kit/RoundedButton';
@@ -17,11 +21,23 @@ interface CommonButtonConfig {
   onClick?: (event: SystemActionEvent<RoundedButton>) => void;
 }
 
+interface ComplexGameConfig {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  gameConfig: GameConfig<any, any, any>;
+  playerConfig?: PlayerConfig;
+}
+
 export class WelcomeScene extends Scene {
   private isModalWindowOpen = false;
   private preparedActors: Actor[] = [];
-  private availableCheckers: Partial<Record<SystemName, GameConfig<unknown, unknown, unknown>>> = {
-    [SystemName.CheckersRu]: checkersRuConfig,
+  private availableCheckers: Partial<Record<SystemName, ComplexGameConfig>> = {
+    [SystemName.CheckersRu]: {
+      gameConfig: checkersRuConfig,
+      playerConfig: {
+        [CheckersUnitOwner.Black]: PlayerType.Human,
+        [CheckersUnitOwner.White]: PlayerType.Computer,
+      },
+    },
   };
 
   get gameEngine(): GameEngine {
@@ -84,7 +100,8 @@ export class WelcomeScene extends Scene {
 
     const buttons = Object.entries(this.availableCheckers).map(([label, config]) => {
       return this.createSelectionMenuButton(buttonWidth, label as SystemName, event => {
-        this.gameEngine.gameConfig = config;
+        this.gameEngine.gameConfig = config.gameConfig;
+        this.gameEngine.playerConfig = config.playerConfig;
         this.gameEngine.gameEvents.emit(GameEvent.SystemAction, event);
       });
     });

@@ -1,6 +1,6 @@
 import { ScreenElement, vec, Color, Rectangle, Actor, GraphicsGroup, Vector, BoundingBox } from 'excalibur';
 import { SystemName } from '../events/SystemName';
-import { GameEngine } from '../GameEngine';
+import { GameEngine } from '../engine/GameEngine';
 
 export interface ModalWindowConfig {
   systemName: SystemName;

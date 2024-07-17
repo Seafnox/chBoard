@@ -1,5 +1,6 @@
 import { vec, PointerButton } from 'excalibur';
-import { GameEngine, GameEvent } from './GameEngine';
+import { GameEngine } from './engine/GameEngine';
+import { GameEvent } from './engine/GameEvent';
 import { GameProperty } from './GameProperty';
 
 // TODO Remove this

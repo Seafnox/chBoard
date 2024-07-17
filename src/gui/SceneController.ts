@@ -1,5 +1,6 @@
+import { GameEvent } from './engine/GameEvent';
 import { SystemName } from './events/SystemName';
-import { GameEngine, GameEvent } from './GameEngine';
+import { GameEngine } from './engine/GameEngine';
 import { SceneName } from './scenes/SceneMap';
 
 export class SceneController {

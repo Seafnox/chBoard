@@ -1,5 +1,6 @@
 import { Scene, Label, Color, vec, BaseAlign } from 'excalibur';
-import { GameEvent, GameEngine } from '../GameEngine';
+import { GameEngine } from '../engine/GameEngine';
+import { GameEvent } from '../engine/GameEvent';
 import { BackButton } from '../kit/BackButton';
 import { PixelFont30px } from '../PrepareFonts';
 

@@ -3,7 +3,8 @@ import './resources/main.css';
 import './resources/gui.css';
 
 import { DisplayMode, vec } from 'excalibur';
-import { GameEngine, GameEvent } from './gui/GameEngine';
+import { GameEngine } from './gui/engine/GameEngine';
+import { GameEvent } from './gui/engine/GameEvent';
 import { GameProperty } from './gui/GameProperty';
 import { ResourceLoader } from './gui/ResourceLoader';
 import { SceneController } from './gui/SceneController';
