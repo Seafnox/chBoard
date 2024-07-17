@@ -1,7 +1,8 @@
-import { ScreenElement, Vector, Color, GraphicsGroup, Circle, vec, Rectangle } from 'excalibur';
+import { ScreenElement, Vector, Color, vec } from 'excalibur';
 import { Vector2d } from '../../engine/Vector2d';
 import { SystemActionEvent } from '../events/SystemActionEvent';
 import { SystemName } from '../events/SystemName';
+import { CheckersUnitGraphic } from './CheckersUnitGraphic';
 import { InteractiveState } from './InteractiveState';
 
 export interface CheckersUnitConfig {
@@ -17,15 +18,6 @@ export interface CheckersUnitConfig {
   onClick?: (event: SystemActionEvent<CheckersUnitElement>) => void;
 }
 
-interface CheckersUnitStateConfig {
-  cellSize: number;
-  unitOuterColor: Color;
-  unitInnerColor: Color;
-  lightingColor?: Color;
-}
-
-const sizeCoef = 0.9;
-const borderCoef = 0.3;
 const systemName = SystemName.Unit;
 
 export class CheckersUnitElement extends ScreenElement {
@@ -102,7 +94,7 @@ export class CheckersUnitElement extends ScreenElement {
   }
 
   private getIdleState(config: CheckersUnitConfig) {
-    return this.getCustomState({
+    return new CheckersUnitGraphic({
       cellSize: config.cellSize,
       unitOuterColor: config.unitColor[0],
       unitInnerColor: config.unitColor[1],
@@ -111,7 +103,7 @@ export class CheckersUnitElement extends ScreenElement {
   }
 
   private getHoverState(config: CheckersUnitConfig) {
-    return this.getCustomState({
+    return new CheckersUnitGraphic({
       cellSize: config.cellSize,
       unitOuterColor: config.unitColor[0],
       unitInnerColor: config.unitColor[1],
@@ -120,7 +112,7 @@ export class CheckersUnitElement extends ScreenElement {
   }
 
   private getPressedState(config: CheckersUnitConfig) {
-    return this.getCustomState({
+    return new CheckersUnitGraphic({
       cellSize: config.cellSize,
       unitOuterColor: config.unitColor[0],
       unitInnerColor: config.unitColor[1],
@@ -129,43 +121,11 @@ export class CheckersUnitElement extends ScreenElement {
   }
 
   private getActiveState(config: CheckersUnitConfig) {
-    return this.getCustomState({
+    return new CheckersUnitGraphic({
       cellSize: config.cellSize,
       unitOuterColor: config.unitColor[0],
       unitInnerColor: config.unitColor[1],
       lightingColor: config.activeColor || config.hoverColor,
     });
-  }
-
-  private getCustomState(config: CheckersUnitStateConfig): GraphicsGroup {
-    const unitRadius = config.cellSize / 2 * sizeCoef;
-    const borderRadius = unitRadius * borderCoef / 2;
-    const unitOffset = config.cellSize / 2 - unitRadius;
-    return new GraphicsGroup({
-      members: [
-        ...(!config.lightingColor ? []: [{
-          graphic: new Rectangle({
-            width: config.cellSize * sizeCoef,
-            height: config.cellSize * sizeCoef,
-            color: config.lightingColor,
-          }),
-          offset: vec(2 + config.cellSize * (1 - sizeCoef) / 2, 2 + config.cellSize * (1 - sizeCoef) / 2),
-        }]),
-        {
-          graphic: new Circle({
-            radius: unitRadius,
-            color: config.unitOuterColor,
-          }),
-          offset: vec(unitOffset, unitOffset),
-        },
-        {
-          graphic: new Circle({
-            radius: unitRadius - borderRadius,
-            color: config.unitInnerColor,
-          }),
-          offset: vec(unitOffset + borderRadius, unitOffset + borderRadius),
-        },
-      ]
-    })
   }
 }

@@ -1,15 +1,16 @@
 import { Cell } from './Cell';
+import { Enumerable } from './Enumerable';
 import { EventEmitter } from './EventEmitter';
 import { InteractiveEntity } from './InteractiveEntity';
 import { Vector2d } from './Vector2d';
 
-export class Unit<TCellType, TUnitType, TOwner> extends InteractiveEntity<TCellType, TUnitType, TOwner> {
-  private _prevCell?: Cell<TCellType, TUnitType, TOwner>;
+export class Unit<TCellType, TUnitType, TUnitOwner extends Enumerable> extends InteractiveEntity<TCellType, TUnitType, TUnitOwner> {
+  private _prevCell?: Cell<TCellType, TUnitType, TUnitOwner>;
 
   constructor(
-    private _cell: Cell<TCellType, TUnitType, TOwner>,
+    private _cell: Cell<TCellType, TUnitType, TUnitOwner>,
     private _type: TUnitType,
-    private _owner: TOwner,
+    private _owner: TUnitOwner,
     public readonly eventBus: EventEmitter,
   ) {
     super();
@@ -27,7 +28,7 @@ export class Unit<TCellType, TUnitType, TOwner> extends InteractiveEntity<TCellT
     return this._type;
   }
 
-  public get lastMove(): [Cell<TCellType, TUnitType, TOwner> | undefined, Cell<TCellType, TUnitType, TOwner>] {
+  public get lastMove(): [Cell<TCellType, TUnitType, TUnitOwner> | undefined, Cell<TCellType, TUnitType, TUnitOwner>] {
     return [this._prevCell, this._cell];
   }
 
@@ -35,17 +36,17 @@ export class Unit<TCellType, TUnitType, TOwner> extends InteractiveEntity<TCellT
     this._type = type;
   }
 
-  public setCell(cell: Cell<TCellType, TUnitType, TOwner>): void {
+  public setCell(cell: Cell<TCellType, TUnitType, TUnitOwner>): void {
     // TODO Add Pathfinder for smooth and correct animations
     this._prevCell = this._cell;
     this._cell = cell;
   }
 
-  public changeOwner(owner: TOwner): void {
+  public changeOwner(owner: TUnitOwner): void {
     this._owner = owner;
   }
 
-  public get owner(): TOwner {
+  public get owner(): TUnitOwner {
     return this._owner;
   }
 }

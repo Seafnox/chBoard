@@ -1,12 +1,13 @@
 import { ScreenElement, Rectangle, GraphicsGroup, vec, Text, Vector } from 'excalibur';
 import { GraphicsGrouping } from 'excalibur/build/dist/Graphics/GraphicsGroup';
+import { Enumerable } from '../../engine/Enumerable';
 import { GameConfig } from '../../engine/GameConfig';
 import { borderFont, darkColor, lightColor, graphicState, borderBorderCoef, borderSize, cellSize } from './CheckersConstants';
 
 export class CheckersBoardElement extends ScreenElement {
 
   constructor(
-    public readonly initialConfig: GameConfig<unknown, unknown, unknown>,
+    public readonly initialConfig: GameConfig<Enumerable, Enumerable, Enumerable>,
     public readonly position: Vector,
   ) {
     super({
@@ -22,7 +23,7 @@ export class CheckersBoardElement extends ScreenElement {
     this.graphics.use(graphicState);
   }
 
-  private getStateGroup(initialConfig: GameConfig<unknown, unknown, unknown>) {
+  private getStateGroup(initialConfig: GameConfig<Enumerable, Enumerable, Enumerable>) {
     const offsetX = (2 * borderSize + initialConfig.width * cellSize) / 2;
     return new GraphicsGroup({
       members: [
@@ -67,7 +68,7 @@ export class CheckersBoardElement extends ScreenElement {
   }
 
   private getVerticalBorder(
-    initialConfig: GameConfig<unknown, unknown, unknown>,
+    initialConfig: GameConfig<Enumerable, Enumerable, Enumerable>,
     isLeftBorder = false,
   ): GraphicsGroup {
     return new GraphicsGroup({
@@ -100,7 +101,7 @@ export class CheckersBoardElement extends ScreenElement {
     });
   }
 
-  private getVerticalBorderNumbers(initialConfig: GameConfig<unknown, unknown, unknown>): GraphicsGroup {
+  private getVerticalBorderNumbers(initialConfig: GameConfig<Enumerable, Enumerable, Enumerable>): GraphicsGroup {
     return new GraphicsGroup({
       members: Array(initialConfig.width).fill(0).map<GraphicsGrouping>((_, index) => ({
         graphic: new Text({
@@ -116,7 +117,7 @@ export class CheckersBoardElement extends ScreenElement {
   }
 
   private getHorizontalBorder(
-    initialConfig: GameConfig<unknown, unknown, unknown>,
+    initialConfig: GameConfig<Enumerable, Enumerable, Enumerable>,
     isTopBorder = false,
   ): GraphicsGroup {
     return new GraphicsGroup({
@@ -149,7 +150,7 @@ export class CheckersBoardElement extends ScreenElement {
     });
   }
 
-  private getHorizontalBorderLetters(initialConfig: GameConfig<unknown, unknown, unknown>): GraphicsGroup {
+  private getHorizontalBorderLetters(initialConfig: GameConfig<Enumerable, Enumerable, Enumerable>): GraphicsGroup {
     const firstCharIndex = 'A'.charCodeAt(0);
     return new GraphicsGroup({
       members: Array(initialConfig.height).fill(0).map<GraphicsGrouping>((_, index) => ({
@@ -165,7 +166,7 @@ export class CheckersBoardElement extends ScreenElement {
     });
   }
 
-  private getCells(initialConfig: GameConfig<unknown, unknown, unknown>): GraphicsGroup {
+  private getCells(initialConfig: GameConfig<Enumerable, Enumerable, Enumerable>): GraphicsGroup {
     const cellMembers: GraphicsGrouping[] = [];
     for (let y = 0; y < initialConfig.height; y++) {
       for (let x = 0; x < initialConfig.width; x++) {

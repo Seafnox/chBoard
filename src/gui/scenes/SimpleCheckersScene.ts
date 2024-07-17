@@ -14,6 +14,7 @@ import { CheckersBoardElement } from '../kit/CheckersBoardElement';
 import { borderSize, cellSize } from '../kit/CheckersConstants';
 import { CheckersUnitElement } from '../kit/CheckersUnitElement';
 import { CircleButton } from '../kit/CircleButton';
+import { CurrentTurnElement, PlayerColorScheme } from '../kit/CurrentTurnElement';
 import { PixelFont60px } from '../PrepareFonts';
 
 interface CircleButtonConfig {
@@ -26,11 +27,27 @@ interface CircleButtonConfig {
 export class SimpleCheckersScene extends Scene {
   private isModalWindowOpen = false;
   private game?: CheckersGame;
+  private turnUI?: CurrentTurnElement<CheckersUnitOwner>;
   private boardView?: CheckersBoardElement;
   private unitViews: CheckersUnitElement[] = [];
   private selectedUnitView?: CheckersUnitElement;
   private selectedUnit?: CheckersUnit;
   private selectedUnitActionViews: CheckersUnitElement[] = [];
+  private playerScheme: Record<CheckersUnitOwner, PlayerColorScheme> = {
+    [CheckersUnitOwner.Black]: {
+      unitColor: [Color.Black, Color.DarkGray],
+      hoverColor: Color.Gray,
+      activeColor: Color.fromHex("#0080f077"),
+      pressedColor: Color.fromHex("#0080f0aa"),
+    },
+    [CheckersUnitOwner.White]: {
+      unitColor: [Color.White, Color.LightGray],
+      hoverColor: Color.Gray,
+      activeColor: Color.fromHex("#0080f077"),
+      pressedColor: Color.fromHex("#0080f0aa"),
+    },
+
+  }
 
   get gameEngine(): GameEngine {
     return this.engine as GameEngine;
@@ -48,10 +65,12 @@ export class SimpleCheckersScene extends Scene {
     const gameConfig = this.gameEngine.gameConfig as CheckersGameConfig;
 
     this.game = new Game(this.gameEngine.gameConfig);
+    this.turnUI = this.createTurnUI(this.game.turnManager.activeOwner);
     this.boardView = this.createBoard(gameConfig, vec(this.gameEngine.screen.center.x, 120));
     this.unitViews = this.createUnits(this.game);
 
     this.add(this.createHeader());
+    this.add(this.turnUI);
     this.add(this.createMenuButton(350, SystemName.Settings2, this.emitSystemAction.bind(this)));
     this.add(this.createMenuButton(500, SystemName.Help2, this.emitSystemAction.bind(this)));
 
@@ -66,6 +85,15 @@ export class SimpleCheckersScene extends Scene {
       pos: vec(this.gameEngine.screen.center.x, 50),
       color: Color.White,
       font: PixelFont60px({shadow: {color: Color.Black}}),
+    });
+  }
+
+  createTurnUI(currentPlayer: CheckersUnitOwner): CurrentTurnElement<CheckersUnitOwner> {
+    return new CurrentTurnElement({
+      cellSize: cellSize,
+      initialPlayer: currentPlayer,
+      position: vec(100, 100),
+      playerScheme: this.playerScheme,
     });
   }
 
