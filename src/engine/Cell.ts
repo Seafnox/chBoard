@@ -1,5 +1,5 @@
 import { Enumerable } from './Enumerable';
-import { EventEmitter } from './EventEmitter';
+import { Game } from './Game';
 import { InteractiveEntity } from './InteractiveEntity';
 import { Unit } from './Unit';
 import { Vector2d } from './Vector2d';
@@ -11,7 +11,7 @@ export class Cell<TCellType, TUnitType, TUnitOwner extends Enumerable> extends I
     public readonly x: number,
     public readonly y: number,
     public readonly type: TCellType,
-    public readonly eventBus: EventEmitter,
+    public readonly game: Game<TCellType, TUnitType, TUnitOwner>,
   ) {
     super();
   }

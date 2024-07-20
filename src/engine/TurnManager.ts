@@ -1,16 +1,14 @@
 import { Enumerable } from './Enumerable';
-import { EventEmitter } from './EventEmitter';
 import { Game } from './Game';
 
 export interface TurnManagerConstructor<TCellType, TUnitType, TUnitOwner extends Enumerable, TTurnManager extends TurnManager<TCellType, TUnitType, TUnitOwner>> {
-  new(game: Game<TCellType, TUnitType, TUnitOwner>, eventBus: EventEmitter): TTurnManager;
+  new(game: Game<TCellType, TUnitType, TUnitOwner>): TTurnManager;
 }
 
 export abstract class TurnManager<TCellType, TUnitType, TUnitOwner extends Enumerable> {
 
   constructor(
     public readonly game: Game<TCellType, TUnitType, TUnitOwner>,
-    public readonly eventBus: EventEmitter,
   ) {}
 
   public abstract get initialOwner(): TUnitOwner;

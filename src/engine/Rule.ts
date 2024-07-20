@@ -1,6 +1,5 @@
 import { Action } from './Action';
 import { Enumerable } from './Enumerable';
-import { EventEmitter } from './EventEmitter';
 import { Game } from './Game';
 import { InteractiveEntity } from './InteractiveEntity';
 
@@ -8,7 +7,6 @@ export abstract class Rule<TCellType, TUnitType, TUnitOwner extends Enumerable, 
   abstract isSuitable(entity: InteractiveEntity<TCellType, TUnitType, TUnitOwner>): entity is TInteractiveEntity;
   abstract getAction(
     entity: TInteractiveEntity,
-    game: Game<TCellType, TUnitType, TUnitOwner>,
-    eventBus: EventEmitter,
+    game: Game<TCellType, TUnitType, TUnitOwner>
   ): Action<TCellType, TUnitType, TUnitOwner, TInteractiveEntity>[];
 }

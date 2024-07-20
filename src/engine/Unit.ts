@@ -1,17 +1,18 @@
 import { Cell } from './Cell';
 import { Enumerable } from './Enumerable';
-import { EventEmitter } from './EventEmitter';
+import { Game } from './Game';
 import { InteractiveEntity } from './InteractiveEntity';
 import { Vector2d } from './Vector2d';
 
 export class Unit<TCellType, TUnitType, TUnitOwner extends Enumerable> extends InteractiveEntity<TCellType, TUnitType, TUnitOwner> {
   private _prevCell?: Cell<TCellType, TUnitType, TUnitOwner>;
+  public isDead = false;
 
   constructor(
     private _cell: Cell<TCellType, TUnitType, TUnitOwner>,
     private _type: TUnitType,
     private _owner: TUnitOwner,
-    public readonly eventBus: EventEmitter,
+    public readonly game: Game<TCellType, TUnitType, TUnitOwner>,
   ) {
     super();
   }

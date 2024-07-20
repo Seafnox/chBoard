@@ -15,13 +15,13 @@ export class Game<TCellType, TUnitType, TUnitOwner extends Enumerable> {
   constructor(
     public readonly initialConfig: GameConfig<TCellType, TUnitType, TUnitOwner>,
   ) {
-    this.board = new Board(initialConfig, this.eventBus);
-    this.turnManager = new initialConfig.turnManager(this, this.eventBus);
+    this.board = new Board(initialConfig, this);
+    this.turnManager = new initialConfig.turnManager(this);
 
     this.initialConfig.rules.forEach(rule => {
       this.interactiveEntities.forEach(interactiveEntity => {
         if (rule.isSuitable(interactiveEntity)) {
-          interactiveEntity.addAction(rule.getAction(interactiveEntity, this, this.eventBus));
+          interactiveEntity.addAction(rule.getAction(interactiveEntity, this));
         }
       })
     })

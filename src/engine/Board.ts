@@ -1,6 +1,6 @@
 import { BoardConfig } from './BoardConfig';
 import { Cell } from './Cell';
-import { EventEmitter } from './EventEmitter';
+import { Game } from './Game';
 import { InteractiveEntity } from './InteractiveEntity';
 import { Enumerable } from './Enumerable';
 import { Unit } from './Unit';
@@ -15,7 +15,7 @@ export class Board<TCellType, TUnitType, TUnitOwner extends Enumerable> extends 
 
   constructor(
     public readonly initialConfig: BoardConfig<TCellType, TUnitType, TUnitOwner>,
-    public readonly eventBus: EventEmitter,
+    public readonly game: Game<TCellType, TUnitType, TUnitOwner>,
   ) {
     super();
 
@@ -28,7 +28,7 @@ export class Board<TCellType, TUnitType, TUnitOwner extends Enumerable> extends 
     Object.keys(initialConfig.cellMap).forEach(location => {
       const cellType = initialConfig.cellMap[location];
       const [x, y] = location.split(',').map(Number);
-      const cell = new Cell<TCellType, TUnitType, TUnitOwner>(x, y, cellType, this.eventBus);
+      const cell = new Cell<TCellType, TUnitType, TUnitOwner>(x, y, cellType, this.game);
       this.cells[y * this.initialConfig.width + x] = cell;
       this.cellMap[location] = cell;
     });
@@ -40,7 +40,7 @@ export class Board<TCellType, TUnitType, TUnitOwner extends Enumerable> extends 
       if (!cell) {
         throw new Error(`initialConfig incorrect. Could not find cell at [${x},${y}] for unit ${location}`);
       }
-      const unit = new Unit<TCellType, TUnitType, TUnitOwner>(cell, type, owner, this.eventBus);
+      const unit = new Unit<TCellType, TUnitType, TUnitOwner>(cell, type, owner, this.game);
       this.units.push(unit);
       this.unitMap[location] = unit;
     });
