@@ -1,6 +1,9 @@
-import { EventEmitter } from '../../../../engine/EventEmitter';
 import { Unit } from '../../../../engine/Unit';
 import { CheckersRule } from '../../commons/CheckersRule';
+import { CheckerBiteBackLeft } from '../actions/CheckerBiteBackLeft';
+import { CheckerBiteBackRight } from '../actions/CheckerBiteBackRight';
+import { CheckerBiteFrontLeft } from '../actions/CheckerBiteFrontLeft';
+import { CheckerBiteFrontRight } from '../actions/CheckerBiteFrontRight';
 import { CheckersUnit, CheckersInteractiveEntity, CheckersAvailableAction, CheckersGame } from '../CheckersRuTypings';
 import { CheckersUnitType } from '../../commons/CheckersUnitType';
 import { CheckerMoveFrontLeft } from '../actions/CheckerMoveFrontLeft';
@@ -14,16 +17,15 @@ export class RulesForChecker extends CheckersRule {
   getAction(
     entity: CheckersUnit,
     game: CheckersGame,
-    eventBus: EventEmitter,
   ): CheckersAvailableAction[] {
     return [
       // TODO make commons move logic
-      new CheckerMoveFrontLeft(entity, game, eventBus),
-      new CheckerMoveFrontRight(entity, game, eventBus),
-      new CheckerBiteFrontLeft(entity, game, eventBus),
-      new CheckerBiteFrontRight(entity, game, eventBus),
-      new CheckerBiteBackLeft(entity, game, eventBus),
-      new CheckerBiteBackRight(entity, game, eventBus),
+      new CheckerMoveFrontLeft(entity, game),
+      new CheckerMoveFrontRight(entity, game),
+      new CheckerBiteFrontLeft(entity, game),
+      new CheckerBiteFrontRight(entity, game),
+      new CheckerBiteBackLeft(entity, game),
+      new CheckerBiteBackRight(entity, game),
     ];
   }
 }
