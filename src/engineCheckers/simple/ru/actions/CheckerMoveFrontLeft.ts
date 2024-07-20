@@ -1,13 +1,11 @@
-import { Action } from '../../../../engine/Action';
 import { ActionChangeType } from '../../../../engine/actionChanges/ActionChangeType';
 import { CommonActionChange } from '../../../../engine/actionChanges/CommonActionChange';
 import { Vector2d } from '../../../../engine/Vector2d';
-import { CheckersCellType } from '../../commons/CheckersCellType';
+import { CheckersAction } from '../../commons/CheckersAction';
 import { CheckersUnit } from '../CheckersRuTypings';
 import { CheckersUnitOwner } from '../../commons/CheckersUnitOwner';
-import { CheckersUnitType } from '../../commons/CheckersUnitType';
 
-export class CheckerMoveFrontLeft extends Action<CheckersCellType, CheckersUnitType, CheckersUnitOwner, CheckersUnit> {
+export class CheckerMoveFrontLeft extends CheckersAction {
   get priority(): number {
     return 1;
   }

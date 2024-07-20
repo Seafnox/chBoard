@@ -1,16 +1,12 @@
 import { EventEmitter } from '../../../../engine/EventEmitter';
-import { Rule } from '../../../../engine/Rule';
 import { Unit } from '../../../../engine/Unit';
-import { CheckersCellType } from '../../commons/CheckersCellType';
+import { CheckersRule } from '../../commons/CheckersRule';
 import { CheckersUnit, CheckersInteractiveEntity, CheckersAvailableAction, CheckersGame } from '../CheckersRuTypings';
-import { CheckersUnitOwner } from '../../commons/CheckersUnitOwner';
 import { CheckersUnitType } from '../../commons/CheckersUnitType';
 import { CheckerMoveFrontLeft } from '../actions/CheckerMoveFrontLeft';
 import { CheckerMoveFrontRight } from '../actions/CheckerMoveFrontRight';
 
-
-
-export class RulesForChecker extends Rule<CheckersCellType, CheckersUnitType, CheckersUnitOwner, CheckersUnit> {
+export class RulesForChecker extends CheckersRule {
   isSuitable(entity: CheckersInteractiveEntity): entity is CheckersUnit {
     return entity instanceof Unit && entity.type === CheckersUnitType.Checker;
   }
