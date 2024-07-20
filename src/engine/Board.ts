@@ -1,3 +1,4 @@
+import { ActionChangeType } from './actionChanges/ActionChangeType';
 import { BoardConfig } from './BoardConfig';
 import { Cell } from './Cell';
 import { Game } from './Game';
@@ -66,5 +67,15 @@ export class Board<TCellType, TUnitType, TUnitOwner extends Enumerable> extends 
     unit.setCell(to);
     this.unitMap[`${unit.position.x},${unit.position.y}`] = undefined;
     this.unitMap[`${to.position.x},${to.position.y}`] = unit;
+  }
+
+  removeUnit(unit: Unit<TCellType, TUnitType, TUnitOwner>, reason: InteractiveEntity<TCellType, TUnitType, TUnitOwner>): void {
+    unit.isDead = true;
+    this.unitMap[`${unit.position.x},${unit.position.y}`] = undefined;
+    this.game.gameLog.push({
+      type: ActionChangeType.Remove,
+      entity: unit,
+      reason,
+    })
   }
 }
