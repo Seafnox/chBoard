@@ -1,4 +1,5 @@
-import { ActionChangeType } from './actionChanges/ActionChangeType';
+import { MoveActionChange } from './actionChanges/MoveActionChange';
+import { RemoveActionChange } from './actionChanges/RemoveActionChange';
 import { BoardConfig } from './BoardConfig';
 import { Cell } from './Cell';
 import { Game } from './Game';
@@ -11,7 +12,7 @@ export class Board<TCellType, TUnitType, TUnitOwner extends Enumerable> extends 
   public readonly cells: Cell<TCellType, TUnitType, TUnitOwner>[];
   private readonly cellMap: Record<string, Cell<TCellType, TUnitType, TUnitOwner> | undefined>;
 
-  public readonly units: Unit<TCellType, TUnitType, TUnitOwner>[];
+  public units: Unit<TCellType, TUnitType, TUnitOwner>[];
   private readonly unitMap: Record<string, Unit<TCellType, TUnitType, TUnitOwner> | undefined>;
 
   constructor(
@@ -63,19 +64,24 @@ export class Board<TCellType, TUnitType, TUnitOwner extends Enumerable> extends 
     return this.getUnitXY(vector.x, vector.y);
   }
 
-  public moveUnit(unit: Unit<TCellType, TUnitType, TUnitOwner>, to: Cell<TCellType, TUnitType, TUnitOwner>): void {
+  public moveUnit(unit: Unit<TCellType, TUnitType, TUnitOwner>, action: MoveActionChange<InteractiveEntity<TCellType, TUnitType, TUnitOwner>>): void {
+    const nextPosition = unit.position.add(action.to);
+    const to = this.getCellXY(nextPosition.x, nextPosition.y);
+
+    if (!to) {
+      throw new Error(`Unit [${unit.position}] can not move to next cell [${nextPosition}]. Reason: No next cell`);
+    }
+
     unit.setCell(to);
     this.unitMap[`${unit.position.x},${unit.position.y}`] = undefined;
     this.unitMap[`${to.position.x},${to.position.y}`] = unit;
+    this.game.gameLog.push(action);
   }
 
-  removeUnit(unit: Unit<TCellType, TUnitType, TUnitOwner>, reason: InteractiveEntity<TCellType, TUnitType, TUnitOwner>): void {
+  removeUnit(unit: Unit<TCellType, TUnitType, TUnitOwner>, action: RemoveActionChange<InteractiveEntity<TCellType, TUnitType, TUnitOwner>>): void {
     unit.isDead = true;
     this.unitMap[`${unit.position.x},${unit.position.y}`] = undefined;
-    this.game.gameLog.push({
-      type: ActionChangeType.Remove,
-      entity: unit,
-      reason,
-    })
+    this.units = this.units.filter(currentUnit => currentUnit !== unit);
+    this.game.gameLog.push(action);
   }
 }

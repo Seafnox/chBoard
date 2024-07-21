@@ -1,9 +1,9 @@
+import { ActionChange } from './actionChanges/ActionChange';
 import { Board } from './Board';
 import { EventEmitter } from './EventEmitter';
 import { GameConfig } from './GameConfig';
 import { InteractiveEntity } from './InteractiveEntity';
 import { Enumerable } from './Enumerable';
-import { LogItem } from './LogItem';
 import { TurnManager } from './TurnManager';
 
 export class Game<TCellType, TUnitType, TUnitOwner extends Enumerable> {
@@ -11,7 +11,7 @@ export class Game<TCellType, TUnitType, TUnitOwner extends Enumerable> {
   public readonly eventBus: EventEmitter = new EventEmitter();
   public readonly turnManager: TurnManager<TCellType, TUnitType, TUnitOwner>;
   // TODO add turn counter and mark items on push
-  public readonly gameLog: LogItem<TCellType, TUnitType, TUnitOwner>[] = [];
+  public readonly gameLog: ActionChange<InteractiveEntity<TCellType, TUnitType, TUnitOwner>>[] = [];
   public isGameEnded: boolean = false;
   private _winner?: TUnitOwner; // TODO add Player Types
 

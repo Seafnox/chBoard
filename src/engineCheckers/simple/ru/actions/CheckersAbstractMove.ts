@@ -1,5 +1,6 @@
 import { ActionChangeType } from '../../../../engine/actionChanges/ActionChangeType';
 import { CommonActionChange } from '../../../../engine/actionChanges/CommonActionChange';
+import { MoveActionChange } from '../../../../engine/actionChanges/MoveActionChange';
 import { Vector2d } from '../../../../engine/Vector2d';
 import { CheckersAction } from '../../commons/CheckersAction';
 import { CheckersUnit } from '../CheckersRuTypings';
@@ -35,15 +36,8 @@ export abstract class CheckersAbstractMove extends CheckersAction {
 
   // FIXME refactor to changes
   _run(): void {
-    const nextCell = this.game.board.getCell(this.nextPosition);
-
-    if (!nextCell) {
-      throw new Error('No next cell');
-    }
-
     // TODO check can switch to king
-
-    this.game.board.moveUnit(this.entity, nextCell);
+    this.game.board.moveUnit(this.entity, this.changes[0] as MoveActionChange<CheckersUnit>);
     this.game.turnManager.nextTurn();
   }
 

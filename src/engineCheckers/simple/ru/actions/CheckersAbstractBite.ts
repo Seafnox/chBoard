@@ -1,5 +1,7 @@
 import { ActionChangeType } from '../../../../engine/actionChanges/ActionChangeType';
 import { CommonActionChange } from '../../../../engine/actionChanges/CommonActionChange';
+import { MoveActionChange } from '../../../../engine/actionChanges/MoveActionChange';
+import { RemoveActionChange } from '../../../../engine/actionChanges/RemoveActionChange';
 import { Vector2d } from '../../../../engine/Vector2d';
 import { CheckersAction } from '../../commons/CheckersAction';
 import { CheckersUnit } from '../CheckersRuTypings';
@@ -48,15 +50,12 @@ export abstract class CheckersAbstractBite extends CheckersAction {
 
   // FIXME refactor to changes
   protected _run(): void {
+    const biteAction = this.changes[0] as RemoveActionChange<CheckersUnit>;
+    const moveAction = this.changes[1] as MoveActionChange<CheckersUnit>;
     const nextCell = this.game.board.getCell(this.nextPosition);
 
     if (!nextCell) {
       throw new Error('No next cell');
-    }
-    const secondNextCell = this.game.board.getCell(this.next2ndPosition);
-
-    if (!secondNextCell) {
-      throw new Error('No target cell');
     }
 
     const enemyUnit = this.game.board.getUnit(this.nextPosition);
@@ -65,8 +64,8 @@ export abstract class CheckersAbstractBite extends CheckersAction {
       throw new Error('No enemy unit');
     }
 
-    this.game.board.moveUnit(this.entity, secondNextCell);
-    this.game.board.removeUnit(enemyUnit, this.entity);
+    this.game.board.moveUnit(this.entity, moveAction);
+    this.game.board.removeUnit(enemyUnit, biteAction);
     this.game.turnManager.nextTurn();
   }
 }
