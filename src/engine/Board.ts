@@ -1,3 +1,4 @@
+import { ChangeActionChange } from './actionChanges/ChangeActionChange';
 import { MoveActionChange } from './actionChanges/MoveActionChange';
 import { RemoveActionChange } from './actionChanges/RemoveActionChange';
 import { BoardConfig } from './BoardConfig';
@@ -64,7 +65,7 @@ export class Board<TCellType, TUnitType, TUnitOwner extends Enumerable> extends 
     return this.getUnitXY(vector.x, vector.y);
   }
 
-  public moveUnit(unit: Unit<TCellType, TUnitType, TUnitOwner>, action: MoveActionChange<InteractiveEntity<TCellType, TUnitType, TUnitOwner>>): void {
+  public moveUnit(unit: Unit<TCellType, TUnitType, TUnitOwner>, action: MoveActionChange<Unit<TCellType, TUnitType, TUnitOwner>>): void {
     const nextPosition = unit.position.add(action.to);
     const to = this.getCellXY(nextPosition.x, nextPosition.y);
 
@@ -78,10 +79,15 @@ export class Board<TCellType, TUnitType, TUnitOwner extends Enumerable> extends 
     this.game.gameLog.push(action);
   }
 
-  removeUnit(unit: Unit<TCellType, TUnitType, TUnitOwner>, action: RemoveActionChange<InteractiveEntity<TCellType, TUnitType, TUnitOwner>>): void {
+  removeUnit(unit: Unit<TCellType, TUnitType, TUnitOwner>, action: RemoveActionChange<Unit<TCellType, TUnitType, TUnitOwner>>): void {
     unit.isDead = true;
     this.unitMap[`${unit.position.x},${unit.position.y}`] = undefined;
     this.units = this.units.filter(currentUnit => currentUnit !== unit);
     this.game.gameLog.push(action);
+  }
+
+  updateUnit(target: Unit<TCellType, TUnitType, TUnitOwner>, actionChange: ChangeActionChange<Unit<TCellType, TUnitType, TUnitOwner>>) {
+    actionChange.update(target);
+    this.game.gameLog.push(actionChange);
   }
 }

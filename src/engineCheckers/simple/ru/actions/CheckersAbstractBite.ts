@@ -4,6 +4,8 @@ import { MoveActionChange } from '../../../../engine/actionChanges/MoveActionCha
 import { RemoveActionChange } from '../../../../engine/actionChanges/RemoveActionChange';
 import { Vector2d } from '../../../../engine/Vector2d';
 import { CheckersAction } from '../../commons/CheckersAction';
+import { CheckersUnitOwner } from '../../commons/CheckersUnitOwner';
+import { CheckersUnitType } from '../../commons/CheckersUnitType';
 import { CheckersUnit } from '../CheckersRuTypings';
 
 export abstract class CheckersAbstractBite extends CheckersAction {
@@ -22,8 +24,25 @@ export abstract class CheckersAbstractBite extends CheckersAction {
         type: ActionChangeType.Move,
         entity: this.entity,
         to: this.next2ndPosition,
-      }
+      },
+      ...(!this.shouldSwitchToKing ? [] : [this.switchToKingActionChange]),
     ];
+  }
+
+  get switchToKingActionChange(): CommonActionChange<CheckersUnit> {
+    return {
+      type: ActionChangeType.Change,
+      entity: this.entity,
+      target: this.entity,
+      update: (target: CheckersUnit) => {
+        target.changeType(CheckersUnitType.King);
+      },
+    };
+  }
+
+  get shouldSwitchToKing(): boolean {
+    return this.entity.owner === CheckersUnitOwner.White && this.next2ndPosition.y === this.game.initialConfig.height - 1
+      || this.entity.owner === CheckersUnitOwner.Black && this.next2ndPosition.y === 0;
   }
 
   get isActive(): boolean {

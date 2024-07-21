@@ -3,6 +3,8 @@ import { CommonActionChange } from '../../../../engine/actionChanges/CommonActio
 import { MoveActionChange } from '../../../../engine/actionChanges/MoveActionChange';
 import { Vector2d } from '../../../../engine/Vector2d';
 import { CheckersAction } from '../../commons/CheckersAction';
+import { CheckersUnitOwner } from '../../commons/CheckersUnitOwner';
+import { CheckersUnitType } from '../../commons/CheckersUnitType';
 import { CheckersUnit } from '../CheckersRuTypings';
 
 export abstract class CheckersAbstractMove extends CheckersAction {
@@ -24,9 +26,27 @@ export abstract class CheckersAbstractMove extends CheckersAction {
         type: ActionChangeType.Move,
         entity: this.entity,
         to: this.nextPosition,
-      }
+      },
+      ...(!this.shouldSwitchToKing ? [] : [this.switchToKingActionChange]),
     ];
   }
+
+  get switchToKingActionChange(): CommonActionChange<CheckersUnit> {
+    return {
+      type: ActionChangeType.Change,
+      entity: this.entity,
+      target: this.entity,
+      update: (target: CheckersUnit) => {
+        target.changeType(CheckersUnitType.King);
+      },
+    };
+  }
+
+  get shouldSwitchToKing(): boolean {
+    return this.entity.owner === CheckersUnitOwner.White && this.nextPosition.y === this.game.initialConfig.height - 1
+      || this.entity.owner === CheckersUnitOwner.Black && this.nextPosition.y === 0;
+  }
+
 
   protected get nextPosition(): Vector2d {
     return this.entity.position.add(this.moveDirection);
