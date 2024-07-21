@@ -64,8 +64,10 @@ export abstract class CheckersAbstractBite extends CheckersAction {
       throw new Error('No enemy unit');
     }
 
+    // TODO check can switch to king
     this.game.board.moveUnit(this.entity, moveAction);
     this.game.board.removeUnit(enemyUnit, biteAction);
+    // FIXME not always. there is can be more then one bite. Need to check are more bites available.
     this.game.turnManager.nextTurn();
   }
 }
