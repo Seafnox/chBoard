@@ -66,7 +66,7 @@ export class Board<TCellType, TUnitType, TUnitOwner extends Enumerable> extends 
   }
 
   public moveUnit(unit: Unit<TCellType, TUnitType, TUnitOwner>, action: MoveActionChange<Unit<TCellType, TUnitType, TUnitOwner>>): void {
-    const nextPosition = unit.position.add(action.to);
+    const nextPosition = action.to;
     const to = this.getCellXY(nextPosition.x, nextPosition.y);
 
     if (!to) {
