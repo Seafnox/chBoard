@@ -47,7 +47,6 @@ export class CheckersUnitElement extends ScreenElement {
   onInitialize() {
     this.graphics.use(InteractiveState.Idle);
     this.on('pointerup', () => {
-      console.log(this.constructor.name, 'pointerup', this.isPointerDownHere, this.isActive);
       if (!this.isPointerDownHere || !this.isActive) {
         return;
       }
@@ -57,8 +56,6 @@ export class CheckersUnitElement extends ScreenElement {
       this.config.onClick && this.config.onClick({ systemName, source: this });
     })
     this.on('pointerdown', () => {
-      console.log(this.constructor.name, 'pointerdown');
-
       if (!this.isActive) {
         return;
       }
@@ -66,7 +63,6 @@ export class CheckersUnitElement extends ScreenElement {
       this.graphics.use(InteractiveState.Pressed);
     })
     this.on('pointerenter', () => {
-      console.log(this.constructor.name, 'pointerenter');
       if (!this.isActive) {
         return;
       }
@@ -74,7 +70,6 @@ export class CheckersUnitElement extends ScreenElement {
       this.graphics.use(InteractiveState.Hover);
     })
     this.on('pointerleave', () => {
-      console.log(this.constructor.name, 'pointerleave');
       if (!this.isActive) {
         return;
       }
