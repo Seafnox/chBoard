@@ -1,4 +1,4 @@
-import { CommonActionChange } from './actionChanges/CommonActionChange';
+import { ActionChange } from './actionChanges/ActionChange';
 import { Game } from './Game';
 import { Enumerable } from './Enumerable';
 
@@ -11,7 +11,7 @@ export abstract class Action<TCellType, TUnitType, TUnitOwner extends Enumerable
   abstract get priority(): number;
   abstract get isActive(): boolean;
 
-  abstract get changes(): CommonActionChange<TInteractiveEntity>[];
+  abstract get changes(): ActionChange<TInteractiveEntity>[];
 
   public run(): void {
     this._run();

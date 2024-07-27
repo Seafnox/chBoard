@@ -86,7 +86,7 @@ export class Board<TCellType, TUnitType, TUnitOwner extends Enumerable> extends 
     this.game.gameLog.push(action);
   }
 
-  updateUnit(target: Unit<TCellType, TUnitType, TUnitOwner>, actionChange: ChangeActionChange<Unit<TCellType, TUnitType, TUnitOwner>>) {
+  updateUnit(target: Unit<TCellType, TUnitType, TUnitOwner>, actionChange: ChangeActionChange<InteractiveEntity<TCellType, TUnitType, TUnitOwner>>) {
     actionChange.update(target);
     this.game.gameLog.push(actionChange);
   }
