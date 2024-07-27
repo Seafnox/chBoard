@@ -1,4 +1,4 @@
-export enum CheckersUnitOwner {
+export const enum CheckersUnitOwner {
   White = 'white',
   Black = 'black',
 }

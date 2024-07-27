@@ -1,3 +1,3 @@
-export enum CheckersCellType {
+export const enum CheckersCellType {
   Simple = 0,
 }
