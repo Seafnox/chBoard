@@ -17,7 +17,7 @@ export abstract class CheckersAbstractMove extends CheckersAction {
     const hasNextCell = !!this.game.board.getCell(this.nextPosition);
     const hasAnyUnit = !!this.game.board.getUnit(this.nextPosition);
 
-    return isOwnerTurn && hasNextCell && !hasAnyUnit;
+    return this.isCorrectPriority && isOwnerTurn && hasNextCell && !hasAnyUnit;
   }
 
   get changes(): CommonActionChange<CheckersUnit>[] {

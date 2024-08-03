@@ -1,3 +1,4 @@
+import { Action } from './Action';
 import { CommonActionChange } from './actionChanges/CommonActionChange';
 import { Board } from './Board';
 import { EventEmitter } from './EventEmitter';
@@ -13,6 +14,7 @@ export class Game<TCellType, TUnitType, TUnitOwner extends Enumerable> {
   // TODO add turn counter and mark items on push
   public readonly gameLog: CommonActionChange<InteractiveEntity<TCellType, TUnitType, TUnitOwner>>[] = [];
   public isGameEnded: boolean = false;
+  public maxPriority: number = -1;
   private _winner?: TUnitOwner; // TODO add Player Types
 
   constructor(
@@ -40,6 +42,24 @@ export class Game<TCellType, TUnitType, TUnitOwner extends Enumerable> {
       ...this.board.cells,
       ...this.board.units,
     ];
+  }
+
+  get actions(): Action<TCellType, TUnitType, TUnitOwner, any>[] {
+    return this.interactiveEntities.reduce<Action<TCellType, TUnitType, TUnitOwner, any>[]>(
+      (actions, entity) => [...actions, ...entity.actions],
+      []
+    );
+  }
+
+  doChanges() {
+    this.maxPriority = -1;
+    this.actions
+      .filter(action => action.isActive)
+      .forEach(action => {
+        if (action.priority > this.maxPriority) {
+          this.maxPriority = action.priority;
+        }
+      });
   }
 
   endGame(winner: TUnitOwner) {

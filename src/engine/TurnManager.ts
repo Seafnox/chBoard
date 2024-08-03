@@ -15,7 +15,15 @@ export abstract class TurnManager<TCellType, TUnitType, TUnitOwner extends Enume
 
   public abstract get activeOwner(): TUnitOwner;
 
-  public abstract nextTurn(): void;
+  public nextTurn(): void {
+    this.completeTurn();
+    this.startNewTurn();
+    this.game.doChanges();
+  }
+
+  public abstract completeTurn(): void;
+
+  public abstract startNewTurn(): void;
 
   public abstract hasWinner(): boolean;
 

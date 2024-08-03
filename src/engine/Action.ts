@@ -13,6 +13,10 @@ export abstract class Action<TCellType, TUnitType, TUnitOwner extends Enumerable
 
   abstract get changes(): ActionChange<TInteractiveEntity>[];
 
+  public get isCorrectPriority(): boolean {
+    return this.game.maxPriority == -1 || this.game.maxPriority <= this.priority;
+  }
+
   public run(): void {
     this._run();
 

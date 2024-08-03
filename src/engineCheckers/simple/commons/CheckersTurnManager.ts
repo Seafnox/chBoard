@@ -23,7 +23,7 @@ export class CheckersTurnManager extends TurnManager<CheckersCellType, CheckersU
     return CheckersUnitOwner.White;
   }
 
-  nextTurn(): void {
+  completeTurn(): void {
     if (this.game.board.units.filter(unit => unit.owner === CheckersUnitOwner.Black).length === 0) {
       this._winner = CheckersUnitOwner.White;
       this.endGame(this._winner);
@@ -35,7 +35,9 @@ export class CheckersTurnManager extends TurnManager<CheckersCellType, CheckersU
       this.endGame(this._winner);
       return;
     }
+  }
 
+  startNewTurn() {
     this._activeOwner = this._activeOwner === CheckersUnitOwner.White ? CheckersUnitOwner.Black : CheckersUnitOwner.White;
   }
 }

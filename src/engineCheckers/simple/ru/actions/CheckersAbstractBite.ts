@@ -54,7 +54,7 @@ export abstract class CheckersAbstractBite extends CheckersAction {
     const isFirstEnemyUnit = firstUnit?.owner !== this.entity.owner;
     const hasSecondAnyUnit = !!this.game.board.getUnit(this.next2ndPosition);
 
-    return isOwnerTurn && hasFirstNextCell && hasSecondNextCell && !hasSecondAnyUnit && hasFirstAnyUnit && isFirstEnemyUnit;
+    return this.isCorrectPriority && isOwnerTurn && hasFirstNextCell && hasSecondNextCell && !hasSecondAnyUnit && hasFirstAnyUnit && isFirstEnemyUnit;
   }
 
   protected get nextPosition(): Vector2d {

@@ -49,23 +49,23 @@ export class Board<TCellType, TUnitType, TUnitOwner extends Enumerable> extends 
     });
   }
 
-  public getCellXY(x: number, y: number): Cell<TCellType, TUnitType, TUnitOwner> | undefined {
+  getCellXY(x: number, y: number): Cell<TCellType, TUnitType, TUnitOwner> | undefined {
     return this.cellMap[`${x},${y}`];
   }
 
-  public getCell(vector: Vector2d): Cell<TCellType, TUnitType, TUnitOwner> | undefined {
+  getCell(vector: Vector2d): Cell<TCellType, TUnitType, TUnitOwner> | undefined {
     return this.getCellXY(vector.x, vector.y);
   }
 
-  public getUnitXY(x: number, y: number): Unit<TCellType, TUnitType, TUnitOwner> | undefined {
+  getUnitXY(x: number, y: number): Unit<TCellType, TUnitType, TUnitOwner> | undefined {
     return this.unitMap[`${x},${y}`];
   }
 
-  public getUnit(vector: Vector2d): Unit<TCellType, TUnitType, TUnitOwner> | undefined {
+  getUnit(vector: Vector2d): Unit<TCellType, TUnitType, TUnitOwner> | undefined {
     return this.getUnitXY(vector.x, vector.y);
   }
 
-  public moveUnit(unit: Unit<TCellType, TUnitType, TUnitOwner>, action: MoveActionChange<Unit<TCellType, TUnitType, TUnitOwner>>): void {
+  moveUnit(unit: Unit<TCellType, TUnitType, TUnitOwner>, action: MoveActionChange<Unit<TCellType, TUnitType, TUnitOwner>>): void {
     const nextPosition = action.to;
     const from = unit.cell;
     const to = this.getCellXY(nextPosition.x, nextPosition.y);
