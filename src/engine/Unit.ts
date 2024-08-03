@@ -37,7 +37,11 @@ export class Unit<TCellType, TUnitType, TUnitOwner extends Enumerable> extends I
     this._type = type;
   }
 
-  public setCell(cell: Cell<TCellType, TUnitType, TUnitOwner>): void {
+  public get cell(): Cell<TCellType, TUnitType, TUnitOwner> {
+    return this._cell;
+  }
+
+  public set cell(cell: Cell<TCellType, TUnitType, TUnitOwner>) {
     // TODO Add Pathfinder for smooth and correct animations
     this._prevCell = this._cell;
     this._cell = cell;

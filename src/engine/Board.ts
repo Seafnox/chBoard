@@ -67,14 +67,15 @@ export class Board<TCellType, TUnitType, TUnitOwner extends Enumerable> extends 
 
   public moveUnit(unit: Unit<TCellType, TUnitType, TUnitOwner>, action: MoveActionChange<Unit<TCellType, TUnitType, TUnitOwner>>): void {
     const nextPosition = action.to;
+    const from = unit.cell;
     const to = this.getCellXY(nextPosition.x, nextPosition.y);
 
     if (!to) {
       throw new Error(`Unit [${unit.position}] can not move to next cell [${nextPosition}]. Reason: No next cell`);
     }
 
-    unit.setCell(to);
-    this.unitMap[`${unit.position.x},${unit.position.y}`] = undefined;
+    unit.cell = to;
+    this.unitMap[`${from.position.x},${from.position.y}`] = undefined;
     this.unitMap[`${to.position.x},${to.position.y}`] = unit;
     this.game.gameLog.push(action);
   }
