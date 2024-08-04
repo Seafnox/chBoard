@@ -3,5 +3,5 @@ export const enum ActionChangeType {
   Add = 'add',
   Remove = 'remove',
   Change = 'change',
-  CompleteTurn = 'completeTurn',
+  SwitchTurn = 'switchTurn',
 }

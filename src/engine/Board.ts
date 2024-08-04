@@ -1,6 +1,6 @@
-import { ChangeActionChange } from './actionChanges/ChangeActionChange';
-import { MoveActionChange } from './actionChanges/MoveActionChange';
-import { RemoveActionChange } from './actionChanges/RemoveActionChange';
+import { ChangingActionChange } from './actionChanges/ChangingActionChange';
+import { MovingActionChange } from './actionChanges/MovingActionChange';
+import { RemovingActionChange } from './actionChanges/RemovingActionChange';
 import { BoardConfig } from './BoardConfig';
 import { Cell } from './Cell';
 import { Game } from './Game';
@@ -65,7 +65,7 @@ export class Board<TCellType, TUnitType, TUnitOwner extends Enumerable> extends 
     return this.getUnitXY(vector.x, vector.y);
   }
 
-  moveUnit(unit: Unit<TCellType, TUnitType, TUnitOwner>, action: MoveActionChange<Unit<TCellType, TUnitType, TUnitOwner>>): void {
+  moveUnit(unit: Unit<TCellType, TUnitType, TUnitOwner>, action: MovingActionChange<Unit<TCellType, TUnitType, TUnitOwner>>): void {
     const nextPosition = action.to;
     const from = unit.cell;
     const to = this.getCellXY(nextPosition.x, nextPosition.y);
@@ -80,14 +80,14 @@ export class Board<TCellType, TUnitType, TUnitOwner extends Enumerable> extends 
     this.game.gameLog.push(action);
   }
 
-  removeUnit(unit: Unit<TCellType, TUnitType, TUnitOwner>, action: RemoveActionChange<Unit<TCellType, TUnitType, TUnitOwner>>): void {
+  removeUnit(unit: Unit<TCellType, TUnitType, TUnitOwner>, action: RemovingActionChange<Unit<TCellType, TUnitType, TUnitOwner>>): void {
     unit.isDead = true;
     this.unitMap[`${unit.position.x},${unit.position.y}`] = undefined;
     this.units = this.units.filter(currentUnit => currentUnit !== unit);
     this.game.gameLog.push(action);
   }
 
-  updateUnit(target: Unit<TCellType, TUnitType, TUnitOwner>, actionChange: ChangeActionChange<InteractiveEntity<TCellType, TUnitType, TUnitOwner>>) {
+  updateUnit(target: Unit<TCellType, TUnitType, TUnitOwner>, actionChange: ChangingActionChange<InteractiveEntity<TCellType, TUnitType, TUnitOwner>>) {
     actionChange.update(target);
     this.game.gameLog.push(actionChange);
   }

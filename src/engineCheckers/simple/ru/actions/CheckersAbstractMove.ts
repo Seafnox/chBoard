@@ -1,6 +1,6 @@
 import { ActionChangeType } from '../../../../engine/actionChanges/ActionChangeType';
 import { CommonActionChange } from '../../../../engine/actionChanges/CommonActionChange';
-import { isMoveActonChange } from '../../../../engine/actionChanges/isMoveActonChange';
+import { isMovingActonChange } from '../../../../engine/actionChanges/isMovingActonChange';
 import { Vector2d } from '../../../../engine/Vector2d';
 import { CheckersAction } from '../../commons/CheckersAction';
 import { CheckersUnitOwner } from '../../commons/CheckersUnitOwner';
@@ -55,7 +55,7 @@ export abstract class CheckersAbstractMove extends CheckersAction {
   protected abstract get moveDirection(): Vector2d;
 
   _run(): void {
-    const moveAction = this.changes.find(isMoveActonChange);
+    const moveAction = this.changes.find(isMovingActonChange);
 
     if (!moveAction) {
       throw new Error('No move action');

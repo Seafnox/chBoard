@@ -1,7 +1,7 @@
 import { ActionChangeType } from '../../../../engine/actionChanges/ActionChangeType';
 import { CommonActionChange } from '../../../../engine/actionChanges/CommonActionChange';
-import { isMoveActonChange } from '../../../../engine/actionChanges/isMoveActonChange';
-import { isRemoveActionChange } from '../../../../engine/actionChanges/isRemoveActionChange';
+import { isMovingActonChange } from '../../../../engine/actionChanges/isMovingActonChange';
+import { isRemovingActionChange } from '../../../../engine/actionChanges/isRemovingActionChange';
 import { Vector2d } from '../../../../engine/Vector2d';
 import { CheckersAction } from '../../commons/CheckersAction';
 import { CheckersUnitOwner } from '../../commons/CheckersUnitOwner';
@@ -68,8 +68,8 @@ export abstract class CheckersAbstractBite extends CheckersAction {
   protected abstract get biteDirection(): Vector2d;
 
   protected _run(): void {
-    const biteAction = this.changes.find(isRemoveActionChange);
-    const moveAction = this.changes.find(isMoveActonChange);
+    const biteAction = this.changes.find(isRemovingActionChange);
+    const moveAction = this.changes.find(isMovingActonChange);
 
     if (!biteAction || !moveAction) {
       throw new Error('No bite or move action');

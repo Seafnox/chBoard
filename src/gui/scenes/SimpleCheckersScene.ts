@@ -1,7 +1,7 @@
 import { Scene, Actor, Label, vec, Color, Vector } from 'excalibur';
 import { ActionChange } from '../../engine/actionChanges/ActionChange';
 import { ActionChangeType } from '../../engine/actionChanges/ActionChangeType';
-import { MoveActionChange } from '../../engine/actionChanges/MoveActionChange';
+import { MovingActionChange } from '../../engine/actionChanges/MovingActionChange';
 import { Game } from '../../engine/Game';
 import { CheckersUnitOwner } from '../../engineCheckers/simple/commons/CheckersUnitOwner';
 import { CheckersAvailableAction, CheckersGame, CheckersGameConfig, CheckersUnit } from '../../engineCheckers/simple/ru/CheckersRuTypings';
@@ -200,7 +200,7 @@ export class SimpleCheckersScene extends Scene {
 
   private createActionView(action: CheckersAvailableAction, unit: CheckersUnit): CheckersUnitElement {
     const moveChange = action.changes
-      .find((change: ActionChange<CheckersUnit>): change is MoveActionChange<CheckersUnit> => change.type === ActionChangeType.Move);
+      .find((change: ActionChange<CheckersUnit>): change is MovingActionChange<CheckersUnit> => change.type === ActionChangeType.Move);
 
     if (!moveChange) {
       throw new Error('No move change');

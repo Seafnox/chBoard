@@ -1,10 +1,10 @@
 import { AddActionChange } from './AddActionChange';
-import { ChangeActionChange } from './ChangeActionChange';
-import { MoveActionChange } from './MoveActionChange';
-import { RemoveActionChange } from './RemoveActionChange';
+import { ChangingActionChange } from './ChangingActionChange';
+import { MovingActionChange } from './MovingActionChange';
+import { RemovingActionChange } from './RemovingActionChange';
 
 export type CommonActionChange<TInteractiveEntity> =
-  | MoveActionChange<TInteractiveEntity>
+  | MovingActionChange<TInteractiveEntity>
   | AddActionChange<TInteractiveEntity>
-  | RemoveActionChange<TInteractiveEntity>
-  | ChangeActionChange<TInteractiveEntity>;
+  | RemovingActionChange<TInteractiveEntity>
+  | ChangingActionChange<TInteractiveEntity>;
