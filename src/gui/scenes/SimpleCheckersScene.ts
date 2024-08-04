@@ -219,6 +219,7 @@ export class SimpleCheckersScene extends Scene {
         console.log(this.constructor.name, 'onClick', unit.location, movePosition);
         action.run();
         this.updateUnits();
+        // FIXME fix turn view change
         this.turnUI!.changePlayer(this.game!.turnManager.activeOwner);
       },
     });
