@@ -2,6 +2,7 @@ import { GraphicsGroup, Rectangle, vec, Circle, Color } from 'excalibur';
 
 export interface CheckersUnitGraphicConfig {
   cellSize: number;
+  unitCenterColor: Color;
   unitOuterColor: Color;
   unitInnerColor: Color;
   lightingColor?: Color;
@@ -40,6 +41,13 @@ export class CheckersUnitGraphic extends GraphicsGroup {
             color: config.unitInnerColor,
           }),
           offset: vec(unitOffset + borderRadius, unitOffset + borderRadius),
+        },
+        {
+          graphic: new Circle({
+            radius: borderRadius,
+            color: config.unitCenterColor,
+          }),
+          offset: vec(unitOffset + unitRadius - borderRadius, unitOffset + unitRadius - borderRadius),
         },
       ]
     });

@@ -45,6 +45,7 @@ export class CurrentTurnElement<TUnitOwner extends Enumerable> extends ScreenEle
 
   changePlayer(player: TUnitOwner) {
     this.currentPlayer = player;
+    this.graphics.update(0);
   }
 
 
@@ -65,6 +66,7 @@ export class CurrentTurnElement<TUnitOwner extends Enumerable> extends ScreenEle
         {
           graphic: new CheckersUnitGraphic({
             cellSize: cellSize,
+            unitCenterColor: currentScheme.unitColor[1],
             unitOuterColor: currentScheme.unitColor[0],
             unitInnerColor: currentScheme.unitColor[1],
             lightingColor: currentScheme.hoverColor,
