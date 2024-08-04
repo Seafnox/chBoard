@@ -1,7 +1,7 @@
 import { ActionChangeType } from '../../../../engine/actionChanges/ActionChangeType';
 import { CommonActionChange } from '../../../../engine/actionChanges/CommonActionChange';
-import { MoveActionChange } from '../../../../engine/actionChanges/MoveActionChange';
-import { RemoveActionChange } from '../../../../engine/actionChanges/RemoveActionChange';
+import { isMoveActonChange } from '../../../../engine/actionChanges/isMoveActonChange';
+import { isRemoveActionChange } from '../../../../engine/actionChanges/isRemoveActionChange';
 import { Vector2d } from '../../../../engine/Vector2d';
 import { CheckersAction } from '../../commons/CheckersAction';
 import { CheckersUnitOwner } from '../../commons/CheckersUnitOwner';
@@ -67,10 +67,14 @@ export abstract class CheckersAbstractBite extends CheckersAction {
 
   protected abstract get biteDirection(): Vector2d;
 
-  // FIXME refactor to changes
   protected _run(): void {
-    const biteAction = this.changes[0] as RemoveActionChange<CheckersUnit>;
-    const moveAction = this.changes[1] as MoveActionChange<CheckersUnit>;
+    const biteAction = this.changes.find(isRemoveActionChange);
+    const moveAction = this.changes.find(isMoveActonChange);
+
+    if (!biteAction || !moveAction) {
+      throw new Error('No bite or move action');
+    }
+
     const nextCell = this.game.board.getCell(this.nextPosition);
 
     if (!nextCell) {

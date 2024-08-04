@@ -1,6 +1,6 @@
 import { ActionChangeType } from '../../../../engine/actionChanges/ActionChangeType';
 import { CommonActionChange } from '../../../../engine/actionChanges/CommonActionChange';
-import { MoveActionChange } from '../../../../engine/actionChanges/MoveActionChange';
+import { isMoveActonChange } from '../../../../engine/actionChanges/isMoveActonChange';
 import { Vector2d } from '../../../../engine/Vector2d';
 import { CheckersAction } from '../../commons/CheckersAction';
 import { CheckersUnitOwner } from '../../commons/CheckersUnitOwner';
@@ -54,10 +54,14 @@ export abstract class CheckersAbstractMove extends CheckersAction {
 
   protected abstract get moveDirection(): Vector2d;
 
-  // FIXME refactor to changes
   _run(): void {
+    const moveAction = this.changes.find(isMoveActonChange);
+
+    if (!moveAction) {
+      throw new Error('No move action');
+    }
     // TODO check can switch to king
-    this.game.board.moveUnit(this.entity, this.changes[0] as MoveActionChange<CheckersUnit>);
+    this.game.board.moveUnit(this.entity, moveAction);
     this.game.turnManager.nextTurn();
   }
 

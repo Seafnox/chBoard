@@ -18,6 +18,7 @@ export abstract class Action<TCellType, TUnitType, TUnitOwner extends Enumerable
   }
 
   public run(): void {
+    // TODO change to step by step changes from list, without custom running
     this._run();
 
     this.game.eventBus.emit('Action', this);
