@@ -65,8 +65,9 @@ export class Board<TCellType, TUnitType, TUnitOwner extends Enumerable> extends 
     return this.getUnitXY(vector.x, vector.y);
   }
 
-  moveUnit(unit: Unit<TCellType, TUnitType, TUnitOwner>, action: MovingActionChange<Unit<TCellType, TUnitType, TUnitOwner>>): void {
+  moveUnit(action: MovingActionChange<Unit<TCellType, TUnitType, TUnitOwner>>): void {
     const nextPosition = action.to;
+    const unit = action.entity;
     const from = unit.cell;
     const to = this.getCellXY(nextPosition.x, nextPosition.y);
 
@@ -80,15 +81,17 @@ export class Board<TCellType, TUnitType, TUnitOwner extends Enumerable> extends 
     this.game.gameLog.push(action);
   }
 
-  removeUnit(unit: Unit<TCellType, TUnitType, TUnitOwner>, action: RemovingActionChange<Unit<TCellType, TUnitType, TUnitOwner>>): void {
-    unit.isDead = true;
-    this.unitMap[`${unit.position.x},${unit.position.y}`] = undefined;
-    this.units = this.units.filter(currentUnit => currentUnit !== unit);
+  removeUnit(action: RemovingActionChange<Unit<TCellType, TUnitType, TUnitOwner>>): void {
+    const target = action.target;
+    target.isDead = true;
+    this.unitMap[`${target.position.x},${target.position.y}`] = undefined;
+    this.units = this.units.filter(currentUnit => currentUnit !== target);
     this.game.gameLog.push(action);
   }
 
-  updateUnit(target: Unit<TCellType, TUnitType, TUnitOwner>, actionChange: ChangingActionChange<InteractiveEntity<TCellType, TUnitType, TUnitOwner>>) {
-    actionChange.update(target);
-    this.game.gameLog.push(actionChange);
+  updateUnit(actionChange: ChangingActionChange<Unit<TCellType, TUnitType, TUnitOwner>>) {
+    actionChange.update(actionChange.target);
+    // FIXME stupid typescript. Unit is not InteractiveEntity, but extends InteractiveEntity.
+    this.game.gameLog.push(actionChange as ChangingActionChange<any>);
   }
 }

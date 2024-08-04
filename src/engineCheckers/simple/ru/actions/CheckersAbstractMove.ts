@@ -1,11 +1,12 @@
 import { ActionChangeType } from '../../../../engine/actionChanges/ActionChangeType';
 import { CommonActionChange } from '../../../../engine/actionChanges/CommonActionChange';
+import { isChangingActionChange } from '../../../../engine/actionChanges/isChangingActionChange';
 import { isMovingActonChange } from '../../../../engine/actionChanges/isMovingActonChange';
+import { isSwitchingTurnChange } from '../../../../engine/actionChanges/isSwitchingTurnChange';
 import { Vector2d } from '../../../../engine/Vector2d';
 import { CheckersAction } from '../../commons/CheckersAction';
-import { CheckersUnitOwner } from '../../commons/CheckersUnitOwner';
-import { CheckersUnitType } from '../../commons/CheckersUnitType';
 import { CheckersUnit } from '../CheckersRuTypings';
+import { SwitchToKingActionChange } from './changes/SwitchToKingActionChange';
 
 export abstract class CheckersAbstractMove extends CheckersAction {
   get priority(): number {
@@ -27,26 +28,13 @@ export abstract class CheckersAbstractMove extends CheckersAction {
         entity: this.entity,
         to: this.nextPosition,
       },
-      ...(!this.shouldSwitchToKing ? [] : [this.switchToKingActionChange]),
+      ...SwitchToKingActionChange.createIfAvailable(this.game, this.entity, this.nextPosition),
+      {
+        type: ActionChangeType.SwitchTurn,
+        entity: this.entity,
+      },
     ];
   }
-
-  get switchToKingActionChange(): CommonActionChange<CheckersUnit> {
-    return {
-      type: ActionChangeType.Change,
-      entity: this.entity,
-      target: this.entity,
-      update: (target: CheckersUnit) => {
-        target.changeType(CheckersUnitType.King);
-      },
-    };
-  }
-
-  get shouldSwitchToKing(): boolean {
-    return this.entity.owner === CheckersUnitOwner.White && this.nextPosition.y === this.game.initialConfig.height - 1
-      || this.entity.owner === CheckersUnitOwner.Black && this.nextPosition.y === 0;
-  }
-
 
   protected get nextPosition(): Vector2d {
     return this.entity.position.add(this.moveDirection);
@@ -56,13 +44,21 @@ export abstract class CheckersAbstractMove extends CheckersAction {
 
   _run(): void {
     const moveAction = this.changes.find(isMovingActonChange);
+    const changingAction = this.changes.find(isChangingActionChange);
+    const switchTurnAction = this.changes.find(isSwitchingTurnChange);
 
-    if (!moveAction) {
-      throw new Error('No move action');
+    if (moveAction) {
+      this.game.board.moveUnit(moveAction);
     }
-    // TODO check can switch to king
-    this.game.board.moveUnit(this.entity, moveAction);
-    this.game.turnManager.nextTurn();
+
+
+    if (changingAction) {
+      this.game.board.updateUnit(changingAction);
+    }
+
+    if (switchTurnAction) {
+      this.game.turnManager.nextTurn();
+    }
   }
 
 }

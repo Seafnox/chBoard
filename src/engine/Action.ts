@@ -1,11 +1,14 @@
 import { ActionChange } from './actionChanges/ActionChange';
 import { Game } from './Game';
 import { Enumerable } from './Enumerable';
+import { InteractiveEntity } from './InteractiveEntity';
+import { Rule } from './Rule';
 
-export abstract class Action<TCellType, TUnitType, TUnitOwner extends Enumerable, TInteractiveEntity> {
+export abstract class Action<TCellType, TUnitType, TUnitOwner extends Enumerable, TInteractiveEntity extends InteractiveEntity<TCellType, TUnitType, TUnitOwner>> {
   constructor(
-    public readonly entity: TInteractiveEntity,
     public readonly game: Game<TCellType, TUnitType, TUnitOwner>,
+    public readonly rule: Rule<TCellType, TUnitType, TUnitOwner, TInteractiveEntity>,
+    public readonly entity: TInteractiveEntity,
   ) {}
 
   abstract get priority(): number;

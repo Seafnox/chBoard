@@ -47,11 +47,15 @@ export class Unit<TCellType, TUnitType, TUnitOwner extends Enumerable> extends I
     this._cell = cell;
   }
 
+  public get owner(): TUnitOwner {
+    return this._owner;
+  }
+
   public changeOwner(owner: TUnitOwner): void {
     this._owner = owner;
   }
 
-  public get owner(): TUnitOwner {
-    return this._owner;
+  public clone(): Unit<TCellType, TUnitType, TUnitOwner> {
+    return new Unit<TCellType, TUnitType, TUnitOwner>(this._cell, this._type, this._owner, this.game);
   }
 }

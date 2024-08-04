@@ -1,12 +1,13 @@
 import { ActionChangeType } from '../../../../engine/actionChanges/ActionChangeType';
 import { CommonActionChange } from '../../../../engine/actionChanges/CommonActionChange';
+import { isChangingActionChange } from '../../../../engine/actionChanges/isChangingActionChange';
 import { isMovingActonChange } from '../../../../engine/actionChanges/isMovingActonChange';
 import { isRemovingActionChange } from '../../../../engine/actionChanges/isRemovingActionChange';
+import { isSwitchingTurnChange } from '../../../../engine/actionChanges/isSwitchingTurnChange';
 import { Vector2d } from '../../../../engine/Vector2d';
 import { CheckersAction } from '../../commons/CheckersAction';
-import { CheckersUnitOwner } from '../../commons/CheckersUnitOwner';
-import { CheckersUnitType } from '../../commons/CheckersUnitType';
 import { CheckersUnit } from '../CheckersRuTypings';
+import { SwitchToKingActionChange } from './changes/SwitchToKingActionChange';
 
 export abstract class CheckersAbstractBite extends CheckersAction {
   get priority(): number {
@@ -25,24 +26,23 @@ export abstract class CheckersAbstractBite extends CheckersAction {
         entity: this.entity,
         to: this.next2ndPosition,
       },
-      ...(!this.shouldSwitchToKing ? [] : [this.switchToKingActionChange]),
+      ...SwitchToKingActionChange.createIfAvailable(this.game, this.entity, this.next2ndPosition),
+      ...(this.shouldSwitchTurn ? [this.switchTurnActionChange] : []),
     ];
   }
 
-  get switchToKingActionChange(): CommonActionChange<CheckersUnit> {
-    return {
-      type: ActionChangeType.Change,
-      entity: this.entity,
-      target: this.entity,
-      update: (target: CheckersUnit) => {
-        target.changeType(CheckersUnitType.King);
-      },
-    };
+  get shouldSwitchTurn(): boolean {
+    const featureEntity = this.entity.clone();
+    featureEntity.cell = this.game.board.getCell(this.next2ndPosition)!;
+    const actions = this.rule.getActions(this.game, featureEntity);
+    return !actions.some(action => action.isActive);
   }
 
-  get shouldSwitchToKing(): boolean {
-    return this.entity.owner === CheckersUnitOwner.White && this.next2ndPosition.y === this.game.initialConfig.height - 1
-      || this.entity.owner === CheckersUnitOwner.Black && this.next2ndPosition.y === 0;
+  get switchTurnActionChange(): CommonActionChange<CheckersUnit> {
+    return {
+      type: ActionChangeType.SwitchTurn,
+      entity: this.entity,
+    };
   }
 
   get isActive(): boolean {
@@ -70,27 +70,24 @@ export abstract class CheckersAbstractBite extends CheckersAction {
   protected _run(): void {
     const biteAction = this.changes.find(isRemovingActionChange);
     const moveAction = this.changes.find(isMovingActonChange);
+    const changingAction = this.changes.find(isChangingActionChange);
+    const switchTurnAction = this.changes.find(isSwitchingTurnChange);
 
-    if (!biteAction || !moveAction) {
-      throw new Error('No bite or move action');
+    if (biteAction) {
+      this.game.board.removeUnit(biteAction);
     }
 
-    const nextCell = this.game.board.getCell(this.nextPosition);
-
-    if (!nextCell) {
-      throw new Error('No next cell');
+    if (moveAction) {
+      this.game.board.moveUnit(moveAction);
     }
 
-    const enemyUnit = this.game.board.getUnit(this.nextPosition);
 
-    if (!enemyUnit) {
-      throw new Error('No enemy unit');
+    if (changingAction) {
+      this.game.board.updateUnit(changingAction);
     }
 
-    // TODO check can switch to king
-    this.game.board.moveUnit(this.entity, moveAction);
-    this.game.board.removeUnit(enemyUnit, biteAction);
-    // FIXME not always. there is can be more then one bite. Need to check are more bites available.
-    this.game.turnManager.nextTurn();
+    if (switchTurnAction) {
+      this.game.turnManager.nextTurn();
+    }
   }
 }
