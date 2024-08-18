@@ -5,6 +5,7 @@ import { isMovingActonChange } from '../../../../engine/actionChanges/isMovingAc
 import { isSwitchingTurnChange } from '../../../../engine/actionChanges/isSwitchingTurnChange';
 import { Vector2d } from '../../../../engine/Vector2d';
 import { CheckersAction } from '../../commons/CheckersAction';
+import { CheckersUnitType } from '../../commons/CheckersUnitType';
 import { CheckersUnit } from '../CheckersRuTypings';
 import { SwitchToKingActionChange } from './changes/SwitchToKingActionChange';
 
@@ -14,11 +15,12 @@ export abstract class CheckersAbstractMove extends CheckersAction {
   }
 
   get isActive(): boolean {
+    const isChecker = this.entity.type === CheckersUnitType.Checker;
     const isOwnerTurn = this.entity.owner === this.game.turnManager.activeOwner;
     const hasNextCell = !!this.game.board.getCell(this.nextPosition);
     const hasAnyUnit = !!this.game.board.getUnit(this.nextPosition);
 
-    return this.isCorrectPriority && isOwnerTurn && hasNextCell && !hasAnyUnit;
+    return this.isCorrectPriority && isChecker && isOwnerTurn && hasNextCell && !hasAnyUnit;
   }
 
   get changes(): CommonActionChange<CheckersUnit>[] {
@@ -50,7 +52,6 @@ export abstract class CheckersAbstractMove extends CheckersAction {
     if (moveAction) {
       this.game.board.moveUnit(moveAction);
     }
-
 
     if (changingAction) {
       this.game.board.updateUnit(changingAction);

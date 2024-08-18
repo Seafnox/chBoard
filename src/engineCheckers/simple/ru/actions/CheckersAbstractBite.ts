@@ -6,6 +6,7 @@ import { isRemovingActionChange } from '../../../../engine/actionChanges/isRemov
 import { isSwitchingTurnChange } from '../../../../engine/actionChanges/isSwitchingTurnChange';
 import { Vector2d } from '../../../../engine/Vector2d';
 import { CheckersAction } from '../../commons/CheckersAction';
+import { CheckersUnitType } from '../../commons/CheckersUnitType';
 import { CheckersUnit } from '../CheckersRuTypings';
 import { SwitchToKingActionChange } from './changes/SwitchToKingActionChange';
 
@@ -46,6 +47,7 @@ export abstract class CheckersAbstractBite extends CheckersAction {
   }
 
   get isActive(): boolean {
+    const isChecker = this.entity.type === CheckersUnitType.Checker;
     const isOwnerTurn = this.entity.owner === this.game.turnManager.activeOwner;
     const hasFirstNextCell = !!this.game.board.getCell(this.nextPosition);
     const hasSecondNextCell = !!this.game.board.getCell(this.next2ndPosition);
@@ -54,7 +56,7 @@ export abstract class CheckersAbstractBite extends CheckersAction {
     const isFirstEnemyUnit = firstUnit?.owner !== this.entity.owner;
     const hasSecondAnyUnit = !!this.game.board.getUnit(this.next2ndPosition);
 
-    return this.isCorrectPriority && isOwnerTurn && hasFirstNextCell && hasSecondNextCell && !hasSecondAnyUnit && hasFirstAnyUnit && isFirstEnemyUnit;
+    return this.isCorrectPriority && isChecker && isOwnerTurn && hasFirstNextCell && hasSecondNextCell && !hasSecondAnyUnit && hasFirstAnyUnit && isFirstEnemyUnit;
   }
 
   protected get nextPosition(): Vector2d {
