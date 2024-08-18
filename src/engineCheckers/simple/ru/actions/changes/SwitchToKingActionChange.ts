@@ -15,18 +15,24 @@ export class SwitchToKingActionChange implements ChangingActionChange<CheckersUn
   ) {}
 
   static createIfAvailable(game: CheckersGame, entity: CheckersUnit, nextPosition: Vector2d): SwitchToKingActionChange[] {
-    const shouldBeWhiteKing = entity.type === CheckersUnitType.Checker
-      && entity.owner === CheckersUnitOwner.White
-      && nextPosition.y === 0;
-    const shouldBeBlackKing = entity.type === CheckersUnitType.Checker
-      && entity.owner === CheckersUnitOwner.Black
-      && nextPosition.y === game.initialConfig.height - 1;
-
-    if (shouldBeWhiteKing || shouldBeBlackKing) {
+    if (SwitchToKingActionChange.isAvailable(game, entity, nextPosition)) {
       return [new SwitchToKingActionChange(entity, entity, game)];
     }
 
     return [];
+  }
+
+  static isAvailable(game: CheckersGame, entity: CheckersUnit, nextPosition: Vector2d): boolean {
+    return entity.type === CheckersUnitType.Checker && SwitchToKingActionChange.isSuitable(game, entity, nextPosition);
+  }
+
+  static isSuitable(game: CheckersGame, entity: CheckersUnit, nextPosition: Vector2d): boolean {
+    const shouldBeWhiteKing = entity.owner === CheckersUnitOwner.White
+      && nextPosition.y === 0;
+    const shouldBeBlackKing = entity.owner === CheckersUnitOwner.Black
+      && nextPosition.y === game.initialConfig.height - 1;
+
+    return shouldBeWhiteKing || shouldBeBlackKing;
   }
 
   update(target: CheckersUnit): void {

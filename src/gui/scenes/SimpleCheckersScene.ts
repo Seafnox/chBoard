@@ -4,6 +4,8 @@ import { ActionChangeType } from '../../engine/actionChanges/ActionChangeType';
 import { MovingActionChange } from '../../engine/actionChanges/MovingActionChange';
 import { Game } from '../../engine/Game';
 import { CheckersUnitOwner } from '../../engineCheckers/simple/commons/CheckersUnitOwner';
+import { CheckersUnitType } from '../../engineCheckers/simple/commons/CheckersUnitType';
+import { SwitchToKingActionChange } from '../../engineCheckers/simple/ru/actions/changes/SwitchToKingActionChange';
 import { CheckersAvailableAction, CheckersGame, CheckersGameConfig, CheckersUnit } from '../../engineCheckers/simple/ru/CheckersRuTypings';
 import { GameEvent } from '../engine/GameEvent';
 import { SystemActionEvent } from '../events/SystemActionEvent';
@@ -149,7 +151,9 @@ export class SimpleCheckersScene extends Scene {
         cellLocation: unit.position,
         isActive: unit.actions.filter(action => action.isActive).length !== 0,
         topLeftPosition: this.topLeftPosition,
-        unitColor: unit.owner === CheckersUnitOwner.White ? [Color.White, Color.LightGray] : [Color.Black, Color.DarkGray],
+        unitColor: unit.owner === CheckersUnitOwner.White
+          ? [unit.type === CheckersUnitType.King ? Color.White : Color.LightGray, Color.LightGray, Color.White]
+          : [unit.type === CheckersUnitType.King ? Color.Black : Color.DarkGray, Color.DarkGray, Color.Black],
         hoverColor: Color.Gray,
         activeColor: Color.fromHex("#0080f077"),
         onClick: (event) => {
@@ -212,7 +216,13 @@ export class SimpleCheckersScene extends Scene {
       cellLocation: movePosition,
       isActive: true,
       topLeftPosition: this.topLeftPosition,
-      unitColor: [Color.fromHex('#11aa6633'), Color.fromHex('#aaffaa33')],
+      unitColor: [
+        unit.type === CheckersUnitType.King || SwitchToKingActionChange.isSuitable(this.game!, unit, movePosition)
+          ? Color.fromHex('#11aa6666')
+          : Color.fromHex('#aaffaa00'),
+        Color.fromHex('#aaffaa33'),
+        Color.fromHex('#11aa6633'),
+      ],
       hoverColor: Color.fromHex('#11aa6666'),
       activeColor: Color.fromHex('#11aa6699'),
       onClick: () => {

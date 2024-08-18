@@ -11,7 +11,7 @@ export interface CheckersUnitConfig {
   isActive?: boolean;
   isSelected?: boolean;
   topLeftPosition: Vector;
-  unitColor: [Color, Color];
+  unitColor: [Color, Color, Color];
   hoverColor: Color;
   activeColor?: Color;
   pressedColor?: Color;
@@ -91,10 +91,9 @@ export class CheckersUnitElement extends ScreenElement {
   private getIdleState(config: CheckersUnitConfig) {
     return new CheckersUnitGraphic({
       cellSize: config.cellSize,
-      // TODO remove dot for checkers
       unitCenterColor: config.unitColor[0],
-      unitOuterColor: config.unitColor[0],
       unitInnerColor: config.unitColor[1],
+      unitOuterColor: config.unitColor[2],
       lightingColor: this.isActive ? config.activeColor : undefined,
     });
   }
@@ -102,10 +101,9 @@ export class CheckersUnitElement extends ScreenElement {
   private getHoverState(config: CheckersUnitConfig) {
     return new CheckersUnitGraphic({
       cellSize: config.cellSize,
-      // TODO remove dot for checkers
       unitCenterColor: config.unitColor[0],
-      unitOuterColor: config.unitColor[0],
       unitInnerColor: config.unitColor[1],
+      unitOuterColor: config.unitColor[2],
       lightingColor: config.hoverColor,
     });
   }
@@ -113,10 +111,9 @@ export class CheckersUnitElement extends ScreenElement {
   private getPressedState(config: CheckersUnitConfig) {
     return new CheckersUnitGraphic({
       cellSize: config.cellSize,
-      // TODO remove dot for checkers
       unitCenterColor: config.unitColor[0],
-      unitOuterColor: config.unitColor[0],
       unitInnerColor: config.unitColor[1],
+      unitOuterColor: config.unitColor[2],
       lightingColor: config.pressedColor || config.hoverColor,
     });
   }
@@ -124,10 +121,9 @@ export class CheckersUnitElement extends ScreenElement {
   private getActiveState(config: CheckersUnitConfig) {
     return new CheckersUnitGraphic({
       cellSize: config.cellSize,
-      // TODO remove dot for checkers
       unitCenterColor: config.unitColor[0],
-      unitOuterColor: config.unitColor[0],
       unitInnerColor: config.unitColor[1],
+      unitOuterColor: config.unitColor[2],
       lightingColor: config.activeColor || config.hoverColor,
     });
   }
