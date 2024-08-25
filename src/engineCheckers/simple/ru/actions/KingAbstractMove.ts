@@ -23,11 +23,13 @@ export abstract class KingAbstractMove extends CheckersAction {
   }
 
   get isActive(): boolean {
-    const isChecker = this.entity.type === CheckersUnitType.Checker;
+    const isKing = this.entity.type === CheckersUnitType.King;
     const isOwnerTurn = this.entity.owner === this.game.turnManager.activeOwner;
-    const isPathClear = this.isPathClear();
+    const path = this.path();
+    const isPathExist = !path.some(position => !this.game.board.getCell(position));
+    const isPathClear = !path.some(position => !!this.game.board.getUnit(position));
 
-    return this.isCorrectPriority && isChecker && isOwnerTurn && isPathClear;
+    return this.isCorrectPriority && isKing && isOwnerTurn && isPathExist && isPathClear;
   }
 
   get changes(): CommonActionChange<CheckersUnit>[] {
@@ -63,11 +65,9 @@ export abstract class KingAbstractMove extends CheckersAction {
     }
   }
 
-  private isPathClear(): boolean {
+  private path(distanceCorrection: number = 0): Vector2d[] {
     const entityPosition = this.entity.position;
-    const moveDirection = this.moveDirection;
-    const path = Array(this.distance).fill(null).map((_, index) => entityPosition.add(moveDirection.scale(index)));
-
-    return !path.some(position => !this.game.board.getCell(position) || !!this.game.board.getUnit(position));
+    const biteDirection = this.moveDirection;
+    return Array(this.distance + distanceCorrection).fill(null).map((_, index) => entityPosition.add(biteDirection.scale(index)));
   }
 }
