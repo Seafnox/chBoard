@@ -5,7 +5,9 @@ import { CheckersTurnManager } from '../commons/CheckersTurnManager';
 import { CheckersUnitOwner } from '../commons/CheckersUnitOwner';
 import { CheckersUnitType } from '../commons/CheckersUnitType';
 import { BiteRulesForChecker } from './rules/BiteRulesForChecker';
+import { BiteRulesForKing } from './rules/BiteRulesForKing';
 import { MoveRulesForChecker } from './rules/MoveRulesForChecker';
+import { MoveRulesForKing } from './rules/MoveRulesForKing';
 
 const cellMap: Record<string, CheckersCellType> = {};
 
@@ -47,6 +49,8 @@ export const checkersRuConfig: GameConfig<CheckersCellType, CheckersUnitType, Ch
   rules: [
     new MoveRulesForChecker(),
     new BiteRulesForChecker(),
+    new MoveRulesForKing(),
+    new BiteRulesForKing(),
   ],
   turnManager: CheckersTurnManager,
 }

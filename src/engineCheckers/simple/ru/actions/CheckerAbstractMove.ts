@@ -9,7 +9,7 @@ import { CheckersUnitType } from '../../commons/CheckersUnitType';
 import { CheckersUnit } from '../CheckersRuTypings';
 import { SwitchToKingActionChange } from './changes/SwitchToKingActionChange';
 
-export abstract class CheckersAbstractMove extends CheckersAction {
+export abstract class CheckerAbstractMove extends CheckersAction {
   get priority(): number {
     return 1;
   }

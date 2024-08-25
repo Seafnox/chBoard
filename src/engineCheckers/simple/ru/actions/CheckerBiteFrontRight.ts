@@ -1,8 +1,8 @@
 import { Vector2d } from '../../../../engine/Vector2d';
 import { CheckersUnitOwner } from '../../commons/CheckersUnitOwner';
-import { CheckersAbstractBite } from './CheckersAbstractBite';
+import { CheckerAbstractBite } from './CheckerAbstractBite';
 
-export class CheckerBiteFrontRight extends CheckersAbstractBite {
+export class CheckerBiteFrontRight extends CheckerAbstractBite {
   protected get biteDirection() {
     return this.entity.owner === CheckersUnitOwner.Black
       ? Vector2d.Down.add(Vector2d.Right)

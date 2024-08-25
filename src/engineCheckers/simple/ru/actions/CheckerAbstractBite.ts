@@ -10,7 +10,7 @@ import { CheckersUnitType } from '../../commons/CheckersUnitType';
 import { CheckersUnit } from '../CheckersRuTypings';
 import { SwitchToKingActionChange } from './changes/SwitchToKingActionChange';
 
-export abstract class CheckersAbstractBite extends CheckersAction {
+export abstract class CheckerAbstractBite extends CheckersAction {
   get priority(): number {
     return 2;
   }
