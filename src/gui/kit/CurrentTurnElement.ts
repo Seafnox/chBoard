@@ -2,31 +2,26 @@ import { ScreenElement, Vector, Color, GraphicsGroup, vec } from 'excalibur';
 import { Enumerable } from '../../engine/Enumerable';
 import { ButtonLabel } from './ButtonLabel';
 import { CheckersUnitGraphic } from './CheckersUnitGraphic';
+import { PlayerColorScheme } from './ColorScheme';
 import { InteractiveState } from './InteractiveState';
 
-export interface CurrentTurnElementConfig<TUnitOwner extends Enumerable> {
+export interface CurrentTurnElementConfig<TUnitOwner extends Enumerable, TUnitType extends Enumerable> {
   cellSize: number;
   position: Vector;
   initialPlayer: TUnitOwner;
-  playerScheme: Record<TUnitOwner, PlayerColorScheme>;
-}
-
-export interface PlayerColorScheme {
-  unitColor: [Color, Color];
-  hoverColor: Color;
-  activeColor?: Color;
-  pressedColor?: Color;
+  unitType: TUnitType;
+  playerScheme: Record<TUnitOwner, PlayerColorScheme<TUnitType>>;
 }
 
 const fontSize = 60;
 const fontOffset = 20;
 const fontWidth = 80;
 
-export class CurrentTurnElement<TUnitOwner extends Enumerable> extends ScreenElement {
+export class CurrentTurnElement<TUnitOwner extends Enumerable, TUnitType extends Enumerable> extends ScreenElement {
   currentPlayer: TUnitOwner;
 
   constructor(
-    public readonly config: CurrentTurnElementConfig<TUnitOwner>,
+    public readonly config: CurrentTurnElementConfig<TUnitOwner, TUnitType>,
   ) {
     super({
       name: 'CurrentTurn',
@@ -49,8 +44,8 @@ export class CurrentTurnElement<TUnitOwner extends Enumerable> extends ScreenEle
   }
 
 
-  private getIdleState(cellSize: number, config: CurrentTurnElementConfig<TUnitOwner>) {
-    const currentScheme = config.playerScheme[this.currentPlayer];
+  private getIdleState(cellSize: number, config: CurrentTurnElementConfig<TUnitOwner, TUnitType>) {
+    const currentScheme = config.playerScheme[this.currentPlayer][config.unitType];
     return new GraphicsGroup({
       members: [
         {
@@ -66,9 +61,9 @@ export class CurrentTurnElement<TUnitOwner extends Enumerable> extends ScreenEle
         {
           graphic: new CheckersUnitGraphic({
             cellSize: cellSize,
-            unitCenterColor: currentScheme.unitColor[1],
-            unitOuterColor: currentScheme.unitColor[0],
+            unitCenterColor: currentScheme.unitColor[0],
             unitInnerColor: currentScheme.unitColor[1],
+            unitOuterColor: currentScheme.unitColor[2],
             lightingColor: currentScheme.hoverColor,
           }),
           offset: vec(cellSize / 2, fontSize + fontOffset),

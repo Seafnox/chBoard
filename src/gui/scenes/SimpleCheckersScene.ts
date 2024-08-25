@@ -7,16 +7,17 @@ import { CheckersUnitOwner } from '../../engineCheckers/simple/commons/CheckersU
 import { CheckersUnitType } from '../../engineCheckers/simple/commons/CheckersUnitType';
 import { SwitchToKingActionChange } from '../../engineCheckers/simple/ru/actions/changes/SwitchToKingActionChange';
 import { CheckersAvailableAction, CheckersGame, CheckersGameConfig, CheckersUnit } from '../../engineCheckers/simple/ru/CheckersRuTypings';
+import { GameEngine } from '../engine/GameEngine';
 import { GameEvent } from '../engine/GameEvent';
 import { SystemActionEvent } from '../events/SystemActionEvent';
 import { SystemName } from '../events/SystemName';
-import { GameEngine } from '../engine/GameEngine';
 import { ButtonLabel } from '../kit/ButtonLabel';
 import { CheckersBoardElement } from '../kit/CheckersBoardElement';
 import { borderSize, cellSize } from '../kit/CheckersConstants';
 import { CheckersUnitElement } from '../kit/CheckersUnitElement';
 import { CircleButton } from '../kit/CircleButton';
-import { CurrentTurnElement, PlayerColorScheme } from '../kit/CurrentTurnElement';
+import { PlayerColorScheme } from '../kit/ColorScheme';
+import { CurrentTurnElement } from '../kit/CurrentTurnElement';
 import { PixelFont60px } from '../PrepareFonts';
 
 interface CircleButtonConfig {
@@ -29,24 +30,40 @@ interface CircleButtonConfig {
 export class SimpleCheckersScene extends Scene {
   private isModalWindowOpen = false;
   private game?: CheckersGame;
-  private turnUI?: CurrentTurnElement<CheckersUnitOwner>;
+  private turnUI?: CurrentTurnElement<CheckersUnitOwner, CheckersUnitType>;
   private boardView?: CheckersBoardElement;
   private unitViews: CheckersUnitElement[] = [];
   private selectedUnitView?: CheckersUnitElement;
   private selectedUnit?: CheckersUnit;
   private selectedUnitActionViews: CheckersUnitElement[] = [];
-  private playerScheme: Record<CheckersUnitOwner, PlayerColorScheme> = {
+  private playerScheme: Record<CheckersUnitOwner, PlayerColorScheme<CheckersUnitType>> = {
     [CheckersUnitOwner.Black]: {
-      unitColor: [Color.Black, Color.DarkGray],
-      hoverColor: Color.Gray,
-      activeColor: Color.fromHex("#0080f077"),
-      pressedColor: Color.fromHex("#0080f0aa"),
+      [CheckersUnitType.Checker]: {
+        unitColor: [Color.DarkGray, Color.DarkGray, Color.Black],
+        hoverColor: Color.Gray,
+        activeColor: Color.fromHex("#ffff4033"),
+        pressedColor: Color.fromHex("#ffff40aa"),
+      },
+      [CheckersUnitType.King]: {
+        unitColor: [Color.Black, Color.DarkGray, Color.Black],
+        hoverColor: Color.Gray,
+        activeColor: Color.fromHex("#ffff4033"),
+        pressedColor: Color.fromHex("#ffff40aa"),
+      },
     },
     [CheckersUnitOwner.White]: {
-      unitColor: [Color.White, Color.LightGray],
-      hoverColor: Color.Gray,
-      activeColor: Color.fromHex("#0080f077"),
-      pressedColor: Color.fromHex("#0080f0aa"),
+      [CheckersUnitType.Checker]: {
+        unitColor: [Color.LightGray, Color.LightGray, Color.White],
+        hoverColor: Color.Gray,
+        activeColor: Color.fromHex("#ffff4033"),
+        pressedColor: Color.fromHex("#ffff40aa"),
+      },
+      [CheckersUnitType.King]: {
+        unitColor: [Color.White, Color.LightGray, Color.White],
+        hoverColor: Color.Gray,
+        activeColor: Color.fromHex("#ffff4033"),
+        pressedColor: Color.fromHex("#ffff40aa"),
+      },
     },
 
   }
@@ -90,12 +107,13 @@ export class SimpleCheckersScene extends Scene {
     });
   }
 
-  createTurnUI(currentPlayer: CheckersUnitOwner): CurrentTurnElement<CheckersUnitOwner> {
-    return new CurrentTurnElement({
+  createTurnUI(currentPlayer: CheckersUnitOwner): CurrentTurnElement<CheckersUnitOwner, CheckersUnitType> {
+    return new CurrentTurnElement<CheckersUnitOwner, CheckersUnitType>({
       cellSize: cellSize,
       initialPlayer: currentPlayer,
       position: vec(100, 100),
       playerScheme: this.playerScheme,
+      unitType: CheckersUnitType.Checker,
     });
   }
 
@@ -146,21 +164,25 @@ export class SimpleCheckersScene extends Scene {
 
   private createUnits(game: CheckersGame): CheckersUnitElement[] {
     return game.board.units
-      .map(unit => new CheckersUnitElement({
-        cellSize: cellSize,
-        cellLocation: unit.position,
-        isActive: unit.actions.filter(action => action.isActive).length !== 0,
-        topLeftPosition: this.topLeftPosition,
-        unitColor: unit.owner === CheckersUnitOwner.White
-          ? [unit.type === CheckersUnitType.King ? Color.White : Color.LightGray, Color.LightGray, Color.White]
-          : [unit.type === CheckersUnitType.King ? Color.Black : Color.DarkGray, Color.DarkGray, Color.Black],
-        hoverColor: Color.Gray,
-        activeColor: Color.fromHex("#0080f077"),
-        onClick: (event) => {
-          console.log(this.constructor.name, 'onClick', unit.location);
-          this.selectUnit(event, unit);
-        },
-      }));
+      .map(unit => {
+        const playerScheme = this.playerScheme[unit.owner];
+        const unitScheme = playerScheme[unit.type];
+
+        return new CheckersUnitElement({
+          cellSize: cellSize,
+          cellLocation: unit.position,
+          isActive: unit.actions.filter(action => action.isActive).length !== 0,
+          topLeftPosition: this.topLeftPosition,
+          unitColor: unitScheme.unitColor,
+          hoverColor: unitScheme.hoverColor,
+          pressedColor: unitScheme.pressedColor,
+          activeColor: unitScheme.activeColor,
+          onClick: (event) => {
+            console.log(this.constructor.name, 'onClick', unit.location);
+            this.selectUnit(event, unit);
+          },
+        });
+      });
   }
 
   // TODO make more optimized logic with comparion expected and actual game state with local changes
@@ -224,7 +246,7 @@ export class SimpleCheckersScene extends Scene {
         Color.fromHex('#11aa6633'),
       ],
       hoverColor: Color.fromHex('#11aa6666'),
-      activeColor: Color.fromHex('#11aa6699'),
+      activeColor: Color.fromHex('#11aa6633'),
       onClick: () => {
         console.log(this.constructor.name, 'onClick', unit.location, movePosition);
         action.run();

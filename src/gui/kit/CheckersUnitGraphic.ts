@@ -22,11 +22,11 @@ export class CheckersUnitGraphic extends GraphicsGroup {
       members: [
         ...(!config.lightingColor ? []: [{
           graphic: new Rectangle({
-            width: config.cellSize * sizeCoef,
-            height: config.cellSize * sizeCoef,
+            width: config.cellSize,
+            height: config.cellSize,
             color: config.lightingColor,
           }),
-          offset: vec(2 + config.cellSize * (1 - sizeCoef) / 2, 2 + config.cellSize * (1 - sizeCoef) / 2),
+          offset: vec(2, 2),
         }]),
         {
           graphic: new Circle({
