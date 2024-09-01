@@ -1,9 +1,5 @@
 import { ActionChangeType } from '../../../../engine/actionChanges/ActionChangeType';
 import { CommonActionChange } from '../../../../engine/actionChanges/CommonActionChange';
-import { isChangingActionChange } from '../../../../engine/actionChanges/isChangingActionChange';
-import { isMovingActonChange } from '../../../../engine/actionChanges/isMovingActonChange';
-import { isRemovingActionChange } from '../../../../engine/actionChanges/isRemovingActionChange';
-import { isSwitchingTurnChange } from '../../../../engine/actionChanges/isSwitchingTurnChange';
 import { Vector2d } from '../../../../engine/Vector2d';
 import { CheckersAction } from '../../commons/CheckersAction';
 import { CheckersUnitType } from '../../commons/CheckersUnitType';
@@ -34,7 +30,6 @@ export abstract class CheckerAbstractBite extends CheckersAction {
 
   get shouldSwitchTurn(): boolean {
     const featureEntity = this.entity.clone();
-    featureEntity.cell = this.game.board.getCell(this.next2ndPosition)!;
     const actions = this.rule.getActions(this.game, featureEntity);
     return !actions.some(action => action.isActive);
   }
@@ -48,7 +43,7 @@ export abstract class CheckerAbstractBite extends CheckersAction {
 
   get isActive(): boolean {
     const isChecker = this.entity.type === CheckersUnitType.Checker;
-    const isOwnerTurn = this.entity.owner === this.game.turnManager.activeOwner;
+    const isOwnerTurn = this.entity.owner === this.game.activeOwner;
     const hasFirstNextCell = !!this.game.board.getCell(this.nextPosition);
     const hasSecondNextCell = !!this.game.board.getCell(this.next2ndPosition);
     const firstUnit = this.game.board.getUnit(this.nextPosition);
@@ -68,28 +63,4 @@ export abstract class CheckerAbstractBite extends CheckersAction {
   }
 
   protected abstract get biteDirection(): Vector2d;
-
-  protected _run(): void {
-    const biteAction = this.changes.find(isRemovingActionChange);
-    const moveAction = this.changes.find(isMovingActonChange);
-    const changingAction = this.changes.find(isChangingActionChange);
-    const switchTurnAction = this.changes.find(isSwitchingTurnChange);
-
-    if (biteAction) {
-      this.game.board.removeUnit(biteAction);
-    }
-
-    if (moveAction) {
-      this.game.board.moveUnit(moveAction);
-    }
-
-
-    if (changingAction) {
-      this.game.board.updateUnit(changingAction);
-    }
-
-    if (switchTurnAction) {
-      this.game.turnManager.nextTurn();
-    }
-  }
 }

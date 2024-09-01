@@ -1,5 +1,6 @@
 import { Action } from './Action';
 import { CommonActionChange } from './actionChanges/CommonActionChange';
+import { SwitchingTurnChange } from './actionChanges/SwitchingTurnChange';
 import { Board } from './Board';
 import { EventEmitter } from './EventEmitter';
 import { GameConfig } from './GameConfig';
@@ -10,11 +11,11 @@ import { TurnManager } from './TurnManager';
 export class Game<TCellType extends Enumerable, TUnitType extends Enumerable, TUnitOwner extends Enumerable> {
   public readonly board: Board<TCellType, TUnitType, TUnitOwner>;
   public readonly eventBus: EventEmitter = new EventEmitter();
-  public readonly turnManager: TurnManager<TCellType, TUnitType, TUnitOwner>;
   // TODO add turn counter and mark items on push
   public readonly gameLog: CommonActionChange<InteractiveEntity<TCellType, TUnitType, TUnitOwner>>[] = [];
   public isGameEnded: boolean = false;
   public maxPriority: number = -1;
+  private turnManager: TurnManager<TCellType, TUnitType, TUnitOwner>;
   private _winner?: TUnitOwner; // TODO add Player Types
 
   constructor(
@@ -30,6 +31,10 @@ export class Game<TCellType extends Enumerable, TUnitType extends Enumerable, TU
         }
       })
     })
+  }
+
+  get activeOwner(): TUnitOwner {
+    return this.turnManager.activeOwner;
   }
 
   get winner(): TUnitOwner | undefined {
@@ -69,5 +74,10 @@ export class Game<TCellType extends Enumerable, TUnitType extends Enumerable, TU
     this.interactiveEntities.forEach(interactiveEntity => {
       interactiveEntity.clearActions();
     })
+  }
+
+  nextTurn(event: SwitchingTurnChange<InteractiveEntity<TCellType, TUnitType, TUnitOwner>>) {
+    this.turnManager.nextTurn();
+    this.gameLog.push(event);
   }
 }

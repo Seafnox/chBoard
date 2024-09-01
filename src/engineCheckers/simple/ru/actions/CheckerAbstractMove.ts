@@ -1,8 +1,5 @@
 import { ActionChangeType } from '../../../../engine/actionChanges/ActionChangeType';
 import { CommonActionChange } from '../../../../engine/actionChanges/CommonActionChange';
-import { isChangingActionChange } from '../../../../engine/actionChanges/isChangingActionChange';
-import { isMovingActonChange } from '../../../../engine/actionChanges/isMovingActonChange';
-import { isSwitchingTurnChange } from '../../../../engine/actionChanges/isSwitchingTurnChange';
 import { Vector2d } from '../../../../engine/Vector2d';
 import { CheckersAction } from '../../commons/CheckersAction';
 import { CheckersUnitType } from '../../commons/CheckersUnitType';
@@ -16,7 +13,7 @@ export abstract class CheckerAbstractMove extends CheckersAction {
 
   get isActive(): boolean {
     const isChecker = this.entity.type === CheckersUnitType.Checker;
-    const isOwnerTurn = this.entity.owner === this.game.turnManager.activeOwner;
+    const isOwnerTurn = this.entity.owner === this.game.activeOwner;
     const hasNextCell = !!this.game.board.getCell(this.nextPosition);
     const hasAnyUnit = !!this.game.board.getUnit(this.nextPosition);
 
@@ -31,11 +28,11 @@ export abstract class CheckerAbstractMove extends CheckersAction {
         to: this.nextPosition,
       },
       ...SwitchToKingActionChange.createIfAvailable(this.game, this.entity, this.nextPosition),
-      {
-        type: ActionChangeType.SwitchTurn,
-        entity: this.entity,
-      },
     ];
+  }
+
+  protected get shouldSwitchTurn(): boolean {
+    return true;
   }
 
   protected get nextPosition(): Vector2d {
@@ -43,23 +40,5 @@ export abstract class CheckerAbstractMove extends CheckersAction {
   }
 
   protected abstract get moveDirection(): Vector2d;
-
-  _run(): void {
-    const moveAction = this.changes.find(isMovingActonChange);
-    const changingAction = this.changes.find(isChangingActionChange);
-    const switchTurnAction = this.changes.find(isSwitchingTurnChange);
-
-    if (moveAction) {
-      this.game.board.moveUnit(moveAction);
-    }
-
-    if (changingAction) {
-      this.game.board.updateUnit(changingAction);
-    }
-
-    if (switchTurnAction) {
-      this.game.turnManager.nextTurn();
-    }
-  }
 
 }

@@ -84,7 +84,7 @@ export class SimpleCheckersScene extends Scene {
     const gameConfig = this.gameEngine.gameConfig as CheckersGameConfig;
 
     this.game = new Game(this.gameEngine.gameConfig);
-    this.turnUI = this.createTurnUI(this.game.turnManager.activeOwner);
+    this.turnUI = this.createTurnUI(this.game.activeOwner);
     this.boardView = this.createBoard(gameConfig, vec(this.gameEngine.screen.center.x, 120));
     this.unitViews = this.createUnits(this.game);
 
@@ -252,7 +252,7 @@ export class SimpleCheckersScene extends Scene {
         action.run();
         this.updateUnits();
         // FIXME fix turn view change
-        this.turnUI!.changePlayer(this.game!.turnManager.activeOwner);
+        this.turnUI!.changePlayer(this.game!.activeOwner);
       },
     });
   }

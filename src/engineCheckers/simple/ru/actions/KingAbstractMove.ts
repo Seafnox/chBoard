@@ -1,7 +1,5 @@
 import { ActionChangeType } from '../../../../engine/actionChanges/ActionChangeType';
 import { CommonActionChange } from '../../../../engine/actionChanges/CommonActionChange';
-import { isMovingActonChange } from '../../../../engine/actionChanges/isMovingActonChange';
-import { isSwitchingTurnChange } from '../../../../engine/actionChanges/isSwitchingTurnChange';
 import { Vector2d } from '../../../../engine/Vector2d';
 import { CheckersAction } from '../../commons/CheckersAction';
 import { CheckersUnitType } from '../../commons/CheckersUnitType';
@@ -24,10 +22,11 @@ export abstract class KingAbstractMove extends CheckersAction {
 
   get isActive(): boolean {
     const isKing = this.entity.type === CheckersUnitType.King;
-    const isOwnerTurn = this.entity.owner === this.game.turnManager.activeOwner;
+    const isOwnerTurn = this.entity.owner === this.game.activeOwner;
     const path = this.path();
     const isPathExist = !path.some(position => !this.game.board.getCell(position));
     const isPathClear = !path.some(position => !!this.game.board.getUnit(position));
+    console.log(this.entity.position, this.isCorrectPriority, isKing, isOwnerTurn, isPathExist, isPathClear);
 
     return this.isCorrectPriority && isKing && isOwnerTurn && isPathExist && isPathClear;
   }
@@ -46,27 +45,18 @@ export abstract class KingAbstractMove extends CheckersAction {
     ];
   }
 
+  protected get shouldSwitchTurn(): boolean {
+    return true;
+  }
+
   protected get nextPosition(): Vector2d {
     return this.entity.position.add(this.moveDirection.scale(this.distance));
   }
 
   protected abstract get moveDirection(): Vector2d;
 
-  _run(): void {
-    const moveAction = this.changes.find(isMovingActonChange);
-    const switchTurnAction = this.changes.find(isSwitchingTurnChange);
-
-    if (moveAction) {
-      this.game.board.moveUnit(moveAction);
-    }
-
-    if (switchTurnAction) {
-      this.game.turnManager.nextTurn();
-    }
-  }
-
   private path(distanceCorrection: number = 0): Vector2d[] {
-    const entityPosition = this.entity.position;
+    const entityPosition = this.entity.position.add(this.moveDirection);
     const biteDirection = this.moveDirection;
     return Array(this.distance + distanceCorrection).fill(null).map((_, index) => entityPosition.add(biteDirection.scale(index)));
   }
