@@ -7,7 +7,7 @@ import { InteractiveEntity } from './InteractiveEntity';
 import { Enumerable } from './Enumerable';
 import { TurnManager } from './TurnManager';
 
-export class Game<TCellType, TUnitType, TUnitOwner extends Enumerable> {
+export class Game<TCellType extends Enumerable, TUnitType extends Enumerable, TUnitOwner extends Enumerable> {
   public readonly board: Board<TCellType, TUnitType, TUnitOwner>;
   public readonly eventBus: EventEmitter = new EventEmitter();
   public readonly turnManager: TurnManager<TCellType, TUnitType, TUnitOwner>;

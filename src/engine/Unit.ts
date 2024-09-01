@@ -4,7 +4,7 @@ import { Game } from './Game';
 import { InteractiveEntity } from './InteractiveEntity';
 import { Vector2d } from './Vector2d';
 
-export class Unit<TCellType, TUnitType, TUnitOwner extends Enumerable> extends InteractiveEntity<TCellType, TUnitType, TUnitOwner> {
+export class Unit<TCellType extends Enumerable, TUnitType extends Enumerable, TUnitOwner extends Enumerable> extends InteractiveEntity<TCellType, TUnitType, TUnitOwner> {
   private _prevCell?: Cell<TCellType, TUnitType, TUnitOwner>;
   public isDead = false;
 

@@ -1,11 +1,11 @@
 import { Enumerable } from './Enumerable';
 import { Game } from './Game';
 
-export interface TurnManagerConstructor<TCellType, TUnitType, TUnitOwner extends Enumerable> {
+export interface TurnManagerConstructor<TCellType extends Enumerable, TUnitType extends Enumerable, TUnitOwner extends Enumerable> {
   new(game: Game<TCellType, TUnitType, TUnitOwner>): TurnManager<TCellType, TUnitType, TUnitOwner>;
 }
 
-export abstract class TurnManager<TCellType, TUnitType, TUnitOwner extends Enumerable> {
+export abstract class TurnManager<TCellType extends Enumerable, TUnitType extends Enumerable, TUnitOwner extends Enumerable> {
 
   constructor(
     public readonly game: Game<TCellType, TUnitType, TUnitOwner>,

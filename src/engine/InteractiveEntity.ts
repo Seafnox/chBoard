@@ -1,7 +1,7 @@
 import { Action } from './Action';
 import { Enumerable } from './Enumerable';
 
-export class InteractiveEntity<TCellType, TUnitType, TUnitOwner extends Enumerable> {
+export class InteractiveEntity<TCellType extends Enumerable, TUnitType extends Enumerable, TUnitOwner extends Enumerable> {
   protected _actions: Action<TCellType, TUnitType, TUnitOwner, this>[] = [];
 
   public get actions(): Action<TCellType, TUnitType, TUnitOwner, this>[] {

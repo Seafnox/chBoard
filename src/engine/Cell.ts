@@ -4,7 +4,7 @@ import { InteractiveEntity } from './InteractiveEntity';
 import { Unit } from './Unit';
 import { Vector2d } from './Vector2d';
 
-export class Cell<TCellType, TUnitType, TUnitOwner extends Enumerable> extends InteractiveEntity<TCellType, TUnitType, TUnitOwner> {
+export class Cell<TCellType extends Enumerable, TUnitType extends Enumerable, TUnitOwner extends Enumerable> extends InteractiveEntity<TCellType, TUnitType, TUnitOwner> {
   private _unit?: Unit<TCellType, TUnitType, TUnitOwner>;
 
   constructor(

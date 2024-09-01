@@ -4,7 +4,7 @@ import { Enumerable } from './Enumerable';
 import { InteractiveEntity } from './InteractiveEntity';
 import { Rule } from './Rule';
 
-export abstract class Action<TCellType, TUnitType, TUnitOwner extends Enumerable, TInteractiveEntity extends InteractiveEntity<TCellType, TUnitType, TUnitOwner>> {
+export abstract class Action<TCellType extends Enumerable, TUnitType extends Enumerable, TUnitOwner extends Enumerable, TInteractiveEntity extends InteractiveEntity<TCellType, TUnitType, TUnitOwner>> {
   constructor(
     public readonly game: Game<TCellType, TUnitType, TUnitOwner>,
     public readonly rule: Rule<TCellType, TUnitType, TUnitOwner, TInteractiveEntity>,
