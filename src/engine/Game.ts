@@ -1,3 +1,4 @@
+import { deserialize, serialize } from '@ungap/structured-clone';
 import { Action } from './Action';
 import { CommonActionChange } from './actionChanges/CommonActionChange';
 import { SwitchingTurnChange } from './actionChanges/SwitchingTurnChange';
@@ -79,5 +80,9 @@ export class Game<TCellType extends Enumerable, TUnitType extends Enumerable, TU
   nextTurn(event: SwitchingTurnChange<InteractiveEntity<TCellType, TUnitType, TUnitOwner>>) {
     this.turnManager.nextTurn();
     this.gameLog.push(event);
+  }
+
+  clone(): this {
+    return deserialize(serialize(this));
   }
 }
