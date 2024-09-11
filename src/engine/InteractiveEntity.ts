@@ -8,7 +8,7 @@ export class InteractiveEntity<TCellType extends Enumerable, TUnitType extends E
     return this._actions;
   }
 
-  public addAction(action: Action<TCellType, TUnitType, TUnitOwner, this>[]): void {
+  public addActions(action: Action<TCellType, TUnitType, TUnitOwner, this>[]): void {
     this._actions.push(...action);
   }
 

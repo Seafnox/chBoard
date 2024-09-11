@@ -10,7 +10,7 @@ import { Unit } from './Unit';
 import { Vector2d } from './Vector2d';
 
 export class Board<TCellType extends Enumerable, TUnitType extends Enumerable, TUnitOwner extends Enumerable> extends InteractiveEntity<TCellType, TUnitType, TUnitOwner> {
-  public readonly cells: Cell<TCellType, TUnitType, TUnitOwner>[];
+  public cells: Cell<TCellType, TUnitType, TUnitOwner>[];
   private readonly cellMap: Record<string, Cell<TCellType, TUnitType, TUnitOwner> | undefined>;
 
   public units: Unit<TCellType, TUnitType, TUnitOwner>[];

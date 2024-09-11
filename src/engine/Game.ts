@@ -27,7 +27,7 @@ export class Game<TCellType extends Enumerable, TUnitType extends Enumerable, TU
     this.initialConfig.rules.forEach(rule => {
       this.interactiveEntities.forEach(interactiveEntity => {
         if (rule.isSuitable(interactiveEntity)) {
-          interactiveEntity.addAction(rule.getActions(this, interactiveEntity));
+          interactiveEntity.addActions(rule.getActions(this, interactiveEntity));
         }
       })
     })
