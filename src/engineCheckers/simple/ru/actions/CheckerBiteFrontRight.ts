@@ -3,7 +3,7 @@ import { CheckersUnitOwner } from '../../commons/CheckersUnitOwner';
 import { CheckerAbstractBite } from './CheckerAbstractBite';
 
 export class CheckerBiteFrontRight extends CheckerAbstractBite {
-  protected get biteDirection() {
+  public get biteDirection() {
     return this.entity.owner === CheckersUnitOwner.Black
       ? Vector2d.Down.add(Vector2d.Right)
       : Vector2d.Up.add(Vector2d.Right);

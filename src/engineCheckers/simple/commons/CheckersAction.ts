@@ -10,15 +10,14 @@ import { CheckersUnitOwner } from './CheckersUnitOwner';
 import { CheckersUnitType } from './CheckersUnitType';
 
 export abstract class CheckersAction extends Action<CheckersCellType, CheckersUnitType, CheckersUnitOwner, CheckersUnit> {
-
-  protected abstract get shouldSwitchTurn(): boolean;
-
   protected get switchTurnAction(): SwitchingTurnChange<CheckersUnit> {
     return {
       type: ActionChangeType.SwitchTurn,
       entity: this.entity,
     }
   }
+
+  protected abstract get shouldSwitchTurn(): boolean;
 
   protected _run(): void {
     const biteAction = this.changes.find(isRemovingActionChange);

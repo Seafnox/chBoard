@@ -24,7 +24,7 @@ for(let x = 0; x < 8; x++) {
     if ((x + y) % 2 === 0) continue;
 
     unitMap[`${x},${y}`] = {
-      type: CheckersUnitType.Checker,
+      type: CheckersUnitType.King,
       owner: CheckersUnitOwner.Black,
     };
   }
