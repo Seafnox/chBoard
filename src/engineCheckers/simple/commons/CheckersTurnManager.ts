@@ -1,4 +1,5 @@
 import { TurnManager } from '../../../engine/TurnManager';
+import { CheckersUnit } from '../ru/CheckersRuTypings';
 import { CheckersCellType } from './CheckersCellType';
 import { CheckersUnitOwner } from './CheckersUnitOwner';
 import { CheckersUnitType } from './CheckersUnitType';
@@ -7,7 +8,7 @@ export class CheckersTurnManager extends TurnManager<CheckersCellType, CheckersU
   private _activeOwner: CheckersUnitOwner = this.initialOwner;
   private _winner: CheckersUnitOwner | null = null;
 
-  public getWinner(): CheckersUnitOwner | null {
+  get winner(): CheckersUnitOwner | null {
     return this._winner;
   }
 
@@ -24,13 +25,13 @@ export class CheckersTurnManager extends TurnManager<CheckersCellType, CheckersU
   }
 
   completeTurn(): void {
-    if (this.game.board.units.filter(unit => unit.owner === CheckersUnitOwner.Black).length === 0) {
+    if (this.getActiveBlackUnits().length === 0) {
       this._winner = CheckersUnitOwner.White;
       this.endGame(this._winner);
       return;
     }
 
-    if (this.game.board.units.filter(unit => unit.owner === CheckersUnitOwner.White).length === 0) {
+    if (this.getActiveWhiteUnits().length === 0) {
       this._winner = CheckersUnitOwner.Black;
       this.endGame(this._winner);
       return;
@@ -39,5 +40,26 @@ export class CheckersTurnManager extends TurnManager<CheckersCellType, CheckersU
 
   startNewTurn() {
     this._activeOwner = this._activeOwner === CheckersUnitOwner.White ? CheckersUnitOwner.Black : CheckersUnitOwner.White;
+  }
+
+  copy(turnManager: TurnManager<CheckersCellType, CheckersUnitType, CheckersUnitOwner>): TurnManager<CheckersCellType, CheckersUnitType, CheckersUnitOwner> {
+    const { winner, activeOwner } = turnManager;
+
+    this._winner = winner;
+    this._activeOwner = activeOwner;
+
+    return this;
+  }
+
+  getActiveBlackUnits(): CheckersUnit[] {
+    return this.game.board.units
+      .filter(unit => unit.owner === CheckersUnitOwner.Black)
+      .filter(unit => !unit.isDead);
+  }
+
+  getActiveWhiteUnits(): CheckersUnit[] {
+    return this.game.board.units
+      .filter(unit => unit.owner === CheckersUnitOwner.White)
+      .filter(unit => !unit.isDead);
   }
 }

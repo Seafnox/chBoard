@@ -11,10 +11,11 @@ import { Vector2d } from './Vector2d';
 
 export class Board<TCellType extends Enumerable, TUnitType extends Enumerable, TUnitOwner extends Enumerable> extends InteractiveEntity<TCellType, TUnitType, TUnitOwner> {
   public cells: Cell<TCellType, TUnitType, TUnitOwner>[];
-  private readonly cellMap: Record<string, Cell<TCellType, TUnitType, TUnitOwner> | undefined>;
+  private cellMap: Record<string, Cell<TCellType, TUnitType, TUnitOwner> | undefined>;
+  private notOnBoardCell = new Cell<TCellType, TUnitType, TUnitOwner>(NaN, NaN, undefined, this.game);
 
   public units: Unit<TCellType, TUnitType, TUnitOwner>[];
-  private readonly unitMap: Record<string, Unit<TCellType, TUnitType, TUnitOwner> | undefined>;
+  private unitMap: Record<string, Unit<TCellType, TUnitType, TUnitOwner> | undefined>;
 
   constructor(
     public readonly initialConfig: BoardConfig<TCellType, TUnitType, TUnitOwner>,
@@ -50,6 +51,10 @@ export class Board<TCellType extends Enumerable, TUnitType extends Enumerable, T
   }
 
   getCellXY(x: number, y: number): Cell<TCellType, TUnitType, TUnitOwner> | undefined {
+    if (isNaN(x) || isNaN(y)) {
+      return this.notOnBoardCell;
+    }
+
     return this.cellMap[`${x},${y}`];
   }
 
@@ -84,6 +89,7 @@ export class Board<TCellType extends Enumerable, TUnitType extends Enumerable, T
   removeUnit(action: RemovingActionChange<Unit<TCellType, TUnitType, TUnitOwner>>): void {
     const target = action.target;
     target.isDead = true;
+    target.cell = this.notOnBoardCell;
     this.unitMap[`${target.position.x},${target.position.y}`] = undefined;
     this.units = this.units.filter(currentUnit => currentUnit !== target);
     this.game.gameLog.push(action);
@@ -93,5 +99,27 @@ export class Board<TCellType extends Enumerable, TUnitType extends Enumerable, T
     actionChange.update(actionChange.target);
     // FIXME stupid typescript. Unit is not InteractiveEntity, but extends InteractiveEntity.
     this.game.gameLog.push(actionChange as ChangingActionChange<any>);
+  }
+
+  copy(board: Board<TCellType, TUnitType, TUnitOwner>): Board<TCellType, TUnitType, TUnitOwner> {
+    const { cells, units } = board;
+
+    const cellMap: Record<string, Cell<TCellType, TUnitType, TUnitOwner>> = {};
+    cells.forEach((cell: Cell<TCellType, TUnitType, TUnitOwner>, index: number) => {
+      // TODO copy cell
+      this.cells[index].copy(cell);
+      cellMap[`${cell.position.x},${cell.position.y}`] = cell;
+    });
+    this.cellMap = cellMap;
+
+    const unitMap: Record<string, Unit<TCellType, TUnitType, TUnitOwner>> = {};
+    units.forEach((unit: Unit<TCellType, TUnitType, TUnitOwner>, index: number) => {
+      // TODO copy unit
+      this.units[index].copy(unit);
+      unitMap[`${unit.position.x},${unit.position.y}`] = unit;
+    });
+    this.unitMap = unitMap;
+
+    return this;
   }
 }

@@ -1,4 +1,3 @@
-import { deserialize, serialize } from '@ungap/structured-clone';
 import { Action } from './Action';
 import { CommonActionChange } from './actionChanges/CommonActionChange';
 import { SwitchingTurnChange } from './actionChanges/SwitchingTurnChange';
@@ -82,7 +81,22 @@ export class Game<TCellType extends Enumerable, TUnitType extends Enumerable, TU
     this.gameLog.push(event);
   }
 
-  clone(): this {
-    return deserialize(serialize(this));
+  clone(): Game<TCellType, TUnitType, TUnitOwner> {
+    return new Game<TCellType, TUnitType, TUnitOwner>(this.initialConfig).copy(this);
+  }
+
+  copy(game: Game<TCellType, TUnitType, TUnitOwner>): Game<TCellType, TUnitType, TUnitOwner> {
+    const { gameLog, isGameEnded, maxPriority, winner } = game;
+    Object.assign(this, {
+      gameLog,
+      isGameEnded,
+      maxPriority,
+      winner,
+    });
+
+    this.board.copy(game.board);
+    this.turnManager.copy(game.turnManager);
+
+    return game;
   }
 }

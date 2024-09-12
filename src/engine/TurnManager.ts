@@ -15,6 +15,8 @@ export abstract class TurnManager<TCellType extends Enumerable, TUnitType extend
 
   public abstract get activeOwner(): TUnitOwner;
 
+  public abstract get winner(): TUnitOwner | null;
+
   public nextTurn(): void {
     this.completeTurn();
     this.startNewTurn();
@@ -27,9 +29,9 @@ export abstract class TurnManager<TCellType extends Enumerable, TUnitType extend
 
   public abstract hasWinner(): boolean;
 
-  public abstract getWinner(): TUnitOwner | null;
-
   public endGame(winner: TUnitOwner) {
     this.game.endGame(winner);
   }
+
+  public abstract copy(turnManager: TurnManager<TCellType, TUnitType, TUnitOwner>): TurnManager<TCellType, TUnitType, TUnitOwner>;
 }

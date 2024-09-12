@@ -10,7 +10,7 @@ export class Cell<TCellType extends Enumerable, TUnitType extends Enumerable, TU
   constructor(
     public readonly x: number,
     public readonly y: number,
-    public readonly type: TCellType,
+    public readonly type: TCellType | undefined,
     public readonly game: Game<TCellType, TUnitType, TUnitOwner>,
   ) {
     super();
