@@ -19,7 +19,7 @@ export abstract class CheckersAction extends Action<CheckersCellType, CheckersUn
 
   protected abstract get shouldSwitchTurn(): boolean;
 
-  protected _run(): void {
+  protected _run(isVirtual: boolean = false): void {
     const biteAction = this.changes.find(isRemovingActionChange);
     const changingAction = this.changes.find(isChangingActionChange);
     const moveAction = this.changes.find(isMovingActonChange);
@@ -36,7 +36,7 @@ export abstract class CheckersAction extends Action<CheckersCellType, CheckersUn
       this.game.board.moveUnit(moveAction);
     }
 
-    if (this.shouldSwitchTurn) {
+    if (!isVirtual && this.shouldSwitchTurn) {
       this.game.nextTurn(this.switchTurnAction);
     }
   }

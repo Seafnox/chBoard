@@ -12,7 +12,7 @@ export abstract class KingAbstractBite extends CheckersBiteAction {
       {
         type: ActionChangeType.Remove,
         entity: this.entity,
-        target: this.game.board.getUnit(this.enemyPosition(path) || Vector2d.Zero)!,
+        target: this.game.board.getUnit(this.enemyPosition(path) || Vector2d.NaN)!,
       },
       {
         type: ActionChangeType.Move,
@@ -23,13 +23,12 @@ export abstract class KingAbstractBite extends CheckersBiteAction {
   }
 
   get isActive(): boolean {
-    const isKing = this.entity.type === CheckersUnitType.King;
-    const isOwnerTurn = this.entity.owner === this.game.activeOwner;
-    const path = this.path();
-    const isPathExist = !path.some(position => !this.game.board.getCell(position));
-    const hasEnemyPosition = !!this.enemyPosition(path);
-    const hasOnlyOneEnemyInPath = path.filter(position => !!this.game.board.getUnit(position)).length === 1 && hasEnemyPosition;
+    return this.isCorrectPriority && this.isAvailable;
+  }
 
-    return this.isCorrectPriority && isKing && isOwnerTurn && isPathExist && hasOnlyOneEnemyInPath;
+  get isAvailable(): boolean {
+    const isKing = this.entity.type === CheckersUnitType.King;
+
+    return super.isAvailable && isKing;
   }
 }

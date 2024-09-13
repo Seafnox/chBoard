@@ -19,27 +19,47 @@ export abstract class CheckersBiteAction extends CheckersAction {
   }
 
   get shouldSwitchTurn(): boolean {
-    const actions = this.rule.getActions(this.game, this.entity);
-    return !actions.some(action => action.isActive);
+    const biteActions = this.entity.actions
+      .filter<CheckersBiteAction>((action: CheckersAvailableAction): action is CheckersBiteAction => action instanceof CheckersBiteAction)
+    ;
+    return !biteActions.some(action => action.isAvailable);
   }
 
   get nextPosition(): Vector2d {
     return this.entity.position.add(this.biteDirection.scale(this.distance));
   }
 
+  get isAvailable(): boolean {
+    const isOwnerTurn = this.entity.owner === this.game.activeOwner;
+    const path = this.path();
+    const isPathExist = !path.some(position => !this.game.board.getCell(position));
+    const hasEnemyPosition = !!this.enemyPosition(path);
+    const hasOnlyOneEnemyInPath = hasEnemyPosition && path.filter(position => !!this.game.board.getUnit(position)).length === 1;
+
+    return !this.entity.isDead && isOwnerTurn && isPathExist && hasOnlyOneEnemyInPath;
+  }
+
   availableKills(): number {
+    if (!this.isAvailable) {
+      return 0;
+    }
+
     const virtualGame = this.game.clone();
     const virtualEntity = virtualGame.board.getUnit(this.entity.position)!;
     const virtualAction = virtualEntity.actions
-      .find(
-        action => action.constructor.name === this.constructor.name
-      ) as typeof this;
+      .find(action => {
+        return action instanceof CheckersBiteAction && action.constructor.name === this.constructor.name && action.distance === this.distance;
+      }) as typeof this;
 
-    virtualAction._run();
+    virtualAction._run(true);
+
+    if (this.shouldSwitchTurn) {
+      return 1;
+    }
 
     const availableActions = virtualEntity.actions
-      .filter(action => action.isActive)
-      .filter<CheckersBiteAction>((action: CheckersAvailableAction): action is CheckersBiteAction => action instanceof CheckersBiteAction);
+      .filter<CheckersBiteAction>((action: CheckersAvailableAction): action is CheckersBiteAction => action instanceof CheckersBiteAction)
+      .filter(action => action.isAvailable);
 
     if (availableActions.length === 0) {
       return 1;

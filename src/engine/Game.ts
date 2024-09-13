@@ -1,3 +1,4 @@
+import { getId } from '../utils/getId';
 import { Action } from './Action';
 import { CommonActionChange } from './actionChanges/CommonActionChange';
 import { SwitchingTurnChange } from './actionChanges/SwitchingTurnChange';
@@ -9,6 +10,7 @@ import { Enumerable } from './Enumerable';
 import { TurnManager } from './TurnManager';
 
 export class Game<TCellType extends Enumerable, TUnitType extends Enumerable, TUnitOwner extends Enumerable> {
+  public readonly id = getId();
   public readonly board: Board<TCellType, TUnitType, TUnitOwner>;
   public readonly eventBus: EventEmitter = new EventEmitter();
   // TODO add turn counter and mark items on push
@@ -59,7 +61,7 @@ export class Game<TCellType extends Enumerable, TUnitType extends Enumerable, TU
   doChanges() {
     this.maxPriority = -1;
     this.actions
-      .filter(action => action.isActive)
+      .filter(action => action.isAvailable)
       .forEach(action => {
         if (action.priority > this.maxPriority) {
           this.maxPriority = action.priority;
@@ -91,12 +93,13 @@ export class Game<TCellType extends Enumerable, TUnitType extends Enumerable, TU
       gameLog,
       isGameEnded,
       maxPriority,
-      winner,
     });
+
+    this._winner = winner;
 
     this.board.copy(game.board);
     this.turnManager.copy(game.turnManager);
 
-    return game;
+    return this;
   }
 }

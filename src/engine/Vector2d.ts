@@ -5,6 +5,13 @@ import { canonicalizeAngle } from './utils/canonicalizeAngle';
  */
 export class Vector2d {
   /**
+   * A (NaN, NaN) Vector2d
+   */
+  static get NaN(): Vector2d {
+    return new Vector2d(NaN, NaN);
+  }
+
+  /**
    * A (0, 0) Vector2d
    */
   static get Zero(): Vector2d {

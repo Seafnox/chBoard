@@ -3,6 +3,7 @@ import { ActionChange } from '../../engine/actionChanges/ActionChange';
 import { ActionChangeType } from '../../engine/actionChanges/ActionChangeType';
 import { MovingActionChange } from '../../engine/actionChanges/MovingActionChange';
 import { Game } from '../../engine/Game';
+import { CheckersCellType } from '../../engineCheckers/simple/commons/CheckersCellType';
 import { CheckersUnitOwner } from '../../engineCheckers/simple/commons/CheckersUnitOwner';
 import { CheckersUnitType } from '../../engineCheckers/simple/commons/CheckersUnitType';
 import { SwitchToKingActionChange } from '../../engineCheckers/simple/ru/actions/changes/SwitchToKingActionChange';
@@ -31,7 +32,7 @@ export class SimpleCheckersScene extends Scene {
   private isModalWindowOpen = false;
   private game?: CheckersGame;
   private turnUI?: CurrentTurnElement<CheckersUnitOwner, CheckersUnitType>;
-  private boardView?: CheckersBoardElement;
+  private boardView?: CheckersBoardElement<CheckersCellType, CheckersUnitType, CheckersUnitOwner>;
   private unitViews: CheckersUnitElement[] = [];
   private selectedUnitView?: CheckersUnitElement;
   private selectedUnit?: CheckersUnit;
@@ -117,7 +118,7 @@ export class SimpleCheckersScene extends Scene {
     });
   }
 
-  createBoard(config: CheckersGameConfig, offset: Vector): CheckersBoardElement {
+  createBoard(config: CheckersGameConfig, offset: Vector): CheckersBoardElement<CheckersCellType, CheckersUnitType, CheckersUnitOwner> {
     return new CheckersBoardElement(config, offset);
   }
 

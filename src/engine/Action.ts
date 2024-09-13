@@ -1,3 +1,4 @@
+import { getId } from '../utils/getId';
 import { ActionChange } from './actionChanges/ActionChange';
 import { Game } from './Game';
 import { Enumerable } from './Enumerable';
@@ -5,6 +6,8 @@ import { InteractiveEntity } from './InteractiveEntity';
 import { Rule } from './Rule';
 
 export abstract class Action<TCellType extends Enumerable, TUnitType extends Enumerable, TUnitOwner extends Enumerable, TInteractiveEntity extends InteractiveEntity<TCellType, TUnitType, TUnitOwner>> {
+  public id = getId();
+
   constructor(
     public readonly game: Game<TCellType, TUnitType, TUnitOwner>,
     public readonly rule: Rule<TCellType, TUnitType, TUnitOwner, TInteractiveEntity>,
@@ -13,6 +16,7 @@ export abstract class Action<TCellType extends Enumerable, TUnitType extends Enu
 
   abstract get priority(): number;
   abstract get isActive(): boolean;
+  abstract get isAvailable(): boolean;
 
   abstract get changes(): ActionChange<TInteractiveEntity>[];
 

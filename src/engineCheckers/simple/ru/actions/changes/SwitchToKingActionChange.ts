@@ -36,6 +36,6 @@ export class SwitchToKingActionChange implements ChangingActionChange<CheckersUn
   }
 
   update(target: CheckersUnit): void {
-    target.changeType(CheckersUnitType.King);
+    target.type = CheckersUnitType.King;
   }
 }
