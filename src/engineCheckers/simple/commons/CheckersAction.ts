@@ -39,5 +39,7 @@ export abstract class CheckersAction extends Action<CheckersCellType, CheckersUn
     if (!isVirtual && this.shouldSwitchTurn) {
       this.game.nextTurn(this.switchTurnAction);
     }
+
+    this.game.doChanges();
   }
 }

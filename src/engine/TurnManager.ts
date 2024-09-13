@@ -20,7 +20,6 @@ export abstract class TurnManager<TCellType extends Enumerable, TUnitType extend
   public nextTurn(): void {
     this.completeTurn();
     this.startNewTurn();
-    this.game.doChanges();
   }
 
   public abstract completeTurn(): void;

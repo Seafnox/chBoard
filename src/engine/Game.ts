@@ -80,7 +80,12 @@ export class Game<TCellType extends Enumerable, TUnitType extends Enumerable, TU
 
   nextTurn(event: SwitchingTurnChange<InteractiveEntity<TCellType, TUnitType, TUnitOwner>>) {
     this.turnManager.nextTurn();
+    this.emit(event);
+  }
+
+  emit(event: CommonActionChange<InteractiveEntity<TCellType, TUnitType, TUnitOwner>>) {
     this.gameLog.push(event);
+    if (this.id === '#0') console.log(event);
   }
 
   clone(): Game<TCellType, TUnitType, TUnitOwner> {
@@ -88,9 +93,8 @@ export class Game<TCellType extends Enumerable, TUnitType extends Enumerable, TU
   }
 
   copy(game: Game<TCellType, TUnitType, TUnitOwner>): Game<TCellType, TUnitType, TUnitOwner> {
-    const { gameLog, isGameEnded, maxPriority, winner } = game;
+    const { isGameEnded, maxPriority, winner } = game;
     Object.assign(this, {
-      gameLog,
       isGameEnded,
       maxPriority,
     });

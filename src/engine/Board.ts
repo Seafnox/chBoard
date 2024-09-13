@@ -87,7 +87,7 @@ export class Board<TCellType extends Enumerable, TUnitType extends Enumerable, T
     unit.cell = to;
     this.unitMap[`${from.position.x},${from.position.y}`] = undefined;
     this.unitMap[`${to.position.x},${to.position.y}`] = unit;
-    this.game.gameLog.push(action);
+    this.game.emit(action);
   }
 
   removeUnit(action: RemovingActionChange<Unit<TCellType, TUnitType, TUnitOwner>>): void {
@@ -95,13 +95,13 @@ export class Board<TCellType extends Enumerable, TUnitType extends Enumerable, T
     this.unitMap[`${target.position.x},${target.position.y}`] = undefined;
     target.isDead = true;
     target.cell = this.notOnBoardCell;
-    this.game.gameLog.push(action);
+    this.game.emit(action);
   }
 
   updateUnit(actionChange: ChangingActionChange<Unit<TCellType, TUnitType, TUnitOwner>>) {
     actionChange.update(actionChange.target);
     // FIXME stupid typescript. Unit is not InteractiveEntity, but extends InteractiveEntity.
-    this.game.gameLog.push(actionChange as ChangingActionChange<any>);
+    this.game.emit(actionChange as ChangingActionChange<any>);
   }
 
   copy(board: Board<TCellType, TUnitType, TUnitOwner>): Board<TCellType, TUnitType, TUnitOwner> {
