@@ -10,7 +10,7 @@ export function buildMainMenuButton(
   label: SystemName,
   onClick: (event: SystemActionEvent<RoundedButton>) => void
 ): Actor {
-  const width = 400;
+  const width = 800;
   const height = 100;
 
   return buildRoundedButton({
