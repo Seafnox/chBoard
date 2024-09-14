@@ -12,21 +12,13 @@ import { GameEngine } from '../engine/GameEngine';
 import { GameEvent } from '../engine/GameEvent';
 import { SystemActionEvent } from '../events/SystemActionEvent';
 import { SystemName } from '../events/SystemName';
-import { ButtonLabel } from '../kit/ButtonLabel';
+import { buildIconButton } from '../kit/builders/buildIconButton';
 import { CheckersBoardElement } from '../kit/CheckersBoardElement';
 import { borderSize, cellSize } from '../kit/CheckersConstants';
 import { CheckersUnitElement } from '../kit/CheckersUnitElement';
-import { CircleButton } from '../kit/CircleButton';
 import { PlayerColorScheme } from '../kit/ColorScheme';
 import { CurrentTurnElement } from '../kit/CurrentTurnElement';
 import { PixelFont60px } from '../PrepareFonts';
-
-interface CircleButtonConfig {
-  systemName: SystemName;
-  diameter: number;
-  pos: Vector;
-  onClick?: (event: SystemActionEvent<CircleButton>) => void;
-}
 
 export class SimpleCheckersScene extends Scene {
   private isModalWindowOpen = false;
@@ -91,8 +83,8 @@ export class SimpleCheckersScene extends Scene {
 
     this.add(this.createHeader());
     this.add(this.turnUI);
-    this.add(this.createMenuButton(350, SystemName.Settings2, this.emitSystemAction.bind(this)));
-    this.add(this.createMenuButton(500, SystemName.Help2, this.emitSystemAction.bind(this)));
+    this.add(buildIconButton(vec(this.gameEngine.screen.drawWidth - 150, 350), SystemName.Settings2, this.emitSystemAction.bind(this)));
+    this.add(buildIconButton(vec(this.gameEngine.screen.drawWidth - 150, 500), SystemName.Help2, this.emitSystemAction.bind(this)));
 
     this.add(this.boardView);
     this.unitViews.forEach(unitView => this.add(unitView));
@@ -101,7 +93,7 @@ export class SimpleCheckersScene extends Scene {
 
   createHeader(): Actor {
     return new Label({
-      text: 'CHECKERS',
+      text: SystemName.CheckersRu,
       pos: vec(this.gameEngine.screen.center.x, 50),
       color: Color.White,
       font: PixelFont60px({shadow: {color: Color.Black}}),
@@ -122,46 +114,10 @@ export class SimpleCheckersScene extends Scene {
     return new CheckersBoardElement(config, offset);
   }
 
-  private emitSystemAction(event: SystemActionEvent<CircleButton>) {
-    if (!this.isModalWindowOpen) {
-      this.gameEngine.gameEvents.emit(GameEvent.SystemAction, event);
-    }
+  private emitSystemAction<T>(event: SystemActionEvent<T>) {
+    this.gameEngine.gameEvents.emit(GameEvent.SystemAction, event);
   }
 
-  private createMenuButton(offsetY: number, label: SystemName, onClick: (event: SystemActionEvent<CircleButton>) => void): Actor {
-    const diameter = 100;
-
-    return this.createCommonButton({
-      systemName: label,
-      diameter,
-      pos: vec(this.gameEngine.screen.drawWidth - diameter * 1.5, offsetY),
-      onClick,
-    });
-  }
-
-  private createCommonButton(config: CircleButtonConfig): Actor {
-    return new CircleButton({
-      systemName: config.systemName,
-      radius: config.diameter / 2,
-      borderSize: config.diameter / 20,
-      pos: config.pos,
-      subNodes: [{
-        graphic: new ButtonLabel({
-          width: config.diameter,
-          height: config.diameter,
-          label: config.systemName,
-        }),
-        offset: vec(config.diameter / 2, config.diameter / 2.5),
-      }],
-      idleBackground: Color.Cyan,
-      idleBorder: Color.Black,
-      hoverBackground: Color.Blue,
-      hoverBorder: Color.Black,
-      pressedBackground: Color.Magenta,
-      pressedBorder: Color.Black,
-      onClick: config.onClick,
-    });
-  }
 
   private createUnits(game: CheckersGame): CheckersUnitElement[] {
     return game.board.units
