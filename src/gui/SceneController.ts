@@ -5,6 +5,7 @@ import { SceneName } from './scenes/SceneMap';
 
 export class SceneController {
   private sceneMap: Partial<Record<SystemName, SceneName>> = {
+    [SystemName.SelectGame]: SceneName.CheckersSelectScene,
     [SystemName.CheckersRu]: SceneName.SimpleCheckersScene,
     [SystemName.Settings]: SceneName.SettingsScene,
     [SystemName.Help]: SceneName.HelpScene,
