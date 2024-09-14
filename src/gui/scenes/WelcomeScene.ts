@@ -17,7 +17,7 @@ export class WelcomeScene extends Scene {
 
   onInitialize() {
     this.add(this.createHeader());
-    this.add(buildMainMenuButton(this.screenCenter, 200, SystemName.SelectGame, this.emitSystemAction.bind(this)));
+    this.add(buildMainMenuButton(this.screenCenter, 200, SystemName.SelectCheckers, this.emitSystemAction.bind(this)));
     this.add(buildMainMenuButton(this.screenCenter, 350, SystemName.Settings, this.emitSystemAction.bind(this)));
     this.add(buildMainMenuButton(this.screenCenter, 500, SystemName.Help, this.emitSystemAction.bind(this)));
   }

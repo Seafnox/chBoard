@@ -59,7 +59,7 @@ export class CheckersSelectScene extends Scene {
 
   createHeader(): Actor {
     return new Label({
-      text: SystemName.SelectGame,
+      text: SystemName.SelectCheckers,
       pos: vec(this.gameEngine.screen.center.x, 50),
       color: Color.White,
       font: PixelFont60px({shadow: {color: Color.Black}}),

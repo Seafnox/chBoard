@@ -6,7 +6,7 @@ export const enum SystemName {
   QuitGame = 'QUIT GAME',
   LoadGame = 'LOAD GAME',
   Play = 'PLAY',
-  SelectGame = 'SELECT GAME',
+  SelectCheckers = 'SELECT CHECKERS',
   CheckersRu = 'RUSSIAN CHECKERS',
   Settings = 'SETTINGS',
   Settings2 = '⚙️',
