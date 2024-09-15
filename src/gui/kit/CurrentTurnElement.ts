@@ -1,4 +1,4 @@
-import { ScreenElement, Vector, Color, GraphicsGroup, vec } from 'excalibur';
+import { ScreenElement, Vector, GraphicsGroup, vec, Color } from 'excalibur';
 import { Enumerable } from '../../engine/Enumerable';
 import { ButtonLabel } from './ButtonLabel';
 import { CheckersUnitGraphic } from './CheckersUnitGraphic';
@@ -31,7 +31,7 @@ export class CurrentTurnElement<TUnitOwner extends Enumerable, TUnitType extends
     });
 
     this.currentPlayer = config.initialPlayer;
-    this.graphics.add(InteractiveState.Idle, this.getIdleState(config.cellSize, config));
+    this.graphics.add(InteractiveState.Idle, this.getIdleState(this.config.cellSize, this.config));
   }
 
   onInitialize() {
@@ -39,8 +39,9 @@ export class CurrentTurnElement<TUnitOwner extends Enumerable, TUnitType extends
   }
 
   changePlayer(player: TUnitOwner) {
+    console.log(this.constructor.name, 'changePlayer', this.currentPlayer, player);
     this.currentPlayer = player;
-    this.graphics.update(0);
+    this.graphics.add(InteractiveState.Idle, this.getIdleState(this.config.cellSize, this.config));
   }
 
 
@@ -49,24 +50,23 @@ export class CurrentTurnElement<TUnitOwner extends Enumerable, TUnitType extends
     return new GraphicsGroup({
       members: [
         {
-          graphic: new ButtonLabel({
-            width: cellSize,
-            height: fontSize,
-            label: 'TURN',
-            labelColor: Color.Black,
-            labelShadowColor: Color.White,
-          }),
-          offset: vec(0, 0),
-        },
-        {
           graphic: new CheckersUnitGraphic({
             cellSize: cellSize,
             unitCenterColor: currentScheme.unitColor[0],
             unitInnerColor: currentScheme.unitColor[1],
             unitOuterColor: currentScheme.unitColor[2],
-            lightingColor: currentScheme.hoverColor,
           }),
-          offset: vec(cellSize / 2, fontSize + fontOffset),
+          offset: vec(0, - cellSize / 1.85),
+        },
+        {
+          graphic: new ButtonLabel({
+            width: cellSize,
+            height: fontSize,
+            label: 'TURN',
+            labelColor: currentScheme.unitColor[1],
+            labelShadowColor: Color.Black,
+          }),
+          offset: vec(cellSize * 2 + fontOffset, 0),
         },
       ]
     });

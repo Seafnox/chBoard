@@ -104,7 +104,7 @@ export class SimpleCheckersScene extends Scene {
     return new CurrentTurnElement<CheckersUnitOwner, CheckersUnitType>({
       cellSize: cellSize,
       initialPlayer: currentPlayer,
-      position: vec(100, 100),
+      position: vec(10, 100),
       playerScheme: this.playerScheme,
       unitType: CheckersUnitType.Checker,
     });
@@ -208,7 +208,6 @@ export class SimpleCheckersScene extends Scene {
         console.log(this.constructor.name, 'onClick', unit.location, movePosition);
         action.run();
         this.updateUnits();
-        // FIXME fix turn view change
         this.turnUI!.changePlayer(this.game!.activeOwner);
       },
     });
