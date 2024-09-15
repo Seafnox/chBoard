@@ -11,5 +11,6 @@ export enum GameEvent {
 export interface GameEventMap {
   [GameEvent.PointerDown]: PointerEvent,
   [GameEvent.SystemAction]: SystemActionEvent<unknown>,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [GameEvent.UnitSelected]: Unit<any, any, any>,
 }

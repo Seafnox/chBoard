@@ -51,7 +51,9 @@ export class Game<TCellType extends Enumerable, TUnitType extends Enumerable, TU
     ];
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   get actions(): Action<TCellType, TUnitType, TUnitOwner, any>[] {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return this.interactiveEntities.reduce<Action<TCellType, TUnitType, TUnitOwner, any>[]>(
       (actions, entity) => [...actions, ...entity.actions],
       []

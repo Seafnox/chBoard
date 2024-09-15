@@ -101,6 +101,7 @@ export class Board<TCellType extends Enumerable, TUnitType extends Enumerable, T
   updateUnit(actionChange: ChangingActionChange<Unit<TCellType, TUnitType, TUnitOwner>>) {
     actionChange.update(actionChange.target);
     // FIXME stupid typescript. Unit is not InteractiveEntity, but extends InteractiveEntity.
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     this.game.emit(actionChange as ChangingActionChange<any>);
   }
 
