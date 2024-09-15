@@ -11,25 +11,27 @@ export class SceneController {
     [SystemName.Help]: SceneName.HelpScene,
     [SystemName.QuitGame]: SceneName.WelcomeScene,
     [SystemName.NewGame]: SceneName.WelcomeScene,
-  }
+  };
 
   constructor(
     private engine: GameEngine,
   ) {
-    // FIXME unhandled Promise exceptions
-    // eslint-disable-next-line @typescript-eslint/no-misused-promises
-    this.engine.gameEvents.on(GameEvent.SystemAction, event => {
-      console.log(this.constructor.name, event.systemName);
-      if (event.systemName === SystemName.Back) {
-        return this.runBackScenario();
-      }
-
-      const sceneName = this.sceneMap[event.systemName];
-      if (sceneName && sceneName !== this.currentSceneName) {
-        return this.engine.goToScene(sceneName);
-      } else {
-        console.log(this.constructor.name, 'runNoopScenario');
-        return this.engine.goToScene(SceneName.NoopScene);
+    this.engine.gameEvents.on(GameEvent.SystemAction, async (event) => {
+      try {
+        console.log(this.constructor.name, event.systemName);
+        if (event.systemName === SystemName.Back) {
+          await this.runBackScenario();
+        } else {
+          const sceneName = this.sceneMap[event.systemName];
+          if (sceneName && sceneName !== this.currentSceneName) {
+            await this.engine.goToScene(sceneName);
+          } else {
+            console.log(this.constructor.name, 'runNoopScenario');
+            await this.engine.goToScene(SceneName.NoopScene);
+          }
+        }
+      } catch (error) {
+        throw error;
       }
     });
   }
