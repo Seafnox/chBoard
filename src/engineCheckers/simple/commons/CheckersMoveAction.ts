@@ -26,7 +26,7 @@ export abstract class CheckersMoveAction extends CheckersAction {
     return isOwnerTurn && isPathExist && isPathClear;
   }
 
-  protected get shouldSwitchTurn(): boolean {
+  get shouldSwitchTurn(): boolean {
     return true;
   }
 

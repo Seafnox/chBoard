@@ -1,5 +1,7 @@
 import { getId } from '../utils/getId';
 import { ActionChange } from './actionChanges/ActionChange';
+import { ActionChangeType } from './actionChanges/ActionChangeType';
+import { SwitchingTurnChange } from './actionChanges/SwitchingTurnChange';
 import { Game } from './Game';
 import { Enumerable } from './Enumerable';
 import { InteractiveEntity } from './InteractiveEntity';
@@ -19,17 +21,34 @@ export abstract class Action<TCellType extends Enumerable, TUnitType extends Enu
   abstract get isAvailable(): boolean;
 
   abstract get changes(): ActionChange<TInteractiveEntity>[];
+  abstract get shouldSwitchTurn(): boolean;
 
-  public get isCorrectPriority(): boolean {
+  get isCorrectPriority(): boolean {
     return this.game.maxPriority == -1 || this.game.maxPriority <= this.priority;
   }
 
-  public run(): void {
-    // TODO change to step by step changes from list, without custom running
-    this._run();
-
-    this.game.eventBus.emit('Action', this);
+  get switchTurnAction(): SwitchingTurnChange<TInteractiveEntity> {
+    return {
+      type: ActionChangeType.SwitchTurn,
+      entity: this.entity,
+    }
   }
 
-  protected abstract _run(): void;
+
+  public run(isVirtual: boolean = false): void {
+    this.changes.forEach(change => {
+      this.runChanges(change, isVirtual);
+      this.game.eventBus.emit('Action', change);
+    });
+
+    if (!isVirtual && this.shouldSwitchTurn) {
+      const change = this.switchTurnAction;
+      this.game.nextTurn(change);
+      this.game.eventBus.emit('Action', change);
+    }
+
+    this.game.doChanges();
+  }
+
+  protected abstract runChanges(change: ActionChange<TInteractiveEntity>, isVirtual: boolean): void;
 }

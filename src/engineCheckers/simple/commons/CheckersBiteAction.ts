@@ -51,7 +51,7 @@ export abstract class CheckersBiteAction extends CheckersAction {
         return action instanceof CheckersBiteAction && action.constructor.name === this.constructor.name && action.distance === this.distance;
       }) as typeof this;
 
-    virtualAction._run(true);
+    virtualAction.run(true);
 
     if (this.shouldSwitchTurn) {
       return 1;

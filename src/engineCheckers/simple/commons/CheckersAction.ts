@@ -1,45 +1,25 @@
 import { Action } from '../../../engine/Action';
-import { ActionChangeType } from '../../../engine/actionChanges/ActionChangeType';
+import { ActionChange } from '../../../engine/actionChanges/ActionChange';
 import { isChangingActionChange } from '../../../engine/actionChanges/isChangingActionChange';
 import { isMovingActonChange } from '../../../engine/actionChanges/isMovingActonChange';
 import { isRemovingActionChange } from '../../../engine/actionChanges/isRemovingActionChange';
-import { SwitchingTurnChange } from '../../../engine/actionChanges/SwitchingTurnChange';
 import { CheckersUnit } from '../ru/CheckersRuTypings';
 import { CheckersCellType } from './CheckersCellType';
 import { CheckersUnitOwner } from './CheckersUnitOwner';
 import { CheckersUnitType } from './CheckersUnitType';
 
 export abstract class CheckersAction extends Action<CheckersCellType, CheckersUnitType, CheckersUnitOwner, CheckersUnit> {
-  protected get switchTurnAction(): SwitchingTurnChange<CheckersUnit> {
-    return {
-      type: ActionChangeType.SwitchTurn,
-      entity: this.entity,
-    }
-  }
-
-  protected abstract get shouldSwitchTurn(): boolean;
-
-  protected _run(isVirtual: boolean = false): void {
-    const biteAction = this.changes.find(isRemovingActionChange);
-    const changingAction = this.changes.find(isChangingActionChange);
-    const moveAction = this.changes.find(isMovingActonChange);
-
-    if (biteAction) {
-      this.game.board.removeUnit(biteAction);
+  protected runChanges(change: ActionChange<CheckersUnit>) {
+    if (isRemovingActionChange(change)) {
+      this.game.board.removeUnit(change);
     }
 
-    if (changingAction) {
-      this.game.board.updateUnit(changingAction);
+    if (isChangingActionChange(change)) {
+      this.game.board.updateUnit(change);
     }
 
-    if (moveAction) {
-      this.game.board.moveUnit(moveAction);
+    if (isMovingActonChange(change)) {
+      this.game.board.moveUnit(change);
     }
-
-    if (!isVirtual && this.shouldSwitchTurn) {
-      this.game.nextTurn(this.switchTurnAction);
-    }
-
-    this.game.doChanges();
   }
 }
