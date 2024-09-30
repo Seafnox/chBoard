@@ -10,7 +10,7 @@ export interface CurrentTurnElementConfig<TUnitOwner extends Enumerable, TUnitTy
   position: Vector;
   initialPlayer: TUnitOwner;
   unitType: TUnitType;
-  playerScheme: Record<TUnitOwner, PlayerColorScheme<TUnitType>>;
+  playerSchemes: Record<TUnitOwner, PlayerColorScheme<TUnitType>>;
 }
 
 const fontSize = 60;
@@ -45,7 +45,7 @@ export class CurrentTurnElement<TUnitOwner extends Enumerable, TUnitType extends
 
 
   private getIdleState(cellSize: number, config: CurrentTurnElementConfig<TUnitOwner, TUnitType>) {
-    const currentScheme = config.playerScheme[this.currentPlayer][config.unitType];
+    const currentScheme = config.playerSchemes[this.currentPlayer][config.unitType];
     return new GraphicsGroup({
       members: [
         {

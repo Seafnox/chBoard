@@ -4,6 +4,7 @@ export const enum SystemName {
   Load = 'LOAD',
   NewGame = 'NEW GAME',
   QuitGame = 'QUIT GAME',
+  EndGame = 'END GAME',
   LoadGame = 'LOAD GAME',
   Play = 'PLAY',
   SelectCheckers = 'SELECT CHECKERS',

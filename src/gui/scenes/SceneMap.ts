@@ -1,11 +1,13 @@
 import { SceneWithOptions, FadeInOut, Color } from 'excalibur';
 import { CheckersSelectScene } from './CheckersSelectScene';
+import { EndGameScene } from './EndGameScene';
 import { SimpleCheckersScene } from './SimpleCheckersScene';
 import { NotImplementedScene } from './NotImplemented';
 import { WelcomeScene } from './WelcomeScene';
 
 export enum SceneName {
   WelcomeScene = 'WelcomeScene',
+  EndGameScene = 'EndGameScene',
   CheckersSelectScene = 'CheckersSelectScene',
   SimpleCheckersScene = 'SimpleCheckersScene',
   GameOverScene = 'GameOverScene',
@@ -25,6 +27,10 @@ export const defaultSceneTransition = {
 export const sceneMap: Record<SceneName, SceneWithOptions> = {
   [SceneName.WelcomeScene]: {
     scene: WelcomeScene,
+    transitions: defaultSceneTransition,
+  },
+  [SceneName.EndGameScene]: {
+    scene: EndGameScene,
     transitions: defaultSceneTransition,
   },
   [SceneName.CheckersSelectScene]: {

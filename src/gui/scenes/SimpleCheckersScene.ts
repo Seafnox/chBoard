@@ -11,10 +11,10 @@ import { GameEvent } from '../engine/GameEvent';
 import { SystemActionEvent } from '../events/SystemActionEvent';
 import { SystemName } from '../events/SystemName';
 import { buildIconButton } from '../kit/builders/buildIconButton';
+import { buildTurnUI } from '../kit/builders/buildTurnUI';
 import { CheckersBoardElement } from '../kit/CheckersBoardElement';
-import { borderSize, cellSize } from '../kit/CheckersConstants';
+import { borderSize, cellSize, playerSchemes } from '../kit/CheckersConstants';
 import { CheckersUnitElement } from '../kit/CheckersUnitElement';
-import { PlayerColorScheme } from '../kit/ColorScheme';
 import { CurrentTurnElement } from '../kit/CurrentTurnElement';
 import { PixelFont60px } from '../PrepareFonts';
 
@@ -27,37 +27,6 @@ export class SimpleCheckersScene extends Scene {
   private selectedUnitView?: CheckersUnitElement;
   private selectedUnit?: CheckersUnit;
   private selectedUnitActionViews: CheckersUnitElement[] = [];
-  private playerScheme: Record<CheckersUnitOwner, PlayerColorScheme<CheckersUnitType>> = {
-    [CheckersUnitOwner.Black]: {
-      [CheckersUnitType.Checker]: {
-        unitColor: [Color.DarkGray, Color.DarkGray, Color.Black],
-        hoverColor: Color.Gray,
-        activeColor: Color.fromHex("#ffff4033"),
-        pressedColor: Color.fromHex("#ffff40aa"),
-      },
-      [CheckersUnitType.King]: {
-        unitColor: [Color.Black, Color.DarkGray, Color.Black],
-        hoverColor: Color.Gray,
-        activeColor: Color.fromHex("#ffff4033"),
-        pressedColor: Color.fromHex("#ffff40aa"),
-      },
-    },
-    [CheckersUnitOwner.White]: {
-      [CheckersUnitType.Checker]: {
-        unitColor: [Color.LightGray, Color.LightGray, Color.White],
-        hoverColor: Color.Gray,
-        activeColor: Color.fromHex("#ffff4033"),
-        pressedColor: Color.fromHex("#ffff40aa"),
-      },
-      [CheckersUnitType.King]: {
-        unitColor: [Color.White, Color.LightGray, Color.White],
-        hoverColor: Color.Gray,
-        activeColor: Color.fromHex("#ffff4033"),
-        pressedColor: Color.fromHex("#ffff40aa"),
-      },
-    },
-
-  }
 
   get gameEngine(): GameEngine {
     return this.engine as GameEngine;
@@ -75,7 +44,7 @@ export class SimpleCheckersScene extends Scene {
     const gameConfig = this.gameEngine.gameConfig as CheckersGameConfig;
 
     this.game = new Game(this.gameEngine.gameConfig);
-    this.turnUI = this.createTurnUI(this.game.activeOwner);
+    this.turnUI = buildTurnUI(this.game.activeOwner, CheckersUnitType.Checker);
     this.boardView = this.createBoard(gameConfig, vec(this.gameEngine.screen.center.x, 120));
     this.unitViews = this.createUnits(this.game);
 
@@ -98,16 +67,6 @@ export class SimpleCheckersScene extends Scene {
     });
   }
 
-  createTurnUI(currentPlayer: CheckersUnitOwner): CurrentTurnElement<CheckersUnitOwner, CheckersUnitType> {
-    return new CurrentTurnElement<CheckersUnitOwner, CheckersUnitType>({
-      cellSize: cellSize,
-      initialPlayer: currentPlayer,
-      position: vec(10, 100),
-      playerScheme: this.playerScheme,
-      unitType: CheckersUnitType.Checker,
-    });
-  }
-
   createBoard(config: CheckersGameConfig, offset: Vector): CheckersBoardElement<CheckersCellType, CheckersUnitType, CheckersUnitOwner> {
     return new CheckersBoardElement(config, offset);
   }
@@ -116,11 +75,10 @@ export class SimpleCheckersScene extends Scene {
     this.gameEngine.gameEvents.emit(GameEvent.SystemAction, event);
   }
 
-
   private createUnits(game: CheckersGame): CheckersUnitElement[] {
     return game.board.units
       .map(unit => {
-        const playerScheme = this.playerScheme[unit.owner];
+        const playerScheme = playerSchemes[unit.owner];
         const unitScheme = playerScheme[unit.type];
 
         return new CheckersUnitElement({
@@ -142,6 +100,16 @@ export class SimpleCheckersScene extends Scene {
 
   // TODO make more optimized logic with comparion expected and actual game state with local changes
   private updateUnits() {
+    if (this.game?.winner) {
+      this.gameEngine.lastWinner = this.game.winner;
+      this.gameEngine.gameEvents.emit(GameEvent.SystemAction, {
+        name: SystemName.EndGame,
+        source: this,
+      });
+
+      return;
+    }
+
     this.unitViews.forEach(unitView => this.remove(unitView));
     this.unitViews = this.createUnits(this.game!);
     this.unitViews.forEach(unitView => this.add(unitView));

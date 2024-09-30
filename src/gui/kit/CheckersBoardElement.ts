@@ -2,7 +2,7 @@ import { ScreenElement, Rectangle, GraphicsGroup, vec, Text, Vector } from 'exca
 import { GraphicsGrouping } from 'excalibur/build/dist/Graphics/GraphicsGroup';
 import { Enumerable } from '../../engine/Enumerable';
 import { GameConfig } from '../../engine/GameConfig';
-import { borderFont, darkColor, lightColor, graphicState, borderBorderCoef, borderSize, cellSize } from './CheckersConstants';
+import { borderFont, darkBoardColor, lightBoardColor, graphicState, borderBorderCoef, borderSize, cellSize } from './CheckersConstants';
 
 export class CheckersBoardElement<TCellType extends Enumerable, TUnitType extends Enumerable, TUnitOwner extends Enumerable> extends ScreenElement {
 
@@ -77,7 +77,7 @@ export class CheckersBoardElement<TCellType extends Enumerable, TUnitType extend
           graphic: new Rectangle({
             width: borderSize,
             height: initialConfig.height * cellSize + borderSize * 2 * (1 - borderBorderCoef),
-            color: lightColor,
+            color: lightBoardColor,
           }),
           offset: vec(0, borderSize * borderBorderCoef),
         },
@@ -85,7 +85,7 @@ export class CheckersBoardElement<TCellType extends Enumerable, TUnitType extend
           graphic: new Rectangle({
             width: borderSize * borderBorderCoef,
             height: initialConfig.height * cellSize + borderSize * 2,
-            color: darkColor,
+            color: darkBoardColor,
           }),
           offset: vec(isLeftBorder ? 0 : borderSize * (1 - borderBorderCoef), 0),
         },
@@ -93,7 +93,7 @@ export class CheckersBoardElement<TCellType extends Enumerable, TUnitType extend
           graphic: new Rectangle({
             width: borderSize * borderBorderCoef,
             height: initialConfig.height * cellSize + borderSize * 2 * borderBorderCoef,
-            color: darkColor,
+            color: darkBoardColor,
           }),
           offset: vec(isLeftBorder ? borderSize * (1 - borderBorderCoef) : 0, borderSize * (1 - borderBorderCoef)),
         },
@@ -108,7 +108,7 @@ export class CheckersBoardElement<TCellType extends Enumerable, TUnitType extend
           width: borderSize,
           height: borderSize,
           text: String(index + 1),
-          color: darkColor,
+          color: darkBoardColor,
           font: borderFont,
         }),
         offset: vec(index * cellSize + borderSize, borderSize / 2),
@@ -126,7 +126,7 @@ export class CheckersBoardElement<TCellType extends Enumerable, TUnitType extend
           graphic: new Rectangle({
             width: initialConfig.width * cellSize + borderSize * 2 * (1 - borderBorderCoef),
             height: borderSize,
-            color: lightColor,
+            color: lightBoardColor,
           }),
           offset: vec(borderSize * borderBorderCoef, 0),
         },
@@ -134,7 +134,7 @@ export class CheckersBoardElement<TCellType extends Enumerable, TUnitType extend
           graphic: new Rectangle({
             width: initialConfig.width * cellSize + borderSize * 2,
             height: borderSize * borderBorderCoef,
-            color: darkColor,
+            color: darkBoardColor,
           }),
           offset: vec(0, isTopBorder ? 0 : borderSize * (1 - borderBorderCoef)),
         },
@@ -142,7 +142,7 @@ export class CheckersBoardElement<TCellType extends Enumerable, TUnitType extend
           graphic: new Rectangle({
             width: initialConfig.width * cellSize + borderSize * 2 * borderBorderCoef,
             height: borderSize * borderBorderCoef,
-            color: darkColor,
+            color: darkBoardColor,
           }),
           offset: vec(borderSize * (1 - borderBorderCoef), isTopBorder ? borderSize * (1 - borderBorderCoef) : 0),
         },
@@ -158,7 +158,7 @@ export class CheckersBoardElement<TCellType extends Enumerable, TUnitType extend
           width: borderSize,
           height: borderSize,
           text: String.fromCharCode(firstCharIndex + index),
-          color: darkColor,
+          color: darkBoardColor,
           font: borderFont,
         }),
         offset: vec(borderSize / 2, index * cellSize + borderSize),
@@ -174,7 +174,7 @@ export class CheckersBoardElement<TCellType extends Enumerable, TUnitType extend
           graphic: new Rectangle({
             width: cellSize,
             height: cellSize,
-            color: (x + y) % 2 === 0 ? lightColor : darkColor,
+            color: (x + y) % 2 === 0 ? lightBoardColor : darkBoardColor,
           }),
           offset: vec(x * cellSize, y * cellSize),
         });

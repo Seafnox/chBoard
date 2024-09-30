@@ -10,7 +10,10 @@ export class SceneController {
     [SystemName.Settings]: SceneName.SettingsScene,
     [SystemName.Help]: SceneName.HelpScene,
     [SystemName.QuitGame]: SceneName.WelcomeScene,
+    // TODO make restart logic
+    [SystemName.Restart]: SceneName.SimpleCheckersScene,
     [SystemName.NewGame]: SceneName.WelcomeScene,
+    [SystemName.EndGame]: SceneName.EndGameScene,
   };
 
   constructor(
