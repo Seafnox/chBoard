@@ -1,15 +1,16 @@
 import { ActionChangeType } from '../../../../../engine/actionChanges/ActionChangeType';
 import { ChangingActionChange } from '../../../../../engine/actionChanges/ChangingActionChange';
 import { Vector2d } from '../../../../../engine/Vector2d';
+import { CheckersCellType } from '../../../commons/CheckersCellType';
 import { CheckersUnitOwner } from '../../../commons/CheckersUnitOwner';
 import { CheckersUnitType } from '../../../commons/CheckersUnitType';
 import { CheckersUnit, CheckersGame } from '../../CheckersRuTypings';
 
-export class SwitchToKingActionChange implements ChangingActionChange<CheckersUnit> {
+export class SwitchToKingActionChange implements ChangingActionChange<CheckersCellType, CheckersUnitType, CheckersUnitOwner, CheckersUnit> {
   public readonly type = ActionChangeType.Change;
 
   constructor(
-    public readonly entity: CheckersUnit,
+    public readonly source: CheckersUnit,
     public readonly target: CheckersUnit,
     public readonly game: CheckersGame,
   ) {}

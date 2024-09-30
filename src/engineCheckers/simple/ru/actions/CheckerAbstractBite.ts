@@ -1,10 +1,9 @@
 import { ActionChangeType } from '../../../../engine/actionChanges/ActionChangeType';
-import { CommonActionChange } from '../../../../engine/actionChanges/CommonActionChange';
 import { Vector2d } from '../../../../engine/Vector2d';
 import { CheckersBiteAction } from '../../commons/CheckersBiteAction';
 import { CheckersRule } from '../../commons/CheckersRule';
 import { CheckersUnitType } from '../../commons/CheckersUnitType';
-import { CheckersUnit, CheckersGame } from '../CheckersRuTypings';
+import { CheckersUnit, CheckersGame, CheckersCommonActionChange } from '../CheckersRuTypings';
 import { SwitchToKingActionChange } from './changes/SwitchToKingActionChange';
 
 export abstract class CheckerAbstractBite extends CheckersBiteAction {
@@ -17,17 +16,17 @@ export abstract class CheckerAbstractBite extends CheckersBiteAction {
     super(game, rule, entity, mostKillPriority, 2);
   }
 
-  get changes(): CommonActionChange<CheckersUnit>[] {
+  get changes(): CheckersCommonActionChange<CheckersUnit>[] {
     const path = this.path();
     return [
       {
         type: ActionChangeType.Remove,
-        entity: this.entity,
+        source: this.entity,
         target: this.game.board.getUnit(this.enemyPosition(path) || Vector2d.NaN)!,
       },
       {
         type: ActionChangeType.Move,
-        entity: this.entity,
+        source: this.entity,
         to: this.nextPosition,
       },
       ...SwitchToKingActionChange.createIfAvailable(this.game, this.entity, this.nextPosition),

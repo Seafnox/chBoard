@@ -1,13 +1,11 @@
 import { Scene, Actor, Label, vec, Color, Vector } from 'excalibur';
-import { ActionChange } from '../../engine/actionChanges/ActionChange';
-import { ActionChangeType } from '../../engine/actionChanges/ActionChangeType';
-import { MovingActionChange } from '../../engine/actionChanges/MovingActionChange';
+import { isMovingActonChange } from '../../engine/actionChanges/isMovingActonChange';
 import { Game } from '../../engine/Game';
 import { CheckersCellType } from '../../engineCheckers/simple/commons/CheckersCellType';
 import { CheckersUnitOwner } from '../../engineCheckers/simple/commons/CheckersUnitOwner';
 import { CheckersUnitType } from '../../engineCheckers/simple/commons/CheckersUnitType';
 import { SwitchToKingActionChange } from '../../engineCheckers/simple/ru/actions/changes/SwitchToKingActionChange';
-import { CheckersAvailableAction, CheckersGame, CheckersGameConfig, CheckersUnit } from '../../engineCheckers/simple/ru/CheckersRuTypings';
+import { CheckersUnitAction, CheckersGame, CheckersGameConfig, CheckersUnit } from '../../engineCheckers/simple/ru/CheckersRuTypings';
 import { GameEngine } from '../engine/GameEngine';
 import { GameEvent } from '../engine/GameEvent';
 import { SystemActionEvent } from '../events/SystemActionEvent';
@@ -181,9 +179,8 @@ export class SimpleCheckersScene extends Scene {
     this.selectedUnitActionViews.forEach(actionView => this.add(actionView));
   }
 
-  private createActionView(action: CheckersAvailableAction, unit: CheckersUnit): CheckersUnitElement {
-    const moveChange = action.changes
-      .find((change: ActionChange<CheckersUnit>): change is MovingActionChange<CheckersUnit> => change.type === ActionChangeType.Move);
+  private createActionView(action: CheckersUnitAction, unit: CheckersUnit): CheckersUnitElement {
+    const moveChange = action.changes.find(isMovingActonChange);
 
     if (!moveChange) {
       throw new Error('No move change');

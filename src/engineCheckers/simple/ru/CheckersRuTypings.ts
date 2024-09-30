@@ -1,4 +1,6 @@
 import { Action } from '../../../engine/Action';
+import { ActionChange } from '../../../engine/actionChanges/ActionChange';
+import { CommonActionChange } from '../../../engine/actionChanges/CommonActionChange';
 import { Board } from '../../../engine/Board';
 import { Game } from '../../../engine/Game';
 import { GameConfig } from '../../../engine/GameConfig';
@@ -13,4 +15,6 @@ export type CheckersGameConfig = GameConfig<CheckersCellType, CheckersUnitType, 
 export type CheckersBoard = Board<CheckersCellType, CheckersUnitType, CheckersUnitOwner>;
 export type CheckersUnit = Unit<CheckersCellType, CheckersUnitType, CheckersUnitOwner>;
 export type CheckersInteractiveEntity = InteractiveEntity<CheckersCellType, CheckersUnitType, CheckersUnitOwner>;
-export type CheckersAvailableAction = Action<CheckersCellType, CheckersUnitType, CheckersUnitOwner, CheckersUnit>;
+export type CheckersUnitAction = Action<CheckersCellType, CheckersUnitType, CheckersUnitOwner, CheckersUnit>;
+export type CheckersActionChange<TUnit extends CheckersInteractiveEntity> = ActionChange<CheckersCellType, CheckersUnitType, CheckersUnitOwner, TUnit>;
+export type CheckersCommonActionChange<TUnit extends CheckersInteractiveEntity> = CommonActionChange<CheckersCellType, CheckersUnitType, CheckersUnitOwner, TUnit>;

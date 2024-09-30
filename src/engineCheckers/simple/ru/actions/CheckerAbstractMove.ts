@@ -1,8 +1,7 @@
 import { ActionChangeType } from '../../../../engine/actionChanges/ActionChangeType';
-import { CommonActionChange } from '../../../../engine/actionChanges/CommonActionChange';
 import { CheckersMoveAction } from '../../commons/CheckersMoveAction';
 import { CheckersUnitType } from '../../commons/CheckersUnitType';
-import { CheckersUnit, CheckersGame } from '../CheckersRuTypings';
+import { CheckersUnit, CheckersGame, CheckersCommonActionChange } from '../CheckersRuTypings';
 import { MoveRulesForKing } from '../rules/MoveRulesForKing';
 import { SwitchToKingActionChange } from './changes/SwitchToKingActionChange';
 
@@ -25,11 +24,11 @@ export abstract class CheckerAbstractMove extends CheckersMoveAction {
     return super.isAvailable && isChecker;
   }
 
-  get changes(): CommonActionChange<CheckersUnit>[] {
+  get changes(): CheckersCommonActionChange<CheckersUnit>[] {
     return [
       {
         type: ActionChangeType.Move,
-        entity: this.entity,
+        source: this.entity,
         to: this.nextPosition,
       },
       ...SwitchToKingActionChange.createIfAvailable(this.game, this.entity, this.nextPosition),

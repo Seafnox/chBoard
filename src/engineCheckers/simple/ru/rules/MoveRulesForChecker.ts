@@ -1,6 +1,6 @@
 import { Unit } from '../../../../engine/Unit';
 import { CheckersRule } from '../../commons/CheckersRule';
-import { CheckersUnit, CheckersInteractiveEntity, CheckersAvailableAction, CheckersGame } from '../CheckersRuTypings';
+import { CheckersUnit, CheckersInteractiveEntity, CheckersUnitAction, CheckersGame } from '../CheckersRuTypings';
 import { CheckerMoveFrontLeft } from '../actions/CheckerMoveFrontLeft';
 import { CheckerMoveFrontRight } from '../actions/CheckerMoveFrontRight';
 
@@ -12,7 +12,7 @@ export class MoveRulesForChecker extends CheckersRule {
   getActions(
     game: CheckersGame,
     entity: CheckersUnit,
-  ): CheckersAvailableAction[] {
+  ): CheckersUnitAction[] {
     return [
       new CheckerMoveFrontLeft(game, this, entity),
       new CheckerMoveFrontRight(game, this, entity),

@@ -1,7 +1,8 @@
 export const enum ActionChangeType {
-  Move = 'move',
-  Add = 'add',
-  Remove = 'remove',
-  Change = 'change',
-  SwitchTurn = 'switchTurn',
+  Move = 'Move',
+  Add = 'Add',
+  Remove = 'Remove',
+  Change = 'Change',
+  SwitchTurn = 'SwitchTurn',
+  EndGame = 'EndGame',
 }

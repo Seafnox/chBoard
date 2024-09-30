@@ -1,5 +1,5 @@
 import { Vector2d } from '../../../engine/Vector2d';
-import { CheckersGame, CheckersUnit, CheckersAvailableAction } from '../ru/CheckersRuTypings';
+import { CheckersGame, CheckersUnit, CheckersUnitAction } from '../ru/CheckersRuTypings';
 import { CheckersAction } from './CheckersAction';
 import { CheckersRule } from './CheckersRule';
 
@@ -20,7 +20,7 @@ export abstract class CheckersBiteAction extends CheckersAction {
 
   get shouldSwitchTurn(): boolean {
     const biteActions = this.entity.actions
-      .filter<CheckersBiteAction>((action: CheckersAvailableAction): action is CheckersBiteAction => action instanceof CheckersBiteAction)
+      .filter<CheckersBiteAction>((action: CheckersUnitAction): action is CheckersBiteAction => action instanceof CheckersBiteAction)
     ;
     return !biteActions.some(action => action.isAvailable);
   }
@@ -58,7 +58,7 @@ export abstract class CheckersBiteAction extends CheckersAction {
     }
 
     const availableActions = virtualEntity.actions
-      .filter<CheckersBiteAction>((action: CheckersAvailableAction): action is CheckersBiteAction => action instanceof CheckersBiteAction)
+      .filter<CheckersBiteAction>((action: CheckersUnitAction): action is CheckersBiteAction => action instanceof CheckersBiteAction)
       .filter(action => action.isAvailable);
 
     if (availableActions.length === 0) {

@@ -4,7 +4,7 @@ import { KingBiteBackLeft } from '../actions/KingBiteBackLeft';
 import { KingBiteBackRight } from '../actions/KingBiteBackRight';
 import { KingBiteFontLeft } from '../actions/KingBiteFrontLeft';
 import { KingBiteFrontRight } from '../actions/KingBiteFrontRight';
-import { CheckersUnit, CheckersInteractiveEntity, CheckersAvailableAction, CheckersGame } from '../CheckersRuTypings';
+import { CheckersUnit, CheckersInteractiveEntity, CheckersUnitAction, CheckersGame } from '../CheckersRuTypings';
 
 export class BiteRulesForKing extends CheckersRule {
   isSuitable(entity: CheckersInteractiveEntity): entity is CheckersUnit {
@@ -14,7 +14,7 @@ export class BiteRulesForKing extends CheckersRule {
   getActions(
     game: CheckersGame,
     entity: CheckersUnit,
-  ): CheckersAvailableAction[] {
+  ): CheckersUnitAction[] {
     return [
       new KingBiteBackLeft(game, this, entity, true, 2),
       new KingBiteBackRight(game, this, entity, true, 2),

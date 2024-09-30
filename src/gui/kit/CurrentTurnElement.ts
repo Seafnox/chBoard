@@ -39,7 +39,6 @@ export class CurrentTurnElement<TUnitOwner extends Enumerable, TUnitType extends
   }
 
   changePlayer(player: TUnitOwner) {
-    console.log(this.constructor.name, 'changePlayer', this.currentPlayer, player);
     this.currentPlayer = player;
     this.graphics.add(InteractiveState.Idle, this.getIdleState(this.config.cellSize, this.config));
   }

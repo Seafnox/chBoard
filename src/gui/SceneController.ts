@@ -17,21 +17,17 @@ export class SceneController {
     private engine: GameEngine,
   ) {
     this.engine.gameEvents.on(GameEvent.SystemAction, async (event) => {
-      try {
-        console.log(this.constructor.name, event.systemName);
-        if (event.systemName === SystemName.Back) {
-          await this.runBackScenario();
+      console.log(this.constructor.name, event.systemName);
+      if (event.systemName === SystemName.Back) {
+        await this.runBackScenario();
+      } else {
+        const sceneName = this.sceneMap[event.systemName];
+        if (sceneName && sceneName !== this.currentSceneName) {
+          await this.engine.goToScene(sceneName);
         } else {
-          const sceneName = this.sceneMap[event.systemName];
-          if (sceneName && sceneName !== this.currentSceneName) {
-            await this.engine.goToScene(sceneName);
-          } else {
-            console.log(this.constructor.name, 'runNoopScenario');
-            await this.engine.goToScene(SceneName.NoopScene);
-          }
+          console.log(this.constructor.name, 'runNoopScenario');
+          await this.engine.goToScene(SceneName.NoopScene);
         }
-      } catch (error) {
-        throw error;
       }
     });
   }

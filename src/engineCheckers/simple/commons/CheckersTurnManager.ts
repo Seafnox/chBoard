@@ -6,18 +6,9 @@ import { CheckersUnitType } from './CheckersUnitType';
 
 export class CheckersTurnManager extends TurnManager<CheckersCellType, CheckersUnitType, CheckersUnitOwner> {
   private _activeOwner: CheckersUnitOwner = this.initialOwner;
-  private _winner: CheckersUnitOwner | null = null;
-
-  get winner(): CheckersUnitOwner | null {
-    return this._winner;
-  }
 
   get activeOwner(): CheckersUnitOwner {
     return this._activeOwner;
-  }
-
-  hasWinner(): boolean {
-    return !!this._winner;
   }
 
   get initialOwner(): CheckersUnitOwner {
@@ -26,14 +17,14 @@ export class CheckersTurnManager extends TurnManager<CheckersCellType, CheckersU
 
   completeTurn(): void {
     if (this.getActiveBlackUnits().length === 0) {
-      this._winner = CheckersUnitOwner.White;
-      this.endGame(this._winner);
+      const winner = CheckersUnitOwner.White;
+      this.endGame(winner);
       return;
     }
 
     if (this.getActiveWhiteUnits().length === 0) {
-      this._winner = CheckersUnitOwner.Black;
-      this.endGame(this._winner);
+      const winner = CheckersUnitOwner.Black;
+      this.endGame(winner);
       return;
     }
   }
@@ -43,9 +34,8 @@ export class CheckersTurnManager extends TurnManager<CheckersCellType, CheckersU
   }
 
   copy(turnManager: TurnManager<CheckersCellType, CheckersUnitType, CheckersUnitOwner>): TurnManager<CheckersCellType, CheckersUnitType, CheckersUnitOwner> {
-    const { winner, activeOwner } = turnManager;
+    const { activeOwner } = turnManager;
 
-    this._winner = winner;
     this._activeOwner = activeOwner;
 
     return this;

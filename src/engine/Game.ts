@@ -1,6 +1,7 @@
 import { getId } from '../utils/getId';
 import { Action } from './Action';
 import { CommonActionChange } from './actionChanges/CommonActionChange';
+import { EndGameChange } from './actionChanges/EndGameChange';
 import { SwitchingTurnChange } from './actionChanges/SwitchingTurnChange';
 import { Board } from './Board';
 import { EventEmitter } from './EventEmitter';
@@ -14,7 +15,7 @@ export class Game<TCellType extends Enumerable, TUnitType extends Enumerable, TU
   public readonly board: Board<TCellType, TUnitType, TUnitOwner>;
   public readonly eventBus: EventEmitter = new EventEmitter();
   // TODO add turn counter and mark items on push
-  public readonly gameLog: CommonActionChange<InteractiveEntity<TCellType, TUnitType, TUnitOwner>>[] = [];
+  public readonly gameLog: CommonActionChange<TCellType, TUnitType, TUnitOwner, InteractiveEntity<TCellType, TUnitType, TUnitOwner>>[] = [];
   public isGameEnded: boolean = false;
   public maxPriority: number = -1;
   private turnManager: TurnManager<TCellType, TUnitType, TUnitOwner>;
@@ -71,21 +72,22 @@ export class Game<TCellType extends Enumerable, TUnitType extends Enumerable, TU
       });
   }
 
-  endGame(winner: TUnitOwner) {
+  endGame(endGameChange: EndGameChange<TCellType, TUnitType, TUnitOwner, InteractiveEntity<TCellType, TUnitType, TUnitOwner>>) {
     this.isGameEnded = true;
-    this._winner = winner;
+    this._winner = endGameChange.winner;
     this.eventBus.pause();
     this.interactiveEntities.forEach(interactiveEntity => {
       interactiveEntity.clearActions();
-    })
+    });
+    this.gameLog.push(endGameChange);
   }
 
-  nextTurn(event: SwitchingTurnChange<InteractiveEntity<TCellType, TUnitType, TUnitOwner>>) {
+  nextTurn(event: SwitchingTurnChange<TCellType, TUnitType, TUnitOwner, InteractiveEntity<TCellType, TUnitType, TUnitOwner>>) {
     this.turnManager.nextTurn();
     this.emit(event);
   }
 
-  emit(event: CommonActionChange<InteractiveEntity<TCellType, TUnitType, TUnitOwner>>) {
+  emit(event: CommonActionChange<TCellType, TUnitType, TUnitOwner, InteractiveEntity<TCellType, TUnitType, TUnitOwner>>) {
     this.gameLog.push(event);
     if (this.id === '#0') console.log(event);
   }

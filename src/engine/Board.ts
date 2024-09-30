@@ -74,9 +74,9 @@ export class Board<TCellType extends Enumerable, TUnitType extends Enumerable, T
     return this.getUnitXY(vector.x, vector.y);
   }
 
-  moveUnit(action: MovingActionChange<Unit<TCellType, TUnitType, TUnitOwner>>): void {
+  moveUnit(action: MovingActionChange<TCellType, TUnitType, TUnitOwner, Unit<TCellType, TUnitType, TUnitOwner>>): void {
     const nextPosition = action.to;
-    const unit = action.entity;
+    const unit = action.source;
     const from = unit.cell;
     const to = this.getCellXY(nextPosition.x, nextPosition.y);
 
@@ -90,7 +90,7 @@ export class Board<TCellType extends Enumerable, TUnitType extends Enumerable, T
     this.game.emit(action);
   }
 
-  removeUnit(action: RemovingActionChange<Unit<TCellType, TUnitType, TUnitOwner>>): void {
+  removeUnit(action: RemovingActionChange<TCellType, TUnitType, TUnitOwner, Unit<TCellType, TUnitType, TUnitOwner>>): void {
     const target = action.target;
     this.unitMap[`${target.position.x},${target.position.y}`] = undefined;
     target.isDead = true;
@@ -98,11 +98,11 @@ export class Board<TCellType extends Enumerable, TUnitType extends Enumerable, T
     this.game.emit(action);
   }
 
-  updateUnit(actionChange: ChangingActionChange<Unit<TCellType, TUnitType, TUnitOwner>>) {
+  updateUnit(actionChange: ChangingActionChange<TCellType, TUnitType, TUnitOwner, Unit<TCellType, TUnitType, TUnitOwner>>) {
     actionChange.update(actionChange.target);
     // FIXME stupid typescript. Unit is not InteractiveEntity, but extends InteractiveEntity.
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    this.game.emit(actionChange as ChangingActionChange<any>);
+    this.game.emit(actionChange as ChangingActionChange<TCellType, TUnitType, TUnitOwner, any>);
   }
 
   copy(board: Board<TCellType, TUnitType, TUnitOwner>): Board<TCellType, TUnitType, TUnitOwner> {

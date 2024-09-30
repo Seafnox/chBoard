@@ -4,7 +4,7 @@ import { KingMoveBackLeft } from '../actions/KingMoveBackLeft';
 import { KingMoveBackRight } from '../actions/KingMoveBackRight';
 import { KingMoveFrontLeft } from '../actions/KingMoveFrontLeft';
 import { KingMoveFrontRight } from '../actions/KingMoveFrontRight';
-import { CheckersUnit, CheckersInteractiveEntity, CheckersAvailableAction, CheckersGame } from '../CheckersRuTypings';
+import { CheckersUnit, CheckersInteractiveEntity, CheckersUnitAction, CheckersGame } from '../CheckersRuTypings';
 
 export class MoveRulesForKing extends CheckersRule {
   isSuitable(entity: CheckersInteractiveEntity): entity is CheckersUnit {
@@ -14,7 +14,7 @@ export class MoveRulesForKing extends CheckersRule {
   getActions(
     game: CheckersGame,
     entity: CheckersUnit,
-  ): CheckersAvailableAction[] {
+  ): CheckersUnitAction[] {
     return [
       new KingMoveFrontLeft(game, this, entity, 1),
       new KingMoveFrontRight(game, this, entity, 1),

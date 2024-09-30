@@ -20,17 +20,17 @@ export abstract class Action<TCellType extends Enumerable, TUnitType extends Enu
   abstract get isActive(): boolean;
   abstract get isAvailable(): boolean;
 
-  abstract get changes(): ActionChange<TInteractiveEntity>[];
+  abstract get changes(): ActionChange<TCellType, TUnitType, TUnitOwner, TInteractiveEntity>[];
   abstract get shouldSwitchTurn(): boolean;
 
   get isCorrectPriority(): boolean {
     return this.game.maxPriority == -1 || this.game.maxPriority <= this.priority;
   }
 
-  get switchTurnAction(): SwitchingTurnChange<TInteractiveEntity> {
+  get switchTurnAction(): SwitchingTurnChange<TCellType, TUnitType, TUnitOwner, TInteractiveEntity> {
     return {
       type: ActionChangeType.SwitchTurn,
-      entity: this.entity,
+      source: this.entity,
     }
   }
 
@@ -50,5 +50,5 @@ export abstract class Action<TCellType extends Enumerable, TUnitType extends Enu
     this.game.doChanges();
   }
 
-  protected abstract runChanges(change: ActionChange<TInteractiveEntity>, isVirtual: boolean): void;
+  protected abstract runChanges(change: ActionChange<TCellType, TUnitType, TUnitOwner, TInteractiveEntity>, isVirtual: boolean): void;
 }
