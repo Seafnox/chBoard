@@ -1,4 +1,5 @@
 import { FontSource, FontUnit, vec, TextAlign, FontOptions, GraphicOptions, RasterOptions } from 'excalibur';
+import { FontSize } from './UiConstants';
 
 export const PixelFontResource = new FontSource('../resources/fonts/Better_VCR.ttf', 'BetterVCR');
 
@@ -6,7 +7,7 @@ export const PixelFontResource = new FontSource('../resources/fonts/Better_VCR.t
 // TODO make shadow scheme with light direction and offsetSize
 // TODO make size scheme with 7 levels of size
 export const PixelFont30px = (options?: FontOptions & GraphicOptions & RasterOptions) => PixelFontResource.toFont({
-  size: 30,
+  size: FontSize.Medium,
   unit: FontUnit.Px,
   textAlign: TextAlign.Center,
   ...(options || {}),
@@ -20,7 +21,7 @@ export const PixelFont30px = (options?: FontOptions & GraphicOptions & RasterOpt
 });
 
 export const PixelFont60px = (options?: FontOptions & GraphicOptions & RasterOptions) => PixelFontResource.toFont({
-  size: 60,
+  size: FontSize.Big,
   unit: FontUnit.Px,
   textAlign: TextAlign.Center,
   ...options,

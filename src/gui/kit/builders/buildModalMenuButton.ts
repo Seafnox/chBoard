@@ -1,12 +1,11 @@
-import { Actor, vec, Vector } from 'excalibur';
+import { Actor, Vector } from 'excalibur';
 import { SystemActionEvent } from '../../events/SystemActionEvent';
 import { SystemName } from '../../events/SystemName';
 import { RoundedButton } from '../RoundedButton';
 import { buildRoundedButton } from './buildRoundedButton';
 
 export function buildModalMenuButton(
-  screenCenter: Vector,
-  offsetY: number,
+  position: Vector,
   width: number,
   label: SystemName,
   onClick: (event: SystemActionEvent<RoundedButton>) => void
@@ -17,7 +16,7 @@ export function buildModalMenuButton(
     systemName: label,
     width,
     height,
-    pos: vec(screenCenter.x, offsetY),
+    pos: position,
     onClick,
   });
 }

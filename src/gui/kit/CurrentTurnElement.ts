@@ -8,6 +8,7 @@ import { InteractiveState } from './InteractiveState';
 export interface CurrentTurnElementConfig<TUnitOwner extends Enumerable, TUnitType extends Enumerable> {
   cellSize: number;
   position: Vector;
+  useText: boolean;
   initialPlayer: TUnitOwner;
   unitType: TUnitType;
   playerSchemes: Record<TUnitOwner, PlayerColorScheme<TUnitType>>;
@@ -57,17 +58,20 @@ export class CurrentTurnElement<TUnitOwner extends Enumerable, TUnitType extends
           }),
           offset: vec(0, - cellSize / 1.85),
         },
-        {
-          graphic: new ButtonLabel({
-            width: cellSize,
-            height: fontSize,
-            label: 'TURN',
-            labelColor: currentScheme.unitColor[1],
-            labelShadowColor: Color.Black,
-          }),
-          offset: vec(cellSize * 2 + fontOffset, 0),
-        },
-      ]
+        ...(!this.config.useText
+          ? []
+          : [{
+            graphic: new ButtonLabel({
+              width: cellSize,
+              height: fontSize,
+              label: 'TURN',
+              labelColor: currentScheme.unitColor[1],
+              labelShadowColor: Color.Black,
+            }),
+            offset: vec(cellSize * 2 + fontOffset, 0),
+          }]
+        ),
+      ],
     });
   }
 }

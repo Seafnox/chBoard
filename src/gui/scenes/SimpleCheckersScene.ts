@@ -1,4 +1,4 @@
-import { Scene, Actor, Label, vec, Color, Vector } from 'excalibur';
+import { Scene, Actor, Label, vec, Color, Vector, SceneActivationContext } from 'excalibur';
 import { isMovingActonChange } from '../../engine/actionChanges/isMovingActonChange';
 import { Game } from '../../engine/Game';
 import { CheckersCellType } from '../../engineCheckers/simple/commons/CheckersCellType';
@@ -36,7 +36,11 @@ export class SimpleCheckersScene extends Scene {
     return this.boardView?.pos.add(vec(- (this.gameEngine.gameConfig?.width || 0) / 2 * cellSize, borderSize)) || vec(0,0);
   }
 
-  onInitialize() {
+  onActivate(context: SceneActivationContext<unknown>) {
+    super.onActivate(context);
+    console.log(this.constructor.name, 'onActivate', context);
+
+
     if (!this.gameEngine.gameConfig) {
       alert(`GameConfig is not set. Please set it in.`);
       return;
@@ -44,7 +48,7 @@ export class SimpleCheckersScene extends Scene {
     const gameConfig = this.gameEngine.gameConfig as CheckersGameConfig;
 
     this.game = new Game(this.gameEngine.gameConfig);
-    this.turnUI = buildTurnUI(this.game.activeOwner, CheckersUnitType.Checker);
+    this.turnUI = buildTurnUI(vec(10, 100), this.game.activeOwner, CheckersUnitType.Checker);
     this.boardView = this.createBoard(gameConfig, vec(this.gameEngine.screen.center.x, 120));
     this.unitViews = this.createUnits(this.game);
 
@@ -55,7 +59,12 @@ export class SimpleCheckersScene extends Scene {
 
     this.add(this.boardView);
     this.unitViews.forEach(unitView => this.add(unitView));
+  }
 
+  onDeactivate(context: SceneActivationContext) {
+    super.onDeactivate(context);
+
+    this.actors.forEach(actor => actor.kill());
   }
 
   createHeader(): Actor {
@@ -103,7 +112,7 @@ export class SimpleCheckersScene extends Scene {
     if (this.game?.winner) {
       this.gameEngine.lastWinner = this.game.winner;
       this.gameEngine.gameEvents.emit(GameEvent.SystemAction, {
-        name: SystemName.EndGame,
+        systemName: SystemName.EndGame,
         source: this,
       });
 
