@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "module": "commonjs",
+    "moduleResolution": "Node",
     "target": "es6",
     "jsx": "react-jsx",
     "noImplicitAny": true,
@@ -17,18 +18,24 @@
     "emitDecoratorMetadata": true,
     "lib": [
       "es2015",
-      "dom"
+      "dom",
+      "webworker"
     ],
-    "baseUrl": ".",
+    "baseUrl": "./",
     "typeRoots": [
       "node_modules/@types",
       "src/@types"
     ]
   },
   "include": [
-    "src"
+    "src/*.ts",
+    "test/*.ts",
+    "src/**/*.ts",
+    "test/**/*.ts"
   ],
   "exclude": [
     "excalibur/build/**",
+    "node_modules",
+    "dist"
   ]
 }

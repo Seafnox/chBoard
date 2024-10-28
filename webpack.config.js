@@ -12,9 +12,11 @@ const isProduction = process.env.NODE_ENV === 'production';
 const stylesHandler = isProduction ? MiniCssExtractPlugin.loader : 'style-loader';
 
 const config = {
-  entry: './src/main.ts',
+  entry: {
+    main: './src/main.ts',
+    GameWorker: './src/server/GameWorker.ts',
+  },
   output: {
-
     path: path.resolve(__dirname, 'dist'),
     publicPath: '/',
     filename: '[name].js',
