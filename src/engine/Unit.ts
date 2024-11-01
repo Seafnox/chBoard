@@ -8,7 +8,6 @@ import { Vector2d } from './Vector2d';
 export class Unit<TCellType extends Enumerable, TUnitType extends Enumerable, TUnitOwner extends Enumerable> extends InteractiveEntity<TCellType, TUnitType, TUnitOwner> {
   public id = getId();
   public isDead = false;
-  private _prevCell?: Cell<TCellType, TUnitType, TUnitOwner>;
 
   constructor(
     private _cell: Cell<TCellType, TUnitType, TUnitOwner>,
@@ -31,10 +30,6 @@ export class Unit<TCellType extends Enumerable, TUnitType extends Enumerable, TU
     return this._type;
   }
 
-  public get lastMove(): [Cell<TCellType, TUnitType, TUnitOwner> | undefined, Cell<TCellType, TUnitType, TUnitOwner>] {
-    return [this._prevCell, this._cell];
-  }
-
   public set type(type: TUnitType) {
     this._type = type;
   }
@@ -44,8 +39,6 @@ export class Unit<TCellType extends Enumerable, TUnitType extends Enumerable, TU
   }
 
   public set cell(cell: Cell<TCellType, TUnitType, TUnitOwner>) {
-    // TODO Add Pathfinder for smooth and correct animations
-    this._prevCell = this._cell;
     this._cell = cell;
   }
 
@@ -65,12 +58,7 @@ export class Unit<TCellType extends Enumerable, TUnitType extends Enumerable, TU
     this.isDead = isDead;
     this._owner = owner;
 
-    const [prevCell, currentCell] = unit.lastMove;
-
-    if (!!prevCell) {
-      const cell = this.game.board.getCell(prevCell.position)!;
-      this._prevCell = cell;
-    }
+    const currentCell = unit.cell;
 
     if (!!currentCell) {
       const cell = this.game.board.getCell(currentCell.position)!;
