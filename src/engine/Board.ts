@@ -1,4 +1,3 @@
-import { getId } from '../utils/getId';
 import { ChangingActionChange } from './actionChanges/ChangingActionChange';
 import { MovingActionChange } from './actionChanges/MovingActionChange';
 import { RemovingActionChange } from './actionChanges/RemovingActionChange';
@@ -11,8 +10,6 @@ import { Unit } from './Unit';
 import { Vector2d } from './Vector2d';
 
 export class Board<TCellType extends Enumerable, TUnitType extends Enumerable, TUnitOwner extends Enumerable> extends InteractiveEntity<TCellType, TUnitType, TUnitOwner> {
-  public readonly id = getId();
-
   public cells: Cell<TCellType, TUnitType, TUnitOwner>[];
   public units: Unit<TCellType, TUnitType, TUnitOwner>[];
 

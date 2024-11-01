@@ -1,7 +1,10 @@
 import { Action } from './Action';
 import { Enumerable } from './Enumerable';
+import {getId} from "../utils/getId";
 
 export class InteractiveEntity<TCellType extends Enumerable, TUnitType extends Enumerable, TUnitOwner extends Enumerable> {
+  public id = getId();
+
   protected _actions: Action<TCellType, TUnitType, TUnitOwner, this>[] = [];
 
   public get actions(): Action<TCellType, TUnitType, TUnitOwner, this>[] {

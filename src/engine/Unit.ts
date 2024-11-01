@@ -1,4 +1,3 @@
-import { getId } from '../utils/getId';
 import { Cell } from './Cell';
 import { Enumerable } from './Enumerable';
 import { Game } from './Game';
@@ -6,7 +5,6 @@ import { InteractiveEntity } from './InteractiveEntity';
 import { Vector2d } from './Vector2d';
 
 export class Unit<TCellType extends Enumerable, TUnitType extends Enumerable, TUnitOwner extends Enumerable> extends InteractiveEntity<TCellType, TUnitType, TUnitOwner> {
-  public id = getId();
   public isDead = false;
 
   constructor(
