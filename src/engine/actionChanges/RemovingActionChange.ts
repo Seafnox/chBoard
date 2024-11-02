@@ -1,14 +1,6 @@
-import { Enumerable } from '../Enumerable';
-import { InteractiveEntity } from '../InteractiveEntity';
-import { ActionChange } from './ActionChange';
 import { ActionChangeType } from './ActionChangeType';
+import {TargetActionChange} from "./TargetActionChange";
 
-export interface RemovingActionChange<
-  TCellType extends Enumerable,
-  TUnitType extends Enumerable,
-  TUnitOwner extends Enumerable,
-  TInteractiveEntity extends InteractiveEntity<TCellType, TUnitType, TUnitOwner>
-> extends ActionChange<TCellType, TUnitType, TUnitOwner, TInteractiveEntity> {
+export interface RemovingActionChange extends TargetActionChange {
   type: ActionChangeType.Remove;
-  target: TInteractiveEntity;
 }

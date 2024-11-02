@@ -35,7 +35,11 @@ export class EndGameScene extends Scene {
 
     this.add(this.createHeader());
     this.add(this.createWinnerText(vec(this.gameEngine.screen.center.x, 150), this.gameEngine.lastWinner as CheckersUnitOwner));
-    this.add(buildTurnUI(vec(this.gameEngine.screen.center.x + 75, 180), this.gameEngine.lastWinner as CheckersUnitOwner, CheckersUnitType.King, false, FontSize.Big*1.1));
+
+    const turnUI = buildTurnUI(vec(this.gameEngine.screen.center.x + 75, 180), CheckersUnitType.King, false, FontSize.Big*1.1);
+    turnUI.changePlayer(this.gameEngine.lastWinner as CheckersUnitOwner);
+    this.add(turnUI);
+
     this.add(buildMainMenuButton(this.screenCenter, 400, SystemName.Restart, this.emitSystemAction.bind(this)));
     this.add(buildIconButton(vec(this.gameEngine.screen.drawWidth - 150, 350), SystemName.Settings2, this.emitSystemAction.bind(this)));
     this.add(buildIconButton(vec(this.gameEngine.screen.drawWidth - 150, 500), SystemName.Help2, this.emitSystemAction.bind(this)));

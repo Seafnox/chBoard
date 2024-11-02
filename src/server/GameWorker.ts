@@ -1,3 +1,8 @@
+import {Game} from "../engine/Game";
+import {GameConfig} from "../engine/GameConfig";
+
+let game: Game<any, any, any>;
+
 self.onmessage = (event: MessageEvent) => {
   if (event.data && event.data.type === 'calculateSum') {
     const num1 = event.data.num1;
@@ -6,3 +11,7 @@ self.onmessage = (event: MessageEvent) => {
     self.postMessage({ type: 'result', sum });
   }
 };
+
+function initializeGame(gameConfig: GameConfig<any, any, any>) {
+  game = new Game(gameConfig);
+}

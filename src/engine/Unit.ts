@@ -1,8 +1,9 @@
-import { Cell } from './Cell';
-import { Enumerable } from './Enumerable';
-import { Game } from './Game';
-import { InteractiveEntity } from './InteractiveEntity';
-import { Vector2d } from './Vector2d';
+import {Cell} from './Cell';
+import {Enumerable} from './Enumerable';
+import {Game} from './Game';
+import {InteractiveEntity} from './InteractiveEntity';
+import {Vector2d} from './Vector2d';
+import {UnitDto} from "./dto/UnitDto";
 
 export class Unit<TCellType extends Enumerable, TUnitType extends Enumerable, TUnitOwner extends Enumerable> extends InteractiveEntity<TCellType, TUnitType, TUnitOwner> {
   public isDead = false;
@@ -14,10 +15,6 @@ export class Unit<TCellType extends Enumerable, TUnitType extends Enumerable, TU
     public readonly game: Game<TCellType, TUnitType, TUnitOwner>,
   ) {
     super();
-  }
-
-  public get location(): string {
-    return this._cell.location;
   }
 
   public get position(): Vector2d {
@@ -48,6 +45,19 @@ export class Unit<TCellType extends Enumerable, TUnitType extends Enumerable, TU
     this._owner = owner;
   }
 
+  toDto(): UnitDto<TUnitType, TUnitOwner> {
+    return {
+      id: this.id,
+      type: this.type,
+      x: this.position.x,
+      y: this.position.y,
+      isDead: this.isDead,
+      isActive: !this.isDead && this.actions.filter(action => action.isActive).length !== 0,
+      owner: this.owner,
+      actions: this.actions.map(action => action.toDto())
+    }
+  }
+
   copy(unit: Unit<TCellType, TUnitType, TUnitOwner>): Unit<TCellType, TUnitType, TUnitOwner> {
     const {id, type, isDead, owner} = unit;
 
@@ -59,8 +69,7 @@ export class Unit<TCellType extends Enumerable, TUnitType extends Enumerable, TU
     const currentCell = unit.cell;
 
     if (!!currentCell) {
-      const cell = this.game.board.getCell(currentCell.position)!;
-      this._cell = cell;
+      this._cell = this.game.board.getCell(currentCell.position)!;
     }
 
     return this;

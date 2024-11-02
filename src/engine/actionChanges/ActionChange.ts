@@ -1,14 +1,7 @@
-import { Enumerable } from '../Enumerable';
-import { InteractiveEntity } from '../InteractiveEntity';
 import { ActionChangeType } from './ActionChangeType';
 
-export interface ActionChange<
-  TCellType extends Enumerable,
-  TUnitType extends Enumerable,
-  TUnitOwner extends Enumerable,
-  TInteractiveEntity extends InteractiveEntity<TCellType, TUnitType, TUnitOwner>
-> {
+export interface ActionChange {
   type: ActionChangeType;
-  source: TInteractiveEntity;
+  sourceId: string;
 }
 

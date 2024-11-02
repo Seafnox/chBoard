@@ -1,23 +1,22 @@
 import { ActionChangeType } from '../../../../../engine/actionChanges/ActionChangeType';
 import { ChangingActionChange } from '../../../../../engine/actionChanges/ChangingActionChange';
 import { Vector2d } from '../../../../../engine/Vector2d';
-import { CheckersCellType } from '../../../commons/CheckersCellType';
 import { CheckersUnitOwner } from '../../../commons/CheckersUnitOwner';
 import { CheckersUnitType } from '../../../commons/CheckersUnitType';
 import { CheckersUnit, CheckersGame } from '../../CheckersRuTypings';
 
-export class SwitchToKingActionChange implements ChangingActionChange<CheckersCellType, CheckersUnitType, CheckersUnitOwner, CheckersUnit> {
+export class SwitchToKingActionChange implements ChangingActionChange {
   public readonly type = ActionChangeType.Change;
 
   constructor(
-    public readonly source: CheckersUnit,
-    public readonly target: CheckersUnit,
+    public readonly sourceId: string,
+    public readonly targetId: string,
     public readonly game: CheckersGame,
   ) {}
 
   static createIfAvailable(game: CheckersGame, entity: CheckersUnit, nextPosition: Vector2d): SwitchToKingActionChange[] {
     if (SwitchToKingActionChange.isAvailable(game, entity, nextPosition)) {
-      return [new SwitchToKingActionChange(entity, entity, game)];
+      return [new SwitchToKingActionChange(entity.id, entity.id, game)];
     }
 
     return [];
@@ -36,7 +35,9 @@ export class SwitchToKingActionChange implements ChangingActionChange<CheckersCe
     return shouldBeWhiteKing || shouldBeBlackKing;
   }
 
-  update(target: CheckersUnit): void {
+  update(targetId: string): void {
+    const target = this.game.board.getUnitById(targetId)!;
     target.type = CheckersUnitType.King;
   }
+
 }

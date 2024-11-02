@@ -2,7 +2,6 @@ import { ActionChangeType } from './actionChanges/ActionChangeType';
 import { EndGameChange } from './actionChanges/EndGameChange';
 import { Enumerable } from './Enumerable';
 import { Game } from './Game';
-import { InteractiveEntity } from './InteractiveEntity';
 
 export interface TurnManagerConstructor<TCellType extends Enumerable, TUnitType extends Enumerable, TUnitOwner extends Enumerable> {
   new(game: Game<TCellType, TUnitType, TUnitOwner>): TurnManager<TCellType, TUnitType, TUnitOwner>;
@@ -33,11 +32,11 @@ export abstract class TurnManager<TCellType extends Enumerable, TUnitType extend
     this.game.endGame(this.getEndGameAction(winner));
   }
 
-  public getEndGameAction(winner: TUnitOwner): EndGameChange<TCellType, TUnitType, TUnitOwner, InteractiveEntity<TCellType, TUnitType, TUnitOwner>> {
+  public getEndGameAction(winner: TUnitOwner): EndGameChange {
     return {
       type: ActionChangeType.EndGame,
-      source: this.game.board,
-      winner,
+      sourceId: this.game.board.id,
+      winner: winner.toString(),
     }
   }
 }

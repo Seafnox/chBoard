@@ -6,7 +6,6 @@ import { CurrentTurnElement } from '../CurrentTurnElement';
 
 export function buildTurnUI(
   position: Vector,
-  initialPlayer: CheckersUnitOwner,
   unitType: CheckersUnitType,
   useText: boolean = true,
   _cellSize = cellSize,
@@ -14,7 +13,6 @@ export function buildTurnUI(
   return new CurrentTurnElement<CheckersUnitOwner, CheckersUnitType>({
     cellSize: _cellSize,
     playerSchemes,
-    initialPlayer,
     unitType,
     position,
     useText,

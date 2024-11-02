@@ -1,8 +1,7 @@
 import { PlayerGameClient } from '../client/PlayerGameClient';
-import { Action } from '../engine/Action';
 import { Enumerable } from '../engine/Enumerable';
 import { GameConfig } from '../engine/GameConfig';
-import { InteractiveEntity } from '../engine/InteractiveEntity';
+import {ActionDto} from "../engine/dto/ActionDto";
 
 export class GameServer {
   private worker: Worker;
@@ -23,13 +22,12 @@ export class GameServer {
     };
   }
 
-  stopSever() {
+  stopServer() {
     console.log('stopSever');
   }
 
-  makeAction<TCellType extends Enumerable, TUnitType extends Enumerable, TUnitOwner extends Enumerable, TInteractiveEntity extends InteractiveEntity<TCellType, TUnitType, TUnitOwner>>(
-    action: Action<TCellType, TUnitType, TUnitOwner, TInteractiveEntity>
-  ) {
+  makeAction(action: ActionDto) {
     console.log('makeAction', action);
+    this.worker.postMessage(action);
   }
 }

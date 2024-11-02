@@ -6,6 +6,8 @@ import { Game } from './Game';
 import { Enumerable } from './Enumerable';
 import { InteractiveEntity } from './InteractiveEntity';
 import { Rule } from './Rule';
+import {ActionDto} from "./dto/ActionDto";
+import {CommonActionChange} from "./actionChanges/CommonActionChange";
 
 export abstract class Action<TCellType extends Enumerable, TUnitType extends Enumerable, TUnitOwner extends Enumerable, TInteractiveEntity extends InteractiveEntity<TCellType, TUnitType, TUnitOwner>> {
   public id = getId();
@@ -20,20 +22,19 @@ export abstract class Action<TCellType extends Enumerable, TUnitType extends Enu
   abstract get isActive(): boolean;
   abstract get isAvailable(): boolean;
 
-  abstract get changes(): ActionChange<TCellType, TUnitType, TUnitOwner, TInteractiveEntity>[];
+  abstract get changes(): CommonActionChange[];
   abstract get shouldSwitchTurn(): boolean;
 
   get isCorrectPriority(): boolean {
     return this.game.maxPriority == -1 || this.game.maxPriority <= this.priority;
   }
 
-  get switchTurnAction(): SwitchingTurnChange<TCellType, TUnitType, TUnitOwner, TInteractiveEntity> {
+  get switchTurnAction(): SwitchingTurnChange {
     return {
       type: ActionChangeType.SwitchTurn,
-      source: this.entity,
+      sourceId: this.entity.id,
     }
   }
-
 
   public run(isVirtual: boolean = false): void {
     this.changes.forEach(change => {
@@ -50,5 +51,15 @@ export abstract class Action<TCellType extends Enumerable, TUnitType extends Enu
     this.game.doChanges();
   }
 
-  protected abstract runChanges(change: ActionChange<TCellType, TUnitType, TUnitOwner, TInteractiveEntity>, isVirtual: boolean): void;
+  toDto(): ActionDto {
+    return {
+      id: this.id,
+      priority: this.priority,
+      isActive: this.isActive,
+      isAvailable: this.isAvailable,
+      changes: this.changes,
+    }
+  }
+
+  protected abstract runChanges(change: ActionChange, isVirtual: boolean): void;
 }

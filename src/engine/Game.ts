@@ -15,11 +15,11 @@ export class Game<TCellType extends Enumerable, TUnitType extends Enumerable, TU
   public readonly board: Board<TCellType, TUnitType, TUnitOwner>;
   public readonly eventBus: EventEmitter = new EventEmitter();
   // TODO add turn counter and mark items on push
-  public readonly gameLog: CommonActionChange<TCellType, TUnitType, TUnitOwner, InteractiveEntity<TCellType, TUnitType, TUnitOwner>>[] = [];
+  public readonly gameLog: CommonActionChange[] = [];
   public isGameEnded: boolean = false;
   public maxPriority: number = -1;
   private turnManager: TurnManager<TCellType, TUnitType, TUnitOwner>;
-  private _winner?: TUnitOwner; // TODO add Player Types
+  private _winner?: string; // TODO add Player Types
 
   constructor(
     public readonly initialConfig: GameConfig<TCellType, TUnitType, TUnitOwner>,
@@ -40,16 +40,12 @@ export class Game<TCellType extends Enumerable, TUnitType extends Enumerable, TU
     return this.turnManager.activeOwner;
   }
 
-  get winner(): TUnitOwner | undefined {
+  get winner(): string | undefined {
     return this._winner;
   }
 
   get interactiveEntities(): InteractiveEntity<TCellType, TUnitType, TUnitOwner>[] {
-    return [
-      this.board,
-      ...this.board.cells,
-      ...this.board.units,
-    ];
+    return this.board.interactiveEntities;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -72,7 +68,7 @@ export class Game<TCellType extends Enumerable, TUnitType extends Enumerable, TU
       });
   }
 
-  endGame(endGameChange: EndGameChange<TCellType, TUnitType, TUnitOwner, InteractiveEntity<TCellType, TUnitType, TUnitOwner>>) {
+  endGame(endGameChange: EndGameChange) {
     this.isGameEnded = true;
     this._winner = endGameChange.winner;
     this.eventBus.pause();
@@ -82,12 +78,12 @@ export class Game<TCellType extends Enumerable, TUnitType extends Enumerable, TU
     this.gameLog.push(endGameChange);
   }
 
-  nextTurn(event: SwitchingTurnChange<TCellType, TUnitType, TUnitOwner, InteractiveEntity<TCellType, TUnitType, TUnitOwner>>) {
+  nextTurn(event: SwitchingTurnChange) {
     this.turnManager.nextTurn();
     this.emit(event);
   }
 
-  emit(event: CommonActionChange<TCellType, TUnitType, TUnitOwner, InteractiveEntity<TCellType, TUnitType, TUnitOwner>>) {
+  emit(event: CommonActionChange) {
     this.gameLog.push(event);
     if (this.id === '#0') console.log(event);
   }

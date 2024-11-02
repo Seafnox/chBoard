@@ -9,12 +9,16 @@ import { Unit } from '../../../engine/Unit';
 import { CheckersCellType } from '../commons/CheckersCellType';
 import { CheckersUnitOwner } from '../commons/CheckersUnitOwner';
 import { CheckersUnitType } from '../commons/CheckersUnitType';
+import {UnitDto} from "../../../engine/dto/UnitDto";
+import {BoardDto} from "../../../engine/dto/BoardDto";
 
 export type CheckersGame = Game<CheckersCellType, CheckersUnitType, CheckersUnitOwner>;
 export type CheckersGameConfig = GameConfig<CheckersCellType, CheckersUnitType, CheckersUnitOwner>;
 export type CheckersBoard = Board<CheckersCellType, CheckersUnitType, CheckersUnitOwner>;
+export type CheckersBoardDto = BoardDto<CheckersCellType, CheckersUnitType, CheckersUnitOwner>;
+export type CheckersUnitDto = UnitDto<CheckersUnitType, CheckersUnitOwner>;
 export type CheckersUnit = Unit<CheckersCellType, CheckersUnitType, CheckersUnitOwner>;
 export type CheckersInteractiveEntity = InteractiveEntity<CheckersCellType, CheckersUnitType, CheckersUnitOwner>;
 export type CheckersUnitAction = Action<CheckersCellType, CheckersUnitType, CheckersUnitOwner, CheckersUnit>;
-export type CheckersActionChange<TUnit extends CheckersInteractiveEntity> = ActionChange<CheckersCellType, CheckersUnitType, CheckersUnitOwner, TUnit>;
-export type CheckersCommonActionChange<TUnit extends CheckersInteractiveEntity> = CommonActionChange<CheckersCellType, CheckersUnitType, CheckersUnitOwner, TUnit>;
+export type CheckersActionChange = ActionChange;
+export type CheckersCommonActionChange = CommonActionChange;

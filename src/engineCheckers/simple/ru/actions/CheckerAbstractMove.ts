@@ -24,12 +24,13 @@ export abstract class CheckerAbstractMove extends CheckersMoveAction {
     return super.isAvailable && isChecker;
   }
 
-  get changes(): CheckersCommonActionChange<CheckersUnit>[] {
+  get changes(): CheckersCommonActionChange[] {
     return [
       {
         type: ActionChangeType.Move,
-        source: this.entity,
-        to: this.nextPosition,
+        sourceId: this.entity.id,
+        targetId: this.entity.id,
+        to: this.nextPosition.toString(),
       },
       ...SwitchToKingActionChange.createIfAvailable(this.game, this.entity, this.nextPosition),
     ];

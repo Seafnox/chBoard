@@ -8,7 +8,7 @@ import { CheckersUnitOwner } from './CheckersUnitOwner';
 import { CheckersUnitType } from './CheckersUnitType';
 
 export abstract class CheckersAction extends Action<CheckersCellType, CheckersUnitType, CheckersUnitOwner, CheckersUnit> {
-  protected runChanges(change: CheckersActionChange<CheckersUnit>) {
+  protected runChanges(change: CheckersActionChange) {
     if (isRemovingActionChange(change)) {
       this.game.board.removeUnit(change);
     }

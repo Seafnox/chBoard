@@ -9,7 +9,7 @@ export interface CurrentTurnElementConfig<TUnitOwner extends Enumerable, TUnitTy
   cellSize: number;
   position: Vector;
   useText: boolean;
-  initialPlayer: TUnitOwner;
+  initialPlayer?: TUnitOwner;
   unitType: TUnitType;
   playerSchemes: Record<TUnitOwner, PlayerColorScheme<TUnitType>>;
 }
@@ -19,7 +19,7 @@ const fontOffset = 20;
 const fontWidth = 80;
 
 export class CurrentTurnElement<TUnitOwner extends Enumerable, TUnitType extends Enumerable> extends ScreenElement {
-  currentPlayer: TUnitOwner;
+  currentPlayer: TUnitOwner | undefined;
 
   constructor(
     public readonly config: CurrentTurnElementConfig<TUnitOwner, TUnitType>,
@@ -32,7 +32,9 @@ export class CurrentTurnElement<TUnitOwner extends Enumerable, TUnitType extends
     });
 
     this.currentPlayer = config.initialPlayer;
-    this.graphics.add(InteractiveState.Idle, this.getIdleState(this.config.cellSize, this.config));
+    if (!!this.currentPlayer) {
+      this.graphics.add(InteractiveState.Idle, this.getIdleState(this.config.cellSize, this.currentPlayer, this.config));
+    }
   }
 
   onInitialize() {
@@ -41,12 +43,18 @@ export class CurrentTurnElement<TUnitOwner extends Enumerable, TUnitType extends
 
   changePlayer(player: TUnitOwner) {
     this.currentPlayer = player;
-    this.graphics.add(InteractiveState.Idle, this.getIdleState(this.config.cellSize, this.config));
+    if (!!this.currentPlayer) {
+      this.graphics.add(InteractiveState.Idle, this.getIdleState(this.config.cellSize, this.currentPlayer, this.config));
+    }
   }
 
 
-  private getIdleState(cellSize: number, config: CurrentTurnElementConfig<TUnitOwner, TUnitType>) {
-    const currentScheme = config.playerSchemes[this.currentPlayer][config.unitType];
+  private getIdleState(
+    cellSize: number,
+    currentPlayer: TUnitOwner,
+    config: CurrentTurnElementConfig<TUnitOwner, TUnitType>
+  ) {
+    const currentScheme = config.playerSchemes[currentPlayer][config.unitType];
     return new GraphicsGroup({
       members: [
         {
