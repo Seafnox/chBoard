@@ -99,6 +99,14 @@ export class Vector2d {
     return new Vector2d(-num * vec.y, num * vec.x);
   }
 
+  static fromString(str: string): Vector2d {
+    const parts = str.match(/^\((.*), (.*)\)$/);
+    if (parts) {
+      return new Vector2d(parseFloat(parts[1]), parseFloat(parts[2]));
+    }
+    throw new Error(`Invalid Vector2d string: ${str}`);
+  }
+
   constructor(
     public x = 0,
     public y = 0,
@@ -296,7 +304,7 @@ export class Vector2d {
   /**
    * Returns a string representation of the Vector2d.
    */
-  toString(fixed: number): string {
+  toString(fixed?: number): string {
     if (fixed) {
       return `(${this.x.toFixed(fixed)}, ${this.y.toFixed(fixed)})`;
     }
