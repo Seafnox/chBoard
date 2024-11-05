@@ -20,17 +20,23 @@ export class Game<TCellType extends Enumerable, TUnitType extends Enumerable, TU
   public maxPriority: number = -1;
   private turnManager: TurnManager<TCellType, TUnitType, TUnitOwner>;
   private _winner?: string; // TODO add Player Types
+  private actionMap: Record<string, Action<TCellType, TUnitType, TUnitOwner, any>> = {};
 
   constructor(
     public readonly initialConfig: GameConfig<TCellType, TUnitType, TUnitOwner>,
   ) {
+    this.actionMap = {};
     this.board = new Board(initialConfig, this);
     this.turnManager = new initialConfig.turnManager(this);
 
     this.initialConfig.rules.forEach(rule => {
       this.interactiveEntities.forEach(interactiveEntity => {
         if (rule.isSuitable(interactiveEntity)) {
-          interactiveEntity.addActions(rule.getActions(this, interactiveEntity));
+          const actions = rule.getActions(this, interactiveEntity);
+          interactiveEntity.addActions(actions);
+          actions.forEach(action => {
+            this.actionMap[action.id] = action;
+          });
         }
       })
     })
@@ -55,6 +61,15 @@ export class Game<TCellType extends Enumerable, TUnitType extends Enumerable, TU
       (actions, entity) => [...actions, ...entity.actions],
       []
     );
+  }
+
+  // TODO return consequence of action (real ActionChanges)
+  makeAction(actionId: string): void {
+    const action = this.actionMap[actionId];
+    if (!action) {
+      throw new Error(`Action with id ${actionId} is not found`);
+    }
+    action.run();
   }
 
   doChanges() {
@@ -99,10 +114,19 @@ export class Game<TCellType extends Enumerable, TUnitType extends Enumerable, TU
       maxPriority,
     });
 
+    this.actionMap = {};
+
     this._winner = winner;
 
     this.board.copy(game.board);
     this.turnManager.copy(game.turnManager);
+
+    this.interactiveEntities.forEach(interactiveEntity => {
+      const actions = interactiveEntity.actions;
+      actions.forEach(action => {
+        this.actionMap[action.id] = action;
+      });
+    });
 
     return this;
   }
