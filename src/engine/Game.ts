@@ -14,10 +14,10 @@ export class Game<TCellType extends Enumerable, TUnitType extends Enumerable, TU
   public readonly id = getId();
   public readonly board: Board<TCellType, TUnitType, TUnitOwner>;
   public readonly eventBus: EventEmitter = new EventEmitter();
-  // TODO add turn counter and mark items on push
-  public readonly gameLog: CommonActionChange[] = [];
   public isGameEnded: boolean = false;
   public maxPriority: number = -1;
+  private readonly gameLog: Record<number, CommonActionChange[]> = [[]];
+  private turnCount: number = 0;
   private turnManager: TurnManager<TCellType, TUnitType, TUnitOwner>;
   private _winner?: string; // TODO add Player Types
   private actionMap: Record<string, Action<TCellType, TUnitType, TUnitOwner, any>> = {};
@@ -63,6 +63,18 @@ export class Game<TCellType extends Enumerable, TUnitType extends Enumerable, TU
     );
   }
 
+  get lastActionChanges(): CommonActionChange[] {
+    return this.getTurnActionChanges(this.turnCount);
+  }
+
+  getTurnActionChanges(turnNumber: number): CommonActionChange[] {
+    return this.gameLog[turnNumber];
+  }
+
+  getAllTurnActionChanges(): CommonActionChange[] {
+    return Object.values(this.gameLog).flat();
+  }
+
   // TODO return consequence of action (real ActionChanges)
   makeAction(actionId: string): void {
     const action = this.actionMap[actionId];
@@ -90,16 +102,18 @@ export class Game<TCellType extends Enumerable, TUnitType extends Enumerable, TU
     this.interactiveEntities.forEach(interactiveEntity => {
       interactiveEntity.clearActions();
     });
-    this.gameLog.push(endGameChange);
+    this.gameLog[this.turnCount].push(endGameChange);
   }
 
   nextTurn(event: SwitchingTurnChange) {
-    this.turnManager.nextTurn();
     this.emit(event);
+    this.turnCount++;
+    this.gameLog[this.turnCount] = [];
+    this.turnManager.nextTurn();
   }
 
   emit(event: CommonActionChange) {
-    this.gameLog.push(event);
+    this.gameLog[this.turnCount].push(event);
     if (this.id === '#0') console.log(event);
   }
 
