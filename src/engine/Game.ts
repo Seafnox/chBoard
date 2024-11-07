@@ -63,7 +63,7 @@ export class Game<TCellType extends Enumerable, TUnitType extends Enumerable, TU
     );
   }
 
-  get lastActionChanges(): CommonActionChange[] {
+  getLastActionChanges(): CommonActionChange[] {
     return this.getTurnActionChanges(this.turnCount);
   }
 

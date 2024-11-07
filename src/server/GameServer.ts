@@ -1,23 +1,26 @@
 import {PlayerGameClient} from '../client/PlayerGameClient';
-import {Enumerable} from '../engine/Enumerable';
 import {GameConfig} from '../engine/GameConfig';
 import {ActionDto} from "../engine/dto/ActionDto";
 import {GameServerRequestType} from "./GameServerRequestType";
+import {GameServerResponseType} from "./GameServerResponseType";
 
-export class GameServer<TCellType extends Enumerable, TUnitType extends Enumerable, TUnitOwner extends Enumerable> {
+export class GameServer {
   private worker: Worker;
-  private client?: PlayerGameClient<TCellType, TUnitType, TUnitOwner>;
+  private client?: PlayerGameClient<any, any, any>;
   constructor() {
     this.worker = new Worker('./GameWorker.js', { type: 'module' });
 
     this.worker.onmessage = (event: MessageEvent) => {
       console.log(this.constructor.name, 'WorkerMessage', event.data);
+      if (event.type === GameServerResponseType.ActionChange) {
+        this.client?.onActionChange(event.data);
+      }
     };
   }
 
   startServer(
-    config: GameConfig<TCellType, TUnitType, TUnitOwner>,
-    client: PlayerGameClient<TCellType, TUnitType, TUnitOwner>,
+    config: GameConfig<any, any, any>,
+    client: PlayerGameClient<any, any, any>,
   ) {
     console.log(this.constructor.name, GameServerRequestType.StartGame, config, client);
     this.client = client;

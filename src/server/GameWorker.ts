@@ -7,13 +7,14 @@ import {GameServerResponseType} from "./GameServerResponseType";
 let game: Game<any, any, any> | undefined;
 
 self.onmessage = (event: MessageEvent) => {
+  console.log('Worker', event.type, event.data);
   if (event.data) {
     switch (event.type) {
       case GameServerRequestType.StartGame: start(event.data); break;
       case GameServerRequestType.StopGame: stop(); break;
       case GameServerRequestType.MakeAction: makeAction(event.data); break;
 
-      default: postMessage(GameServerResponseType.Error, `Unknown message type: '${event.data.type}' with data ${JSON.stringify(event.data)}`);
+      // default: emit(GameServerResponseType.Error, `Unknown message type: '${event.type}' with data ${JSON.stringify(event.data)}`);
     }
   }
 };
@@ -28,20 +29,23 @@ function stop() {
 
 function makeAction(data: ActionDto) {
   if (!game) {
-    postMessage(GameServerResponseType.Error, "Game is not started yet");
+    emit(GameServerResponseType.Error, "Game is not started yet");
     return;
   }
 
   try {
     game.makeAction(data.id);
 
-    // TODO: send updated state to client
+    const lastChanges = game.getLastActionChanges();
+    lastChanges.forEach(change => {
+      emit(GameServerResponseType.ActionChange, change);
+    });
   } catch (error) {
-    postMessage(GameServerResponseType.Error, error);
+    emit(GameServerResponseType.Error, error);
   }
 
 }
 
-function postMessage<T>(type: GameServerResponseType, data: T) {
+function emit<T>(type: GameServerResponseType, data: T) {
   self.postMessage({type, data});
 }

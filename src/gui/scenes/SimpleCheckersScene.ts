@@ -78,10 +78,8 @@ export class SimpleCheckersScene extends Scene implements PlayerGameClient<Check
     });
   }
 
-  onActionChange(actions: CheckersActionChange[]) {
-    actions.forEach(action => {
-      console.log(this.constructor.name, 'onActionChange', action);
-    });
+  onActionChange(action: CheckersActionChange) {
+    console.log(this.constructor.name, 'onActionChange', action);
   }
 
   onSetActiveOwner(owner: CheckersUnitOwner) {
