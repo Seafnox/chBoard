@@ -4,22 +4,23 @@ import {GameServerRequestType} from "./GameServerRequestType";
 import {ActionDto} from "../engine/dto/ActionDto";
 import {GameServerResponseType} from "./GameServerResponseType";
 
+type SomeGameConfig = GameConfig<any, any, any>;
 let game: Game<any, any, any> | undefined;
 
 self.onmessage = (event: MessageEvent) => {
-  console.log('Worker', event.type, event.data);
+  console.log('[INCOME]', event.type, event.data);
   if (event.data) {
     switch (event.type) {
-      case GameServerRequestType.StartGame: start(event.data); break;
+      case GameServerRequestType.StartGame: start(event.data as SomeGameConfig); break;
       case GameServerRequestType.StopGame: stop(); break;
-      case GameServerRequestType.MakeAction: makeAction(event.data); break;
+      case GameServerRequestType.MakeAction: makeAction(event.data as ActionDto); break;
 
       // default: emit(GameServerResponseType.Error, `Unknown message type: '${event.type}' with data ${JSON.stringify(event.data)}`);
     }
   }
 };
 
-function start(gameConfig: GameConfig<any, any, any>) {
+function start(gameConfig: SomeGameConfig) {
   game = new Game(gameConfig);
 }
 
@@ -47,5 +48,6 @@ function makeAction(data: ActionDto) {
 }
 
 function emit<T>(type: GameServerResponseType, data: T) {
+  console.log('[OUTCOME]', type, data);
   self.postMessage({type, data});
 }
