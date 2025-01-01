@@ -7,21 +7,51 @@ export interface TurnManagerConstructor<TCellType extends Enumerable, TUnitType 
   new(game: Game<TCellType, TUnitType, TUnitOwner>): TurnManager<TCellType, TUnitType, TUnitOwner>;
 }
 
+export interface TurnManagerConfig<TUnitOwner extends Enumerable> {
+  initialOwner: TUnitOwner;
+  nextTurnOwnerFn: () => TUnitOwner;
+  endGameConditionFn: () => boolean;
+  winnerConditionFn: () => TUnitOwner[];
+}
+
 export abstract class TurnManager<TCellType extends Enumerable, TUnitType extends Enumerable, TUnitOwner extends Enumerable> {
+  protected _activeOwner: TUnitOwner;
+  protected _config: TurnManagerConfig<TUnitOwner>;
 
   constructor(
     public readonly game: Game<TCellType, TUnitType, TUnitOwner>,
-  ) {}
+    config: TurnManagerConfig<TUnitOwner>,
+  ) {
+    this._config = config;
+    this._activeOwner = config.initialOwner;
+  }
 
-  public abstract get initialOwner(): TUnitOwner;
+  get activeOwner(): TUnitOwner {
+    return this._activeOwner;
+  }
 
-  public abstract get activeOwner(): TUnitOwner;
+  get config(): TurnManagerConfig<TUnitOwner> {
+    return this._config;
+  }
 
-  public abstract completeTurn(): void;
+  public completeTurn(): void {
+    if (this._config.endGameConditionFn()) {
+      this.endGame(this._config.winnerConditionFn()[0]);
+    }
+  }
 
-  public abstract startNewTurn(): void;
+  public startNewTurn(): void {
+    this._activeOwner = this._config.nextTurnOwnerFn();
+  }
 
-  public abstract copy(turnManager: TurnManager<TCellType, TUnitType, TUnitOwner>): TurnManager<TCellType, TUnitType, TUnitOwner>;
+  copy(turnManager: TurnManager<TCellType, TUnitType, TUnitOwner>): TurnManager<TCellType, TUnitType, TUnitOwner> {
+    const { activeOwner, config } = turnManager;
+
+    this._activeOwner = activeOwner;
+    this._config = config;
+
+    return this;
+  }
 
   public nextTurn(): void {
     this.completeTurn();
@@ -36,7 +66,7 @@ export abstract class TurnManager<TCellType extends Enumerable, TUnitType extend
     return {
       type: ActionChangeType.EndGame,
       sourceId: this.game.board.id,
-      winner: winner.toString(),
+      winner: winner?.toString() || "Nobody",
     }
   }
 }

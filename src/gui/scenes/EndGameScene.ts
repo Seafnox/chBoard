@@ -1,5 +1,5 @@
 import { Scene, Label, vec, Color, Actor, Vector, SceneActivationContext } from 'excalibur';
-import { CheckersUnitOwner } from '../../engineCheckers/simple/commons/CheckersUnitOwner';
+import { TwoPlayerUnitOwner } from '../../engine/twoPlayer/TwoPlayerUnitOwner';
 import { CheckersUnitType } from '../../engineCheckers/simple/commons/CheckersUnitType';
 import { GameEngine } from '../engine/GameEngine';
 import { GameEvent } from '../engine/GameEvent';
@@ -34,10 +34,10 @@ export class EndGameScene extends Scene {
     }
 
     this.add(this.createHeader());
-    this.add(this.createWinnerText(vec(this.gameEngine.screen.center.x, 150), this.gameEngine.lastWinner as CheckersUnitOwner));
+    this.add(this.createWinnerText(vec(this.gameEngine.screen.center.x, 150), this.gameEngine.lastWinner as TwoPlayerUnitOwner));
 
     const turnUI = buildTurnUI(vec(this.gameEngine.screen.center.x + 75, 180), CheckersUnitType.King, false, FontSize.Big*1.1);
-    turnUI.changePlayer(this.gameEngine.lastWinner as CheckersUnitOwner);
+    turnUI.changePlayer(this.gameEngine.lastWinner as TwoPlayerUnitOwner);
     this.add(turnUI);
 
     this.add(buildMainMenuButton(this.screenCenter, 400, SystemName.Restart, this.emitSystemAction.bind(this)));
@@ -62,7 +62,7 @@ export class EndGameScene extends Scene {
 
   createWinnerText(
     position: Vector,
-    winner: CheckersUnitOwner
+    winner: TwoPlayerUnitOwner
   ): Actor {
     return new Label({
       text: `WINNER IS   ${winner.toUpperCase()}`,

@@ -1,6 +1,6 @@
 import { Scene, Actor, Label, vec, Color, Vector } from 'excalibur';
 import { GameConfig } from '../../engine/GameConfig';
-import { CheckersUnitOwner } from '../../engineCheckers/simple/commons/CheckersUnitOwner';
+import { TwoPlayerUnitOwner } from '../../engine/twoPlayer/TwoPlayerUnitOwner';
 import { checkersRuConfig } from '../../engineCheckers/simple/ru/CheckersRuConfig';
 import { GameEngine } from '../engine/GameEngine';
 import { GameEvent } from '../engine/GameEvent';
@@ -26,8 +26,8 @@ export class CheckersSelectScene extends Scene {
       label: 'Russian Checkers',
       gameConfig: checkersRuConfig,
       playerConfig: {
-        [CheckersUnitOwner.Black]: PlayerType.Human,
-        [CheckersUnitOwner.White]: PlayerType.Computer,
+        [TwoPlayerUnitOwner.Black]: PlayerType.Human,
+        [TwoPlayerUnitOwner.White]: PlayerType.Computer,
       },
     },
   };

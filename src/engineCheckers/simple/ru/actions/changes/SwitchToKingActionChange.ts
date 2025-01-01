@@ -1,7 +1,7 @@
 import { ActionChangeType } from '../../../../../engine/actionChanges/ActionChangeType';
 import { ChangingActionChange } from '../../../../../engine/actionChanges/ChangingActionChange';
+import { TwoPlayerUnitOwner } from '../../../../../engine/twoPlayer/TwoPlayerUnitOwner';
 import { Vector2d } from '../../../../../engine/Vector2d';
-import { CheckersUnitOwner } from '../../../commons/CheckersUnitOwner';
 import { CheckersUnitType } from '../../../commons/CheckersUnitType';
 import { CheckersUnit, CheckersGame } from '../../CheckersRuTypings';
 
@@ -27,9 +27,9 @@ export class SwitchToKingActionChange implements ChangingActionChange {
   }
 
   static isSuitable(game: CheckersGame, entity: CheckersUnit, nextPosition: Vector2d): boolean {
-    const shouldBeWhiteKing = entity.owner === CheckersUnitOwner.White
+    const shouldBeWhiteKing = entity.owner === TwoPlayerUnitOwner.White
       && nextPosition.y === 0;
-    const shouldBeBlackKing = entity.owner === CheckersUnitOwner.Black
+    const shouldBeBlackKing = entity.owner === TwoPlayerUnitOwner.Black
       && nextPosition.y === game.initialConfig.height - 1;
 
     return shouldBeWhiteKing || shouldBeBlackKing;

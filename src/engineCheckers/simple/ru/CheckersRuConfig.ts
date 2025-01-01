@@ -1,8 +1,8 @@
 import { UnitConfig } from '../../../engine/BoardConfig';
 import { GameConfig } from '../../../engine/GameConfig';
+import { TwoPlayerTurnManager } from '../../../engine/twoPlayer/TwoPlayerTurnManager';
+import { TwoPlayerUnitOwner } from '../../../engine/twoPlayer/TwoPlayerUnitOwner';
 import { CheckersCellType } from '../commons/CheckersCellType';
-import { CheckersTurnManager } from '../commons/CheckersTurnManager';
-import { CheckersUnitOwner } from '../commons/CheckersUnitOwner';
 import { CheckersUnitType } from '../commons/CheckersUnitType';
 import { BiteRulesForChecker } from './rules/BiteRulesForChecker';
 import { BiteRulesForKing } from './rules/BiteRulesForKing';
@@ -17,7 +17,7 @@ for(let x = 0; x < 8; x++) {
   }
 }
 
-const unitMap: Record<string, UnitConfig<CheckersUnitType, CheckersUnitOwner>> = {}
+const unitMap: Record<string, UnitConfig<CheckersUnitType, TwoPlayerUnitOwner>> = {}
 
 for(let x = 0; x < 8; x++) {
   for(let y = 0; y < 3; y++) {
@@ -25,7 +25,7 @@ for(let x = 0; x < 8; x++) {
 
     unitMap[`${x},${y}`] = {
       type: CheckersUnitType.King,
-      owner: CheckersUnitOwner.Black,
+      owner: TwoPlayerUnitOwner.Black,
     };
   }
 }
@@ -35,13 +35,13 @@ for(let x = 0; x < 8; x++) {
 
     unitMap[`${x},${7-y}`] = {
       type: CheckersUnitType.Checker,
-      owner: CheckersUnitOwner.White,
+      owner: TwoPlayerUnitOwner.White,
     };
   }
 }
 
 
-export const checkersRuConfig: GameConfig<CheckersCellType, CheckersUnitType, CheckersUnitOwner> = {
+export const checkersRuConfig: GameConfig<CheckersCellType, CheckersUnitType, TwoPlayerUnitOwner> = {
   cellMap,
   unitMap,
   width: 8,
@@ -52,5 +52,5 @@ export const checkersRuConfig: GameConfig<CheckersCellType, CheckersUnitType, Ch
     new MoveRulesForKing(),
     new BiteRulesForKing(),
   ],
-  turnManager: CheckersTurnManager,
+  turnManager: TwoPlayerTurnManager<CheckersCellType, CheckersUnitType>,
 }

@@ -1,5 +1,5 @@
 import { Color, TextAlign, BaseAlign } from 'excalibur';
-import { CheckersUnitOwner } from '../../engineCheckers/simple/commons/CheckersUnitOwner';
+import { TwoPlayerUnitOwner } from '../../engine/twoPlayer/TwoPlayerUnitOwner';
 import { CheckersUnitType } from '../../engineCheckers/simple/commons/CheckersUnitType';
 import { PixelFont30px } from '../PrepareFonts';
 import { PlayerColorScheme } from './ColorScheme';
@@ -14,8 +14,8 @@ export const borderFont = PixelFont30px({
   textAlign: TextAlign.Center,
   baseAlign: BaseAlign.Middle,
 });
-export const playerSchemes: Record<CheckersUnitOwner, PlayerColorScheme<CheckersUnitType>> = {
-  [CheckersUnitOwner.Black]: {
+export const playerSchemes: Record<TwoPlayerUnitOwner, PlayerColorScheme<CheckersUnitType>> = {
+  [TwoPlayerUnitOwner.Black]: {
     [CheckersUnitType.Checker]: {
       unitColor: [Color.DarkGray, Color.DarkGray, Color.Black],
       hoverColor: Color.Gray,
@@ -29,7 +29,7 @@ export const playerSchemes: Record<CheckersUnitOwner, PlayerColorScheme<Checkers
       pressedColor: Color.fromHex("#ffff40aa"),
     },
   },
-  [CheckersUnitOwner.White]: {
+  [TwoPlayerUnitOwner.White]: {
     [CheckersUnitType.Checker]: {
       unitColor: [Color.LightGray, Color.LightGray, Color.White],
       hoverColor: Color.Gray,

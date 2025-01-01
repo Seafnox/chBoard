@@ -2,12 +2,12 @@ import { Action } from '../../../engine/Action';
 import { isChangingActionChange } from '../../../engine/actionChanges/isChangingActionChange';
 import { isMovingActonChange } from '../../../engine/actionChanges/isMovingActonChange';
 import { isRemovingActionChange } from '../../../engine/actionChanges/isRemovingActionChange';
+import { TwoPlayerUnitOwner } from '../../../engine/twoPlayer/TwoPlayerUnitOwner';
 import { CheckersUnit, CheckersActionChange } from '../ru/CheckersRuTypings';
 import { CheckersCellType } from './CheckersCellType';
-import { CheckersUnitOwner } from './CheckersUnitOwner';
 import { CheckersUnitType } from './CheckersUnitType';
 
-export abstract class CheckersAction extends Action<CheckersCellType, CheckersUnitType, CheckersUnitOwner, CheckersUnit> {
+export abstract class CheckersAction extends Action<CheckersCellType, CheckersUnitType, TwoPlayerUnitOwner, CheckersUnit> {
   protected runChanges(change: CheckersActionChange) {
     if (isRemovingActionChange(change)) {
       this.game.board.removeUnit(change);

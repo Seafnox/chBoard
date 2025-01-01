@@ -1,7 +1,7 @@
 import { Scene, Actor, Label, vec, Color, Vector, SceneActivationContext } from 'excalibur';
 import { isMovingActonChange } from '../../engine/actionChanges/isMovingActonChange';
+import { TwoPlayerUnitOwner } from '../../engine/twoPlayer/TwoPlayerUnitOwner';
 import { CheckersCellType } from '../../engineCheckers/simple/commons/CheckersCellType';
-import { CheckersUnitOwner } from '../../engineCheckers/simple/commons/CheckersUnitOwner';
 import { CheckersUnitType } from '../../engineCheckers/simple/commons/CheckersUnitType';
 import {
   CheckersGameConfig,
@@ -25,10 +25,10 @@ import {PlayerGameClient} from "../../client/PlayerGameClient";
 import {Vector2d} from "../../engine/Vector2d";
 import {ActionDto} from "../../engine/dto/ActionDto";
 
-export class SimpleCheckersScene extends Scene implements PlayerGameClient<CheckersCellType, CheckersUnitType, CheckersUnitOwner> {
+export class SimpleCheckersScene extends Scene implements PlayerGameClient<CheckersCellType, CheckersUnitType, TwoPlayerUnitOwner> {
   private gameServer = new GameServer();
-  private turnUI?: CurrentTurnElement<CheckersUnitOwner, CheckersUnitType>;
-  private boardView?: CheckersBoardElement<CheckersCellType, CheckersUnitType, CheckersUnitOwner>;
+  private turnUI?: CurrentTurnElement<TwoPlayerUnitOwner, CheckersUnitType>;
+  private boardView?: CheckersBoardElement<CheckersCellType, CheckersUnitType, TwoPlayerUnitOwner>;
   private unitViewMap: Record<string, CheckersUnitElement> = {};
   private selectedUnitId?: string;
   private selectedUnitActionViews: CheckersUnitElement[] = [];
@@ -82,7 +82,7 @@ export class SimpleCheckersScene extends Scene implements PlayerGameClient<Check
     console.log(this.constructor.name, 'onActionChange', action);
   }
 
-  onSetActiveOwner(owner: CheckersUnitOwner) {
+  onSetActiveOwner(owner: TwoPlayerUnitOwner) {
     this.turnUI!.changePlayer(owner);
   }
 
