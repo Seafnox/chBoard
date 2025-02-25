@@ -9,19 +9,21 @@ export interface TurnManagerConstructor<TCellType extends Enumerable, TUnitType 
 
 export interface TurnManagerConfig<TUnitOwner extends Enumerable> {
   initialOwner: TUnitOwner;
-  nextTurnOwnerFn: () => TUnitOwner;
+  nextTurnOwnerFn: (current?: TUnitOwner) => TUnitOwner;
   endGameConditionFn: () => boolean;
-  winnerConditionFn: () => TUnitOwner[];
+  winnerConditionFn: () => TUnitOwner[] | undefined;
 }
 
 export abstract class TurnManager<TCellType extends Enumerable, TUnitType extends Enumerable, TUnitOwner extends Enumerable> {
   protected _activeOwner: TUnitOwner;
   protected _config: TurnManagerConfig<TUnitOwner>;
+  protected game: Game<TCellType, TUnitType, TUnitOwner>;
 
   constructor(
-    public readonly game: Game<TCellType, TUnitType, TUnitOwner>,
+    game: Game<TCellType, TUnitType, TUnitOwner>,
     config: TurnManagerConfig<TUnitOwner>,
   ) {
+    this.game = game;
     this._config = config;
     this._activeOwner = config.initialOwner;
   }
@@ -36,7 +38,10 @@ export abstract class TurnManager<TCellType extends Enumerable, TUnitType extend
 
   public completeTurn(): void {
     if (this._config.endGameConditionFn()) {
-      this.endGame(this._config.winnerConditionFn()[0]);
+      const winners = this._config.winnerConditionFn();
+      if (winners && winners.length > 0) {
+        this.endGame(winners[0]);
+      }
     }
   }
 

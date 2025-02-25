@@ -1,6 +1,5 @@
 import { UnitConfig } from '../../../engine/BoardConfig';
 import { GameConfig } from '../../../engine/GameConfig';
-import { TwoPlayerTurnManager } from '../../../engine/twoPlayer/TwoPlayerTurnManager';
 import { TwoPlayerUnitOwner } from '../../../engine/twoPlayer/TwoPlayerUnitOwner';
 import { CheckersCellType } from '../commons/CheckersCellType';
 import { CheckersUnitType } from '../commons/CheckersUnitType';
@@ -8,6 +7,7 @@ import { BiteRulesForChecker } from './rules/BiteRulesForChecker';
 import { BiteRulesForKing } from './rules/BiteRulesForKing';
 import { MoveRulesForChecker } from './rules/MoveRulesForChecker';
 import { MoveRulesForKing } from './rules/MoveRulesForKing';
+import { TurnManagerType } from '../../../engine/TurnManagerFactory';
 
 const cellMap: Record<string, CheckersCellType> = {};
 
@@ -52,5 +52,6 @@ export const checkersRuConfig: GameConfig<CheckersCellType, CheckersUnitType, Tw
     new MoveRulesForKing(),
     new BiteRulesForKing(),
   ],
-  turnManager: TwoPlayerTurnManager<CheckersCellType, CheckersUnitType>,
+  turnManagerType: TurnManagerType.SEQUENTIAL_2P,
+  unitOwners: [TwoPlayerUnitOwner.Black, TwoPlayerUnitOwner.White]
 }

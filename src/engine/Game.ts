@@ -8,6 +8,7 @@ import { EventEmitter } from './EventEmitter';
 import { GameConfig } from './GameConfig';
 import { InteractiveEntity } from './InteractiveEntity';
 import { Enumerable } from './Enumerable';
+import { createTurnManager } from './TurnManagerFactory';
 import { TurnManager } from './TurnManager';
 
 export class Game<TCellType extends Enumerable, TUnitType extends Enumerable, TUnitOwner extends Enumerable> {
@@ -27,7 +28,7 @@ export class Game<TCellType extends Enumerable, TUnitType extends Enumerable, TU
   ) {
     this.actionMap = {};
     this.board = new Board(initialConfig, this);
-    this.turnManager = new initialConfig.turnManager(this);
+    this.turnManager = createTurnManager(initialConfig.turnManagerType, this);
 
     this.initialConfig.rules.forEach(rule => {
       this.interactiveEntities.forEach(interactiveEntity => {
