@@ -1,7 +1,7 @@
 import { Scene, Actor, Label, vec, Color, Vector } from 'excalibur';
-import { GameConfig } from '../../engine/GameConfig';
 import { TwoPlayerUnitOwner } from '../../engine/twoPlayer/TwoPlayerUnitOwner';
 import { checkersRuConfig } from '../../engineCheckers/simple/ru/CheckersRuConfig';
+import { SerializedGameConfig } from 'src/engine/SerializedGameConfig';
 import { GameEngine } from '../engine/GameEngine';
 import { GameEvent } from '../engine/GameEvent';
 import { PlayerConfig } from '../engine/PlayerConfig';
@@ -16,7 +16,7 @@ import { PixelFont60px } from '../PrepareFonts';
 interface ComplexGameConfig {
   label: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  gameConfig: GameConfig<any, any, any>;
+  gameConfig: SerializedGameConfig;
   playerConfig?: PlayerConfig;
 }
 

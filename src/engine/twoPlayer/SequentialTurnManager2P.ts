@@ -1,6 +1,6 @@
-import { TurnManager } from './TurnManager';
-import { Enumerable } from './Enumerable';
-import { Game } from './Game';
+import { TurnManager } from '../TurnManager';
+import { Enumerable } from '../Enumerable';
+import { Game } from '../Game';
 
 export class SequentialTurnManager2P<TCellType extends Enumerable, TUnitType extends Enumerable, TUnitOwner extends Enumerable> 
   extends TurnManager<TCellType, TUnitType, TUnitOwner> {

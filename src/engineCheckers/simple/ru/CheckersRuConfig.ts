@@ -1,13 +1,10 @@
 import { UnitConfig } from '../../../engine/BoardConfig';
-import { GameConfig } from '../../../engine/GameConfig';
 import { TwoPlayerUnitOwner } from '../../../engine/twoPlayer/TwoPlayerUnitOwner';
 import { CheckersCellType } from '../commons/CheckersCellType';
 import { CheckersUnitType } from '../commons/CheckersUnitType';
-import { BiteRulesForChecker } from './rules/BiteRulesForChecker';
-import { BiteRulesForKing } from './rules/BiteRulesForKing';
-import { MoveRulesForChecker } from './rules/MoveRulesForChecker';
-import { MoveRulesForKing } from './rules/MoveRulesForKing';
-import { TurnManagerType } from '../../../engine/TurnManagerFactory';
+import { TurnManagerType } from 'src/engine/TurnManagerType';
+import { CheckersRuleType } from '../commons/CheckersRuleFactory';
+import { SerializedGameConfig } from '../../../engine/SerializedGameConfig';
 
 const cellMap: Record<string, CheckersCellType> = {};
 
@@ -40,18 +37,17 @@ for(let x = 0; x < 8; x++) {
   }
 }
 
-
-export const checkersRuConfig: GameConfig<CheckersCellType, CheckersUnitType, TwoPlayerUnitOwner> = {
+export const checkersRuConfig: SerializedGameConfig = {
   cellMap,
   unitMap,
   width: 8,
   height: 8,
-  rules: [
-    new MoveRulesForChecker(),
-    new BiteRulesForChecker(),
-    new MoveRulesForKing(),
-    new BiteRulesForKing(),
+  ruleTypes: [
+    CheckersRuleType.MOVE_CHECKER,
+    CheckersRuleType.BITE_CHECKER,
+    CheckersRuleType.MOVE_KING,
+    CheckersRuleType.BITE_KING,
   ],
   turnManagerType: TurnManagerType.SEQUENTIAL_2P,
   unitOwners: [TwoPlayerUnitOwner.Black, TwoPlayerUnitOwner.White]
-}
+};

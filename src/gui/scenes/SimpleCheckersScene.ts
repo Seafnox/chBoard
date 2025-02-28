@@ -4,7 +4,6 @@ import { TwoPlayerUnitOwner } from '../../engine/twoPlayer/TwoPlayerUnitOwner';
 import { CheckersCellType } from '../../engineCheckers/simple/commons/CheckersCellType';
 import { CheckersUnitType } from '../../engineCheckers/simple/commons/CheckersUnitType';
 import {
-  CheckersGameConfig,
   CheckersActionChange,
   CheckersUnitDto,
   CheckersBoardDto,
@@ -24,6 +23,7 @@ import {GameServer} from "../../server/GameServer";
 import {PlayerGameClient} from "../../client/PlayerGameClient";
 import {Vector2d} from "../../engine/Vector2d";
 import {ActionDto} from "../../engine/dto/ActionDto";
+import { SerializedGameConfig } from 'src/engine/SerializedGameConfig';
 
 export class SimpleCheckersScene extends Scene implements PlayerGameClient<CheckersCellType, CheckersUnitType, TwoPlayerUnitOwner> {
   private gameServer = new GameServer();
@@ -50,7 +50,7 @@ export class SimpleCheckersScene extends Scene implements PlayerGameClient<Check
       return;
     }
 
-    const gameConfig = this.gameEngine.gameConfig as CheckersGameConfig;
+    const gameConfig = this.gameEngine.gameConfig as SerializedGameConfig;
     this.gameServer.startServer(gameConfig, this);
 
     this.add(this.createHeader());

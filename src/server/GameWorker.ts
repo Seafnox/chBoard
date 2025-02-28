@@ -1,26 +1,32 @@
 import {Game} from "../engine/Game";
-import {GameConfig} from "../engine/GameConfig";
 import {GameServerRequestType} from "./GameServerRequestType";
 import {ActionDto} from "../engine/dto/ActionDto";
 import {GameServerResponseType} from "./GameServerResponseType";
+import { createGameConfig } from '../engineCheckers/simple/ru/CheckersRuConfigFactory';
+import { SerializedGameConfig } from 'src/engine/SerializedGameConfig';
 
-type SomeGameConfig = GameConfig<any, any, any>;
 let game: Game<any, any, any> | undefined;
 
 self.onmessage = (event: MessageEvent) => {
-  console.log('[INCOME]', event.type, event.data);
-  if (event.data) {
-    switch (event.type) {
-      case GameServerRequestType.StartGame: start(event.data as SomeGameConfig); break;
-      case GameServerRequestType.StopGame: stop(); break;
-      case GameServerRequestType.MakeAction: makeAction(event.data as ActionDto); break;
-
-      // default: emit(GameServerResponseType.Error, `Unknown message type: '${event.type}' with data ${JSON.stringify(event.data)}`);
-    }
+  const { type, data } = event.data;
+  
+  switch (type) {
+    case GameServerRequestType.StartGame:
+      start(data);
+      break;
+    case GameServerRequestType.StopGame:
+      stop();
+      break;
+    case GameServerRequestType.MakeAction:
+      makeAction(data);
+      break;
+    default:
+      emit(GameServerResponseType.Error, `Unknown request type: ${type}`);
   }
 };
 
-function start(gameConfig: SomeGameConfig) {
+function start(serializedConfig: SerializedGameConfig) {
+  const gameConfig = createGameConfig(serializedConfig);
   game = new Game(gameConfig);
 }
 
@@ -48,6 +54,5 @@ function makeAction(data: ActionDto) {
 }
 
 function emit<T>(type: GameServerResponseType, data: T) {
-  console.log('[OUTCOME]', type, data);
-  self.postMessage({type, data});
+  self.postMessage({ type, data });
 }

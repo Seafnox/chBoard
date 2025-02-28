@@ -1,15 +1,10 @@
 import { TurnManager } from './TurnManager';
 import { Enumerable } from './Enumerable';
 import { Game } from './Game';
-import { SequentialTurnManager2P } from './SequentialTurnManager2P';
+import { SequentialTurnManager2P } from './twoPlayer/SequentialTurnManager2P';
 import { SequentialTurnManager3P } from './SequentialTurnManager3P';
 import { SequentialTurnManager4P } from './SequentialTurnManager4P';
-
-export enum TurnManagerType {
-  SEQUENTIAL_2P = 'SEQUENTIAL_2P',
-  SEQUENTIAL_3P = 'SEQUENTIAL_3P',
-  SEQUENTIAL_4P = 'SEQUENTIAL_4P'
-}
+import { TurnManagerType } from './TurnManagerType';
 
 export function createTurnManager<TCellType extends Enumerable, TUnitType extends Enumerable, TUnitOwner extends Enumerable>(
   type: TurnManagerType,

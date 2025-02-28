@@ -1,5 +1,5 @@
+import { SerializedGameConfig } from 'src/engine/SerializedGameConfig';
 import {PlayerGameClient} from '../client/PlayerGameClient';
-import {GameConfig} from '../engine/GameConfig';
 import {ActionDto} from "../engine/dto/ActionDto";
 import {GameServerRequestType} from "./GameServerRequestType";
 import {GameServerResponseType} from "./GameServerResponseType";
@@ -11,15 +11,25 @@ export class GameServer {
     this.worker = new Worker('./GameWorker.js', { type: 'module' });
 
     this.worker.onmessage = (event: MessageEvent) => {
-      console.log(this.constructor.name, 'WorkerMessage', event.data);
-      if (event.type === GameServerResponseType.ActionChange) {
-        this.client?.onActionChange(event.data);
+      const { type, data } = event.data;
+      
+      switch (type as GameServerResponseType) {
+        case GameServerResponseType.ActionChange:
+          if (this.client) {
+            this.client.onActionChange(data);
+          }
+          break;
+        case GameServerResponseType.Error:
+          console.error('Game Server Error:', data);
+          break;
+        default:
+          console.warn('Unknown response type:', type);
       }
     };
   }
 
   startServer(
-    config: GameConfig<any, any, any>,
+    config: SerializedGameConfig,
     client: PlayerGameClient<any, any, any>,
   ) {
     console.log(this.constructor.name, GameServerRequestType.StartGame, config, client);
@@ -38,6 +48,6 @@ export class GameServer {
   }
 
   private postMessage<T extends object>(type: GameServerRequestType, data?: T) {
-    this.worker.postMessage(new MessageEvent(type, data));
+    this.worker.postMessage({ type, data });
   }
 }
